@@ -83,34 +83,27 @@ public class Credentials implements Serializable {
      *         null if no password has been set.
      */
     public String getPassword() {
+        if (password == null && request != null)
+            password = request.getParameter("password");
+        if (password == null)
+            password = "";
         return password;
     }
 
     /**
-     * Sets the password associated with this set of credentials.
-     * @param password The password to associate with this username/password
-     *                 pair.
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
      * Returns the username associated with this set of credentials.
+     *
+     * Warning: Calling this method will consume the request body!
+     *
      * @return The username associated with this username/password pair, or
-     *         null if no username has been set.
+     *         null if no username is available.
      */
     public String getUsername() {
+        if (username == null && request != null)
+            username = request.getParameter("username");
+        if (username == null)
+            username = "";
         return username;
-    }
-
-    /**
-     * Sets the username associated with this set of credentials.
-     * @param username The username to associate with this username/password
-     *                 pair.
-     */
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     /**
