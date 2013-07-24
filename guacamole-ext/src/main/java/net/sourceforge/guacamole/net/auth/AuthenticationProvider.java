@@ -62,4 +62,6 @@ public interface AuthenticationProvider {
     UserContext getUserContext(Credentials credentials)
             throws GuacamoleException;
 
+    UserContext updateUserContext(UserContext userContext, Credentials credentials)
+            throws GuacamoleException;
 }

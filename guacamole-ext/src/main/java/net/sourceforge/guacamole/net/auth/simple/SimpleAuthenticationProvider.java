@@ -97,4 +97,10 @@ public abstract class SimpleAuthenticationProvider
 
     }
 
+    @Override
+    public UserContext updateUserContext(UserContext context, Credentials credentials)
+        throws GuacamoleException
+    {
+        return context;
+    }
 }

@@ -110,5 +110,4 @@ public class SimpleUserContext implements UserContext {
             throws GuacamoleException {
         return userDirectory;
     }
-
 }
