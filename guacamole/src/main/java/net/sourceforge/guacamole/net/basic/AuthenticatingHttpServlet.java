@@ -227,7 +227,6 @@ public abstract class AuthenticatingHttpServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
-        
         // Set character encoding to UTF-8 if it's not already set
         if(request.getCharacterEncoding() == null) {
             try {
@@ -239,16 +238,10 @@ public abstract class AuthenticatingHttpServlet extends HttpServlet {
 
         HttpSession httpSession = request.getSession(true);
 
-        // Retrieve username and password from params
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
         // Build credentials object
         Credentials credentials = new Credentials();
         credentials.setSession(httpSession);
         credentials.setRequest(request);
-        credentials.setUsername(username);
-        credentials.setPassword(password);
 
         SessionListenerCollection listeners;
         try {
@@ -266,8 +259,14 @@ public abstract class AuthenticatingHttpServlet extends HttpServlet {
             if (context == null) {
                 // If no context, try to authenticate the user to get the context using
                 // this request.
+                setUsernameAndPassword(request, credentials);
                 context = authProvider.getUserContext(credentials);
             } else {
+                if (isTunnelConnect(request)) {
+                    // Important, we must only do this on connect requests,
+                    // otherwise getParameter will consume the request body
+                    setUsernameAndPassword(request, credentials);
+                }
                 // Allow the auth provider to update the cached UserContext using the
                 // credentials in this request
                 context = authProvider.updateUserContext(context, credentials);
@@ -353,6 +352,25 @@ public abstract class AuthenticatingHttpServlet extends HttpServlet {
                       "Internal server error.");
         }
 
+    }
+
+    private boolean isTunnelConnect(HttpServletRequest request) {
+        String query = request.getQueryString();
+        return query != null && query.contains("connect");
+    }
+
+    /**
+     * Called to set the username and password parameters of the credentials object
+     * on connect requests
+     *
+     * @param request The HttpServletRequest being serviced.
+     * @param credentials The Credentials object that will be updated from request params.
+     */
+    private void setUsernameAndPassword(HttpServletRequest request, Credentials credentials) {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        credentials.setUsername(username);
+        credentials.setPassword(password);
     }
 
     /**
