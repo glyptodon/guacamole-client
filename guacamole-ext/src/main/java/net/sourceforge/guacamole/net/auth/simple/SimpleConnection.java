@@ -42,6 +42,7 @@ import java.util.List;
 import net.sourceforge.guacamole.GuacamoleException;
 import net.sourceforge.guacamole.net.GuacamoleSocket;
 import net.sourceforge.guacamole.net.InetGuacamoleSocket;
+import net.sourceforge.guacamole.net.SSLGuacamoleSocket;
 import net.sourceforge.guacamole.net.auth.AbstractConnection;
 import net.sourceforge.guacamole.net.auth.ConnectionRecord;
 import net.sourceforge.guacamole.properties.GuacamoleProperties;
@@ -72,12 +73,16 @@ public class SimpleConnection extends AbstractConnection {
      * Creates a new SimpleConnection having the given identifier and
      * GuacamoleConfiguration.
      *
-     * @param identifier The identifier to associated with this connection.
+     * @param name The name to associate with this connection.
+     * @param identifier The identifier to associate with this connection.
      * @param config The configuration describing how to connect to this
      *               connection.
      */
-    public SimpleConnection(String identifier,
+    public SimpleConnection(String name, String identifier,
             GuacamoleConfiguration config) {
+        
+        // Set name
+        setName(name);
 
         // Set identifier
         setIdentifier(identifier);
@@ -96,10 +101,17 @@ public class SimpleConnection extends AbstractConnection {
         String hostname = GuacamoleProperties.getProperty(GuacamoleProperties.GUACD_HOSTNAME);
         int port = GuacamoleProperties.getProperty(GuacamoleProperties.GUACD_PORT);
 
+        // If guacd requires SSL, use it
+        if (GuacamoleProperties.getProperty(GuacamoleProperties.GUACD_SSL, false))
+            return new ConfiguredGuacamoleSocket(
+                new SSLGuacamoleSocket(hostname, port),
+                config, info
+            );
+
         // Return connected socket
         return new ConfiguredGuacamoleSocket(
-                new InetGuacamoleSocket(hostname, port),
-                config, info
+            new InetGuacamoleSocket(hostname, port),
+            config, info
         );
 
     }

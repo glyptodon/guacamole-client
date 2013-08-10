@@ -47,6 +47,8 @@ import net.sourceforge.guacamole.GuacamoleException;
 import net.sourceforge.guacamole.net.auth.AuthenticationProvider;
 import net.sourceforge.guacamole.net.auth.Credentials;
 import net.sourceforge.guacamole.net.auth.UserContext;
+import net.sourceforge.guacamole.net.auth.mysql.dao.ConnectionGroupMapper;
+import net.sourceforge.guacamole.net.auth.mysql.dao.ConnectionGroupPermissionMapper;
 import net.sourceforge.guacamole.net.auth.mysql.dao.ConnectionHistoryMapper;
 import net.sourceforge.guacamole.net.auth.mysql.dao.ConnectionMapper;
 import net.sourceforge.guacamole.net.auth.mysql.dao.ConnectionParameterMapper;
@@ -55,12 +57,13 @@ import net.sourceforge.guacamole.net.auth.mysql.dao.SystemPermissionMapper;
 import net.sourceforge.guacamole.net.auth.mysql.dao.UserMapper;
 import net.sourceforge.guacamole.net.auth.mysql.dao.UserPermissionMapper;
 import net.sourceforge.guacamole.net.auth.mysql.properties.MySQLGuacamoleProperties;
+import net.sourceforge.guacamole.net.auth.mysql.service.ConnectionGroupService;
 import net.sourceforge.guacamole.net.auth.mysql.service.ConnectionService;
 import net.sourceforge.guacamole.net.auth.mysql.service.PasswordEncryptionService;
 import net.sourceforge.guacamole.net.auth.mysql.service.PermissionCheckService;
+import net.sourceforge.guacamole.net.auth.mysql.service.SHA256PasswordEncryptionService;
 import net.sourceforge.guacamole.net.auth.mysql.service.SaltService;
 import net.sourceforge.guacamole.net.auth.mysql.service.SecureRandomSaltService;
-import net.sourceforge.guacamole.net.auth.mysql.service.SHA256PasswordEncryptionService;
 import net.sourceforge.guacamole.net.auth.mysql.service.UserService;
 import net.sourceforge.guacamole.properties.GuacamoleProperties;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
@@ -79,7 +82,7 @@ public class MySQLAuthenticationProvider implements AuthenticationProvider {
     /**
      * Set of all active connections.
      */
-    private ActiveConnectionSet activeConnectionSet = new ActiveConnectionSet();
+    private ActiveConnectionMap activeConnectionMap = new ActiveConnectionMap();
 
     /**
      * Injector which will manage the object graph of this authentication
@@ -156,6 +159,8 @@ public class MySQLAuthenticationProvider implements AuthenticationProvider {
                     // Add MyBatis mappers
                     addMapperClass(ConnectionHistoryMapper.class);
                     addMapperClass(ConnectionMapper.class);
+                    addMapperClass(ConnectionGroupMapper.class);
+                    addMapperClass(ConnectionGroupPermissionMapper.class);
                     addMapperClass(ConnectionParameterMapper.class);
                     addMapperClass(ConnectionPermissionMapper.class);
                     addMapperClass(SystemPermissionMapper.class);
@@ -170,13 +175,23 @@ public class MySQLAuthenticationProvider implements AuthenticationProvider {
                     bind(PasswordEncryptionService.class).to(SHA256PasswordEncryptionService.class);
                     bind(PermissionCheckService.class);
                     bind(ConnectionService.class);
+                    bind(ConnectionGroupService.class);
                     bind(UserService.class);
-                    bind(ActiveConnectionSet.class).toInstance(activeConnectionSet);
+                    bind(ActiveConnectionMap.class).toInstance(activeConnectionMap);
 
                 }
             } // end of mybatis module
 
         );
     } // end of constructor
+
+    @Override
+    public UserContext updateUserContext(UserContext context,
+        Credentials credentials) throws GuacamoleException {
+
+        // No need to update the context
+        return context;
+
+    }
 
 }

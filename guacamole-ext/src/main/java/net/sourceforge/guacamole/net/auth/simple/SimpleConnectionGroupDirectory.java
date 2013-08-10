@@ -1,5 +1,5 @@
 
-package net.sourceforge.guacamole.net.auth;
+package net.sourceforge.guacamole.net.auth.simple;
 
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -14,7 +14,7 @@ package net.sourceforge.guacamole.net.auth;
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is guacamole-ext.
+ * The Original Code is guacamole-auth.
  *
  * The Initial Developer of the Original Code is
  * Michael Jumper.
@@ -37,50 +37,59 @@ package net.sourceforge.guacamole.net.auth;
  *
  * ***** END LICENSE BLOCK ***** */
 
+import java.util.Collections;
+import java.util.Set;
 import net.sourceforge.guacamole.GuacamoleException;
+import net.sourceforge.guacamole.GuacamoleSecurityException;
+import net.sourceforge.guacamole.net.auth.ConnectionGroup;
+import net.sourceforge.guacamole.net.auth.Directory;
+
 
 /**
- * The context of an active user. The functions of this class enforce all
- * permissions and act only within the rights of the associated user.
+ * An extremely simple read-only implementation of a Directory of
+ * ConnectionGroup which provides an empty set of connection groups.
  *
- * @author Michael Jumper
+ * @author James Muehlner
  */
-public interface UserContext {
-
+public class SimpleConnectionGroupDirectory
+    implements Directory<String, ConnectionGroup> {
+    
     /**
-     * Returns the User whose access rights control the operations of this
-     * UserContext.
-     *
-     * @return The User whose access rights control the operations of this
-     *         UserContext.
-     */
-    User self();
+     * Creates a new SimpleConnectionGroupDirectory */
+    public SimpleConnectionGroupDirectory() {}
 
-    /**
-     * Retrieves a Directory which can be used to view and manipulate other
-     * users, but only as allowed by the permissions given to the user of this
-     * UserContext.
-     *
-     * @return A Directory whose operations are bound by the restrictions
-     *         of this UserContext.
-     *
-     * @throws GuacamoleException If an error occurs while creating the
-     *                            Directory.
-     */
-    Directory<String, User> getUserDirectory() throws GuacamoleException;
+    @Override
+    public ConnectionGroup get(String identifier)
+            throws GuacamoleException {
+        return null;
+    }
 
+    @Override
+    public Set<String> getIdentifiers() throws GuacamoleException {
+        return Collections.EMPTY_SET;
+    }
 
-    /**
-     * Retrieves a connection group which can be used to view and manipulate
-     * connections, but only as allowed by the permissions given to the user of 
-     * this UserContext.
-     *
-     * @return A connection group whose operations are bound by the restrictions
-     *         of this UserContext.
-     *
-     * @throws GuacamoleException If an error occurs while creating the
-     *                            Directory.
-     */
-    ConnectionGroup getRootConnectionGroup() throws GuacamoleException;
+    @Override
+    public void add(ConnectionGroup connectionGroup)
+            throws GuacamoleException {
+        throw new GuacamoleSecurityException("Permission denied.");
+    }
+
+    @Override
+    public void update(ConnectionGroup connectionGroup)
+            throws GuacamoleException {
+        throw new GuacamoleSecurityException("Permission denied.");
+    }
+
+    @Override
+    public void remove(String identifier) throws GuacamoleException {
+        throw new GuacamoleSecurityException("Permission denied.");
+    }
+
+    @Override
+    public void move(String identifier, Directory<String, ConnectionGroup> directory) 
+            throws GuacamoleException {
+        throw new GuacamoleSecurityException("Permission denied.");
+    }
 
 }

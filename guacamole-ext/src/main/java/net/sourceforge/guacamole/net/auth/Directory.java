@@ -114,4 +114,16 @@ public interface Directory<IdentifierType, ObjectType> {
      */
     void remove(IdentifierType identifier) throws GuacamoleException;
 
+    /**
+     * Moves the object with the given identifier to the given directory.
+     *
+     * @param identifier The identifier of the object to remove.
+     * @param directory The directory to move the object to.
+     *
+     * @throws GuacamoleException If an error occurs while moving the object,
+     *                            or if moving object is not allowed.
+     */
+    void move(IdentifierType identifier, Directory<IdentifierType, ObjectType> directory) 
+            throws GuacamoleException;
+
 }

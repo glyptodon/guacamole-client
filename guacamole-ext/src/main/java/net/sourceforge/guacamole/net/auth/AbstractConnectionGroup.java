@@ -37,50 +37,81 @@ package net.sourceforge.guacamole.net.auth;
  *
  * ***** END LICENSE BLOCK ***** */
 
-import net.sourceforge.guacamole.GuacamoleException;
 
 /**
- * The context of an active user. The functions of this class enforce all
- * permissions and act only within the rights of the associated user.
+ * Basic implementation of a Guacamole connection group.
  *
- * @author Michael Jumper
+ * @author James Muehlner
  */
-public interface UserContext {
+public abstract class AbstractConnectionGroup implements ConnectionGroup {
 
     /**
-     * Returns the User whose access rights control the operations of this
-     * UserContext.
-     *
-     * @return The User whose access rights control the operations of this
-     *         UserContext.
+     * The name associated with this connection group.
      */
-    User self();
+    private String name;
 
     /**
-     * Retrieves a Directory which can be used to view and manipulate other
-     * users, but only as allowed by the permissions given to the user of this
-     * UserContext.
-     *
-     * @return A Directory whose operations are bound by the restrictions
-     *         of this UserContext.
-     *
-     * @throws GuacamoleException If an error occurs while creating the
-     *                            Directory.
+     * The unique identifier associated with this connection group.
      */
-    Directory<String, User> getUserDirectory() throws GuacamoleException;
-
-
+    private String identifier;
+    
     /**
-     * Retrieves a connection group which can be used to view and manipulate
-     * connections, but only as allowed by the permissions given to the user of 
-     * this UserContext.
-     *
-     * @return A connection group whose operations are bound by the restrictions
-     *         of this UserContext.
-     *
-     * @throws GuacamoleException If an error occurs while creating the
-     *                            Directory.
+     * The type of this connection group.
      */
-    ConnectionGroup getRootConnectionGroup() throws GuacamoleException;
+    private ConnectionGroup.Type type;
+    
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    @Override
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+    
+    @Override
+    public ConnectionGroup.Type getType() {
+        return type;
+    }
+    
+    @Override
+    public void setType(ConnectionGroup.Type type) {
+        this.type = type;
+    }
+
+    @Override
+    public int hashCode() {
+        if (identifier == null) return 0;
+        return identifier.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        // Not equal if null or not a ConnectionGroup
+        if (obj == null) return false;
+        if (!(obj instanceof AbstractConnectionGroup)) return false;
+
+        // Get identifier
+        String objIdentifier = ((AbstractConnectionGroup) obj).identifier;
+
+        // If null, equal only if this identifier is null
+        if (objIdentifier == null) return identifier == null;
+
+        // Otherwise, equal only if strings are identical
+        return objIdentifier.equals(identifier);
+
+    }
 
 }
