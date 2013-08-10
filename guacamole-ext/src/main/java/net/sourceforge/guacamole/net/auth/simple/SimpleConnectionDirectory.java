@@ -95,24 +95,26 @@ public class SimpleConnectionDirectory
     @Override
     public void add(Connection connection)
             throws GuacamoleException {
-        throw new GuacamoleSecurityException("Permission denied.");
+        connections.put(connection.getIdentifier(), connection);
     }
 
     @Override
     public void update(Connection connection)
             throws GuacamoleException {
-        throw new GuacamoleSecurityException("Permission denied.");
+        SimpleConnection existing = (SimpleConnection) connections.get(connection.getIdentifier());
+        existing.setConfiguration(connection.getConfiguration());
     }
 
     @Override
     public void remove(String identifier) throws GuacamoleException {
-        throw new GuacamoleSecurityException("Permission denied.");
+        connections.remove(identifier);
     }
 
     @Override
     public void move(String identifier, Directory<String, Connection> directory) 
             throws GuacamoleException {
-        throw new GuacamoleSecurityException("Permission denied.");
+        Connection conn = this.get(identifier);
+        this.remove(identifier);
+        directory.add(conn);
     }
-
 }
