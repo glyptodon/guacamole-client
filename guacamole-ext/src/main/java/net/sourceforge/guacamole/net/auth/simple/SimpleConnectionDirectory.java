@@ -75,9 +75,7 @@ public class SimpleConnectionDirectory
 
         // Create connections for each config
         for (Entry<String, GuacamoleConfiguration> entry : configs.entrySet())
-            connections.put(entry.getKey(),
-                    new SimpleConnection(entry.getKey(), entry.getValue()));
-
+            putConfig(entry.getKey(), entry.getValue());
     }
 
     @Override
@@ -108,4 +106,7 @@ public class SimpleConnectionDirectory
         throw new GuacamoleSecurityException("Permission denied.");
     }
 
+    public void putConfig(String id, GuacamoleConfiguration configuration) {
+        connections.put(id, new SimpleConnection(id, configuration));
+    }
 }
