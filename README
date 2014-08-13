@@ -61,8 +61,8 @@ and deployed under servlet containers like Apache Tomcat or Jetty.
  Reporting problems
 ------------------------------------------------------------
 
-Please report any bugs encountered by opening a new ticket at the Trac system
+Please report any bugs encountered by opening a new ticket at the JIRA system
 hosted at:
     
-    http://guac-dev.org/trac/
+    https://glyptodon.org/jira/browse/GUAC
 
