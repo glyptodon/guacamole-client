@@ -187,20 +187,23 @@ GuacUI.Audio = new (function() {
     // Build array of supported audio formats
     codecs.forEach(function(mimetype) {
 
-        var audio = new Audio();
-        var support_level = audio.canPlayType(mimetype);
+        try {
+            var audio = new Audio();
+            var support_level = audio.canPlayType(mimetype);
 
-        // Trim semicolon and trailer
-        var semicolon = mimetype.indexOf(";");
-        if (semicolon != -1)
-            mimetype = mimetype.substring(0, semicolon);
+            // Trim semicolon and trailer
+            var semicolon = mimetype.indexOf(";");
+            if (semicolon != -1)
+                mimetype = mimetype.substring(0, semicolon);
 
-        // Partition by probably/maybe
-        if (support_level == "probably")
-            probably_supported.push(mimetype);
-        else if (support_level == "maybe")
-            maybe_supported.push(mimetype);
-
+            // Partition by probably/maybe
+            if (support_level == "probably")
+                probably_supported.push(mimetype);
+            else if (support_level == "maybe")
+                maybe_supported.push(mimetype);
+        } catch (ignore) {
+            // This happens on IE with Windows Server when audio is disabled.
+        }
     });
 
     // Add probably supported types first
