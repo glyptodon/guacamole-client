@@ -527,18 +527,18 @@ Guacamole.Keyboard = function(element) {
         if (keynum === 229)
             return;
 
-        // Bug: Mac keyboards, it is not possibile to type @, #, [, ], € because the combination Alt-character generates
+        // Bug: Mac keyboards, it is not possibile to type @, #, [, ], Â€ because the combination Alt-character generates
         // wrong keynums
         // solution: converts the keynum value for some specific Mac keyboard keys combinations that are not correctly interpreted
         if (_userAgent != null && _userAgent.indexOf("Macintosh") >= 0) {
             if (guac_keyboard != null && guac_keyboard.modifiers != null &&
                 guac_keyboard.modifiers.alt == true && guac_keyboard.modifiers.ctrl == false) {
-                if (keynum == 186 || keynum == 69 || keynum == 222 || keynum == 219 || keynum == 221) { // # @ [ ] €
+                if (keynum == 186 || keynum == 69 || keynum == 222 || keynum == 219 || keynum == 221) { // # @ [ ] Â€
                     if (keynum == 222) keynum = 35;    // #
                     if (keynum == 186) keynum = 64;    // @
                     if (keynum == 219) keynum = 91;    // [
                     if (keynum == 221) keynum = 93;    // ]
-                    if (keynum == 69) keynum = 8364;   // €
+                    if (keynum == 69) keynum = 8364;   // Â€
 
                     // now the key has just to be sent on the tunnel, with no further changes
                     // the following code could probably be written much better:
@@ -595,11 +595,19 @@ Guacamole.Keyboard = function(element) {
             // the characters are either not typed at all or converted in a wrong character
             // solution: if Ctrl-Alt (Alt-Gr) is pressed let the event bubble
             // it will be correctly handled in the keypress event
-            if (guac_keyboard.modifiers.ctrl && guac_keyboard.modifiers.alt) {
+            if (!guac_keyboard.modifiers.shift && guac_keyboard.modifiers.ctrl && guac_keyboard.modifiers.alt) {
                 // let it bubble to keypress
             } else {
-                if (!press_key(keysym))
+                if (guac_keyboard.modifiers.ctrl && guac_keyboard.modifiers.alt && guac_keyboard.modifiers.shift) {
+                    // manages the combination Ctrl-Alt-Shift that opens the Guacamole menu
+                    press_key(0xFFE3); // Left ctrl
+                    press_key(0xFFE9); // Left alt
+                    press_key(0xFFE1); // shift
                     e.preventDefault();
+                } else {
+                    if (!press_key(keysym))
+                        e.preventDefault();
+                }
             }
             
             // If a key is pressed while meta is held down, the keyup will
