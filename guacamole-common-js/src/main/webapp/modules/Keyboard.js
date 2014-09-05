@@ -562,7 +562,8 @@ Guacamole.Keyboard = function(element) {
         var keysym = keysym_from_keycode(keynum, location);
 
         // Also try to get get keysym from e.key 
-        if (e.key)
+        // Explorer 11 bug: for the dead keys, such as the ^ on French keyboards, the e.key is set to value of 'Unidentified', instead of being null
+        if (e.key && !e.key == 'Unidentified')
             // Firefox, Explorer 11 bug: the CapsLock state has no effect, letters are always typed lowercase
             // solution:
             // when e.key exists it is already set with the correct typed character, either lower or upper case
