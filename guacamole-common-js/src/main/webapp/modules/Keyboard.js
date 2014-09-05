@@ -524,7 +524,7 @@ Guacamole.Keyboard = function(element) {
 
         // Ignore (but do not prevent) the "composition" keycode sent by some
         // browsers when an IME is in use (see: http://lists.w3.org/Archives/Public/www-dom/2010JulSep/att-0182/keyCode-spec.html)
-        if (keynum === 229)
+        if (keynum === 229 || keynum === 221)
             return;
 
         // Bug: Mac keyboards, it is not possibile to type @, #, [, ],  because the combination Alt-character generates
@@ -600,6 +600,10 @@ Guacamole.Keyboard = function(element) {
             } else {
                 if (guac_keyboard.modifiers.ctrl && guac_keyboard.modifiers.alt && guac_keyboard.modifiers.shift) {
                     // manages the combination Ctrl-Alt-Shift that opens the Guacamole menu
+                    release_key(0xFFE9); // Left alt
+                    release_key(0xFFEA); // Right alt (or AltGr)
+                    release_key(0xFFE3); // Left ctrl
+                    release_key(0xFFE4); // Right ctrl
                     press_key(0xFFE3); // Left ctrl
                     press_key(0xFFE9); // Left alt
                     press_key(0xFFE1); // shift
