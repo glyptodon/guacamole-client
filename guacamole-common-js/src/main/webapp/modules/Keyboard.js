@@ -533,28 +533,8 @@ Guacamole.Keyboard = function(element) {
         if (_userAgent != null && _userAgent.indexOf("Macintosh") >= 0) {
             if (guac_keyboard != null && guac_keyboard.modifiers != null &&
                 guac_keyboard.modifiers.alt == true && guac_keyboard.modifiers.ctrl == false) {
-                if (keynum == 186 || keynum == 69 || keynum == 222 || keynum == 219 || keynum == 221) { // # @ [ ] 
-                    if (keynum == 222) keynum = 35;    // #
-                    if (keynum == 186) keynum = 64;    // @
-                    if (keynum == 219) keynum = 91;    // [
-                    if (keynum == 221) keynum = 93;    // ]
-                    if (keynum == 69) keynum = 8364;   // 
-
-                    // now the key has just to be sent on the tunnel, with no further changes
-                    // the following code could probably be written much better:
-                    e.preventDefault();
-                    keysym = keysym_from_charcode(keynum);
-                    // send the plain key, with no modifiers
-                    guac_keyboard.modifiers.alt == false;
-                    release_key(0xFFE9); // Left alt
-                    release_key(0xFFEA); // Right alt (or AltGr)
-                    release_key(0xFFE3); // Left ctrl
-                    release_key(0xFFE4); // Right ctrl
-                    press_key(keysym);
-                    release_key(keysym);
-                    // returns, no further actions are needed
-                    return;
-                }
+                // expects a keypress event for the combined key
+                return;
             }
         }
 
