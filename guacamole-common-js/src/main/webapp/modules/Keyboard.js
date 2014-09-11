@@ -524,9 +524,8 @@ Guacamole.Keyboard = function(element) {
 
         // Ignore (but do not prevent) the "composition" keycode sent by some
         // browsers when an IME is in use (see: http://lists.w3.org/Archives/Public/www-dom/2010JulSep/att-0182/keyCode-spec.html)
-        // I think it is not correct to ignore keydown events sending keyCode=229 because of this: http://stackoverflow.com/questions/25043934/is-it-ok-to-ignore-keydown-events-with-keycode-229
-        //if (keynum === 229)
-        //    return;
+        if (keynum === 229)
+            return;
 
         // Bug: Mac keyboards, it is not possibile to type @, #, [, ],  because the combination Alt-character generates
         // wrong keynums
