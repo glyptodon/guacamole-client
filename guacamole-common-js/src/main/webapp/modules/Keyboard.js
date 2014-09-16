@@ -319,11 +319,16 @@ Guacamole.Keyboard = function(element) {
         else
             return get_keysym(keyidentifier_keysym[identifier], location);
 
-        // Convert case if shifted
-        if (shifted)
-            typedCharacter = typedCharacter.toUpperCase();
-        else
-            typedCharacter = typedCharacter.toLowerCase();
+        // this condition has been added in order to support a null value in the "shifted" parameter
+        // in case of null no case conversion is made
+        // the reason for this is explained below in the source code
+        if (shifted != null) {
+            // Convert case if shifted
+            if (shifted)
+                typedCharacter = typedCharacter.toUpperCase();
+            else
+                typedCharacter = typedCharacter.toLowerCase();
+        }
 
         // Get codepoint
         var codepoint = typedCharacter.charCodeAt(0);
@@ -488,6 +493,9 @@ Guacamole.Keyboard = function(element) {
 
     }
 
+    // the user agent is determined one time and then used in order to handle particular platform-dependent cases
+    var _userAgent = navigator.userAgent;
+
     // When key pressed
     element.addEventListener("keydown", function(e) {
 
@@ -503,7 +511,11 @@ Guacamole.Keyboard = function(element) {
 
         // Ignore any unknown key events
         if (!keynum) {
-            e.preventDefault();
+            // Bug: No accented characters can be typed using Firefox
+            // solution: in Firefox for some keys (e.g.: accented letters) e.which is equal to zero in the keydown event!
+            // the correct value will instead be available in the keypress event
+            // therefore we cannot prevent the event default bubbling here
+            //e.preventDefault();
             return;
         }
 
@@ -515,13 +527,32 @@ Guacamole.Keyboard = function(element) {
         if (keynum === 229)
             return;
 
+        // Bug: Mac keyboards, it is not possibile to type @, #, [, ],  because the combination Alt-character generates
+        // wrong keynums
+        // solution: converts the keynum value for some specific Mac keyboard keys combinations that are not correctly interpreted
+        if (_userAgent != null && _userAgent.indexOf("Macintosh") >= 0) {
+            if (guac_keyboard != null && guac_keyboard.modifiers != null &&
+                guac_keyboard.modifiers.alt == true && guac_keyboard.modifiers.ctrl == false) {
+                // expects a keypress event for the combined key
+                return;
+            }
+        }
+
         // Try to get keysym from keycode
         var keysym = keysym_from_keycode(keynum, location);
 
         // Also try to get get keysym from e.key 
-        if (e.key)
+        // Explorer 11 bug: for the dead keys, such as the ^ on French keyboards, the e.key is set to value of 'Unidentified', instead of being null
+        if (e.key && !e.key == 'Unidentified')
+            // Firefox, Explorer 11 bug: the CapsLock state has no effect, letters are always typed lowercase
+            // solution:
+            // when e.key exists it is already set with the correct typed character, either lower or upper case
+            // the keysym_from_key_identifier function tests the .shift modified in order to decide
+            // if the character will be lower or upper case; with CapsLocks pressed and guac_keyboard.modifiers.shift = false
+            // the character would be converted to lower case, generating the bug
+            // therefore the shifted parameter is set to null and in the keysym_from_key_identifier the letter case will not be changed
             keysym = keysym || keysym_from_key_identifier(
-                guac_keyboard.modifiers.shift, e.key, location);
+                null, e.key, location);
 
         // If no e.key, use e.keyIdentifier if absolutely necessary (can be buggy)
         else {
@@ -541,8 +572,28 @@ Guacamole.Keyboard = function(element) {
         if (keysym !== null) {
 
             keydownChar[keynum] = keysym;
-            if (!press_key(keysym))
-                e.preventDefault();
+            // Chrome, Firefox, IE11 Bug: It is not possible to type Alt-Gr character combinations (e.g.: Alt-Gr @, Alt-Gr #, etc.)
+            // the characters are either not typed at all or converted in a wrong character
+            // solution: if Ctrl-Alt (Alt-Gr) is pressed let the event bubble
+            // it will be correctly handled in the keypress event
+            if (!guac_keyboard.modifiers.shift && guac_keyboard.modifiers.ctrl && guac_keyboard.modifiers.alt) {
+                // let it bubble to keypress
+            } else {
+                if (guac_keyboard.modifiers.ctrl && guac_keyboard.modifiers.alt && guac_keyboard.modifiers.shift) {
+                    // manages the combination Ctrl-Alt-Shift that opens the Guacamole menu
+                    release_key(0xFFE9); // Left alt
+                    release_key(0xFFEA); // Right alt (or AltGr)
+                    release_key(0xFFE3); // Left ctrl
+                    release_key(0xFFE4); // Right ctrl
+                    press_key(0xFFE3); // Left ctrl
+                    press_key(0xFFE9); // Left alt
+                    press_key(0xFFE1); // shift
+                    e.preventDefault();
+                } else {
+                    if (!press_key(keysym))
+                        e.preventDefault();
+                }
+            }
             
             // If a key is pressed while meta is held down, the keyup will
             // never be sent in Chrome, so send it now. (bug #108404)
