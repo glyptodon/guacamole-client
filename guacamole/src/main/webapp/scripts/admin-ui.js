@@ -1409,7 +1409,7 @@ GuacAdmin.reset = function() {
 
             // Alert on failure
             catch (status) {
-                alert(tatusmessage);
+                alert(status.message);
             }
 
         };
