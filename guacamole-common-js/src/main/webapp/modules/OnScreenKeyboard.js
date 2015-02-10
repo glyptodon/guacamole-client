@@ -214,6 +214,7 @@ Guacamole.OnScreenKeyboard = function(url) {
     // Retrieve keyboard XML
     var xmlhttprequest = new XMLHttpRequest();
     xmlhttprequest.open("GET", url, false);
+    xmlhttprequest.withCredentials = true;
     xmlhttprequest.send(null);
 
     var xml = xmlhttprequest.responseXML;
