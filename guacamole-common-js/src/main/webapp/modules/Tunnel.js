@@ -274,7 +274,6 @@ Guacamole.HTTPTunnel = function(tunnelURL) {
 
             var message_xmlhttprequest = new XMLHttpRequest();
             message_xmlhttprequest.open("POST", TUNNEL_WRITE + tunnel_uuid);
-            message_xmlhttprequest.withCredentials = true;
             message_xmlhttprequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
 
             // Once response received, send next queued event.
@@ -505,7 +504,6 @@ Guacamole.HTTPTunnel = function(tunnelURL) {
         // Make request, increment request ID
         var xmlhttprequest = new XMLHttpRequest();
         xmlhttprequest.open("GET", TUNNEL_READ + tunnel_uuid + ":" + (request_id++));
-        xmlhttprequest.withCredentials = true;
         xmlhttprequest.send(null);
 
         return xmlhttprequest;
@@ -545,7 +543,6 @@ Guacamole.HTTPTunnel = function(tunnelURL) {
         };
 
         connect_xmlhttprequest.open("POST", TUNNEL_CONNECT, true);
-        connect_xmlhttprequest.withCredentials = true;
         connect_xmlhttprequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
         connect_xmlhttprequest.send(data);
 
