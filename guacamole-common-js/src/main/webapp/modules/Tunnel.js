@@ -139,7 +139,7 @@ Guacamole.Tunnel.State = {
  * @augments Guacamole.Tunnel
  * @param {String} tunnelURL The URL of the HTTP tunneling service.
  */
-Guacamole.HTTPTunnel = function(tunnelURL) {
+Guacamole.HTTPTunnel = function(tunnelURL, withCredentials) {
 
     /**
      * Reference to this HTTP tunnel.
@@ -161,6 +161,8 @@ Guacamole.HTTPTunnel = function(tunnelURL) {
 
     var sendingMessages = false;
     var outputMessageBuffer = "";
+
+    withCredentials = !!withCredentials;
 
     /**
      * The current receive timeout ID, if any.
@@ -274,6 +276,7 @@ Guacamole.HTTPTunnel = function(tunnelURL) {
 
             var message_xmlhttprequest = new XMLHttpRequest();
             message_xmlhttprequest.open("POST", TUNNEL_WRITE + tunnel_uuid);
+            message_xmlhttprequest.withCredentials = withCredentials;
             message_xmlhttprequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
 
             // Once response received, send next queued event.
@@ -504,6 +507,7 @@ Guacamole.HTTPTunnel = function(tunnelURL) {
         // Make request, increment request ID
         var xmlhttprequest = new XMLHttpRequest();
         xmlhttprequest.open("GET", TUNNEL_READ + tunnel_uuid + ":" + (request_id++));
+        xmlhttprequest.withCredentials = withCredentials;
         xmlhttprequest.send(null);
 
         return xmlhttprequest;
@@ -543,6 +547,7 @@ Guacamole.HTTPTunnel = function(tunnelURL) {
         };
 
         connect_xmlhttprequest.open("POST", TUNNEL_CONNECT, true);
+        connect_xmlhttprequest.withCredentials = withCredentials;
         connect_xmlhttprequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
         connect_xmlhttprequest.send(data);
 
