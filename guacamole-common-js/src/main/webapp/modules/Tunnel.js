@@ -138,6 +138,7 @@ Guacamole.Tunnel.State = {
  * @constructor
  * @augments Guacamole.Tunnel
  * @param {String} tunnelURL The URL of the HTTP tunneling service.
+ * @param {Boolean} withCredentials HTTP requests 'withCredentials' header value.
  */
 Guacamole.HTTPTunnel = function(tunnelURL, withCredentials) {
 
