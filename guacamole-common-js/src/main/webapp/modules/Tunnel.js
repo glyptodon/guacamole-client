@@ -215,7 +215,7 @@ Guacamole.HTTPTunnel = function(tunnelURL) {
         // Mark as closed
         tunnel.state = Guacamole.Tunnel.State.CLOSED;
 
-        // Reset output message buffer
+        // Reset output message buffer 
         sendingMessages = false;
 
         if (tunnel.onstatechange)
