@@ -20,15 +20,7 @@
  * THE SOFTWARE.
  */
 
-.manage table.session-list {
-    width: 100%;
-}
-
-.manage table.session-list tr.session:hover {
-    background: #CDA;
-}
-
-.manage table.session-list .select-session {
-    min-width: 2em;
-    text-align: center;
+.preferences .input-method .caption {
+    margin-left: 2em;
+    margin-right: 2em;
 }
