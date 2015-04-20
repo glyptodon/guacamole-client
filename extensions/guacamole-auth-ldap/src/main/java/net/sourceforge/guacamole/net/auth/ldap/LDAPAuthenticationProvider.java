@@ -28,7 +28,10 @@ import com.novell.ldap.LDAPConnection;
 import com.novell.ldap.LDAPEntry;
 import com.novell.ldap.LDAPException;
 import com.novell.ldap.LDAPSearchResults;
+import com.novell.ldap.LDAPSocketFactory;
+import com.novell.ldap.LDAPJSSESecureSocketFactory;
 import java.io.UnsupportedEncodingException;
+import java.security.Security;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.TreeMap;
@@ -55,6 +58,8 @@ public class LDAPAuthenticationProvider extends SimpleAuthenticationProvider {
      * Logger for this class.
      */
     private Logger logger = LoggerFactory.getLogger(LDAPAuthenticationProvider.class);
+    private int ldapPort = LDAPConnection.DEFAULT_SSL_PORT;
+    private LDAPSocketFactory ssf;
 
     // Courtesy of OWASP: https://www.owasp.org/index.php/Preventing_LDAP_Injection_in_Java
     private static String escapeLDAPSearchFilter(String filter) {
@@ -143,11 +148,17 @@ public class LDAPAuthenticationProvider extends SimpleAuthenticationProvider {
         // Connect to LDAP server
         LDAPConnection ldapConnection;
         try {
-
+            Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+            //TODO: change path to be grabbed from system properties
+            String path = "/home/bdwills";
+            System.setProperty("javax.net.ssl.trustStore", path);
+	    
+            ssf = new LDAPJSSESecureSocketFactory();
+            LDAPConnection.setSocketFactory(ssf);
             ldapConnection = new LDAPConnection();
             ldapConnection.connect(
                     GuacamoleProperties.getRequiredProperty(LDAPGuacamoleProperties.LDAP_HOSTNAME),
-                    GuacamoleProperties.getRequiredProperty(LDAPGuacamoleProperties.LDAP_PORT)
+                    ldapPort
             );
 
         }
