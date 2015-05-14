@@ -99,6 +99,18 @@ public abstract class AbstractGuacamoleTunnelService implements GuacamoleTunnelS
     private ConnectionRecordMapper connectionRecordMapper;
 
     /**
+     * The hostname to use when connecting to guacd if no hostname is provided
+     * within guacamole.properties.
+     */
+    private static final String DEFAULT_GUACD_HOSTNAME = "localhost";
+
+    /**
+     * The port to use when connecting to guacd if no port is provided within
+     * guacamole.properties.
+     */
+    private static final int DEFAULT_GUACD_PORT = 4822;
+
+    /**
      * All active connections through the tunnel having a given UUID.
      */
     private final Map<String, ActiveConnectionRecord> activeTunnels =
@@ -266,17 +278,17 @@ public abstract class AbstractGuacamoleTunnelService implements GuacamoleTunnelS
         throws GuacamoleException {
 
         // Use SSL if requested
-        if (environment.getProperty(Environment.GUACD_SSL, true))
-            return new ManagedInetGuacamoleSocket(
-                environment.getRequiredProperty(Environment.GUACD_HOSTNAME),
-                environment.getRequiredProperty(Environment.GUACD_PORT),
+        if (environment.getProperty(Environment.GUACD_SSL, false))
+            return new ManagedSSLGuacamoleSocket(
+                environment.getProperty(Environment.GUACD_HOSTNAME, DEFAULT_GUACD_HOSTNAME),
+                environment.getProperty(Environment.GUACD_PORT,     DEFAULT_GUACD_PORT),
                 socketClosedCallback
             );
 
         // Otherwise, just use straight TCP
         return new ManagedInetGuacamoleSocket(
-            environment.getRequiredProperty(Environment.GUACD_HOSTNAME),
-            environment.getRequiredProperty(Environment.GUACD_PORT),
+            environment.getProperty(Environment.GUACD_HOSTNAME, DEFAULT_GUACD_HOSTNAME),
+            environment.getProperty(Environment.GUACD_PORT,     DEFAULT_GUACD_PORT),
             socketClosedCallback
         );
 
@@ -424,12 +436,12 @@ public abstract class AbstractGuacamoleTunnelService implements GuacamoleTunnelS
 
         // If not a balancing group, there are no balanced connections
         if (connectionGroup.getType() != ConnectionGroup.Type.BALANCING)
-            return Collections.EMPTY_LIST;
+            return Collections.<ModeledConnection>emptyList();
 
         // If group has no children, there are no balanced connections
         Collection<String> identifiers = connectionMapper.selectIdentifiersWithin(connectionGroup.getIdentifier());
         if (identifiers.isEmpty())
-            return Collections.EMPTY_LIST;
+            return Collections.<ModeledConnection>emptyList();
 
         // Retrieve all children
         Collection<ConnectionModel> models = connectionMapper.select(identifiers);
@@ -453,7 +465,7 @@ public abstract class AbstractGuacamoleTunnelService implements GuacamoleTunnelS
         // Simply return empty list if there are no active tunnels
         Collection<ActiveConnectionRecord> records = activeTunnels.values();
         if (records.isEmpty())
-            return Collections.EMPTY_LIST;
+            return Collections.<ActiveConnectionRecord>emptyList();
 
         // Build set of all connection identifiers associated with active tunnels
         Set<String> identifiers = new HashSet<String>(records.size());
@@ -521,7 +533,7 @@ public abstract class AbstractGuacamoleTunnelService implements GuacamoleTunnelS
 
         // If not a balancing group, assume no connections
         if (connectionGroup.getType() != ConnectionGroup.Type.BALANCING)
-            return Collections.EMPTY_LIST;
+            return Collections.<ActiveConnectionRecord>emptyList();
 
         return activeConnectionGroups.get(connectionGroup.getIdentifier());
 

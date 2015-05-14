@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Glyptodon LLC
+ * Copyright (C) 2015 Glyptodon LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,13 +24,12 @@ package org.glyptodon.guacamole.net.basic;
 
 import com.google.inject.servlet.ServletModule;
 import java.lang.reflect.InvocationTargetException;
-import org.glyptodon.guacamole.GuacamoleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Module which loads tunnel implementations.
- * 
+ *
  * @author Michael Jumper
  */
 public class TunnelModule extends ServletModule {
@@ -54,12 +53,11 @@ public class TunnelModule extends ServletModule {
 
         try {
 
-            // Attempt to find WebSocket module 
-            Class<TunnelLoader> module = (Class<TunnelLoader>)
-                    GuacamoleClassLoader.getInstance().findClass(classname);
+            // Attempt to find WebSocket module
+            Class<?> module = Class.forName(classname);
 
             // Create loader
-            TunnelLoader loader = module.getConstructor().newInstance();
+            TunnelLoader loader = (TunnelLoader) module.getConstructor().newInstance();
 
             // Install module, if supported
             if (loader.isSupported()) {
@@ -84,12 +82,6 @@ public class TunnelModule extends ServletModule {
         }
         catch (InvocationTargetException e) {
             logger.debug("Error instantiating WebSocket module.", e);
-        }
-
-        // Log all GuacamoleExceptions
-        catch (GuacamoleException e) {
-            logger.error("Unable to load/detect WebSocket support: {}", e.getMessage());
-            logger.debug("Error loading/detecting WebSocket support.", e);
         }
 
         // Load attempt failed
@@ -119,4 +111,3 @@ public class TunnelModule extends ServletModule {
     }
 
 }
-

@@ -1,5 +1,7 @@
 {
-
+    
+    "NAME" : "English (US)",
+    
     "APP" : {
 
         "ACTION_ACKNOWLEDGE"        : "OK",
@@ -115,7 +117,7 @@
         "TEXT_RECONNECT_COUNTDOWN"        : "Reconnecting in {REMAINING} {REMAINING, plural, one{second} other{seconds}}...",
         "TEXT_FILE_TRANSFER_PROGRESS"     : "{PROGRESS} {UNIT, select, b{B} kb{KB} mb{MB} gb{GB} other{}}",
 
-        "URL_OSK_LAYOUT" : "layouts/en-us-qwerty.xml"
+        "URL_OSK_LAYOUT" : "layouts/en-us-qwerty.json"
 
     },
 
@@ -141,12 +143,12 @@
 
     "LOGIN": {
 
-        "ACTION_LOGIN"               : "@:APP.ACTION_LOGIN",
+        "ACTION_LOGIN" : "@:APP.ACTION_LOGIN",
 
-        "ERROR_INVALID_LOGIN"        : "Invalid Login",
+        "ERROR_INVALID_LOGIN" : "Invalid Login",
 
-        "FIELD_PLACEHOLDER_USERNAME" : "Username",
-        "FIELD_PLACEHOLDER_PASSWORD" : "Password"
+        "FIELD_HEADER_USERNAME" : "Username",
+        "FIELD_HEADER_PASSWORD" : "Password"
 
     },
 
@@ -411,6 +413,7 @@
         "ERROR_PASSWORD_BLANK"    : "Your password cannot be blank.",
         "ERROR_PASSWORD_MISMATCH" : "@:APP.ERROR_PASSWORD_MISMATCH",
 
+        "FIELD_HEADER_LANGUAGE"           : "Display language:",
         "FIELD_HEADER_PASSWORD"           : "Password:",
         "FIELD_HEADER_PASSWORD_OLD"       : "Current Password:",
         "FIELD_HEADER_PASSWORD_NEW"       : "New Password:",
@@ -422,6 +425,7 @@
         "HELP_INPUT_METHOD_NONE"    : "@:CLIENT.HELP_INPUT_METHOD_NONE",
         "HELP_INPUT_METHOD_OSK"     : "@:CLIENT.HELP_INPUT_METHOD_OSK",
         "HELP_INPUT_METHOD_TEXT"    : "@:CLIENT.HELP_INPUT_METHOD_TEXT",
+        "HELP_LANGUAGE"             : "Select a different language below to change the language of all text within Guacamole. Available choices will depend on which languages are installed.",
         "HELP_MOUSE_MODE_ABSOLUTE"  : "@:CLIENT.HELP_MOUSE_MODE_ABSOLUTE",
         "HELP_MOUSE_MODE_RELATIVE"  : "@:CLIENT.HELP_MOUSE_MODE_RELATIVE",
         "HELP_UPDATE_PASSWORD"      : "If you wish to change your password, enter your current password and the desired new password below, and click \"Update Password\". The change will take effect immediately.",
@@ -433,7 +437,8 @@
         "NAME_INPUT_METHOD_TEXT" : "@:CLIENT.NAME_INPUT_METHOD_TEXT",
 
         "SECTION_HEADER_DEFAULT_INPUT_METHOD" : "Default Input Method",
-        "SECTION_HEADER_DEFAULT_MOUSE_MODE"   : "Default Mouse Emulation Mode"
+        "SECTION_HEADER_DEFAULT_MOUSE_MODE"   : "Default Mouse Emulation Mode",
+        "SECTION_HEADER_UPDATE_PASSWORD"      : "Change Password"
 
     },
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Glyptodon LLC
+ * Copyright (C) 2015 Glyptodon LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,28 +20,9 @@
  * THE SOFTWARE.
  */
 
-angular.module('index').factory('authenticationInterceptor', ['$location', '$q', 
-        function authenticationInterceptor($location, $q) {
-            
-    return {
-
-        // Redirect users to login if authorization fails
-        responseError: function handleErrorResponse(rejection) {
-
-            // Only redirect failed authentication requests
-            if ((rejection.status === 401 || rejection.status === 403)
-                    && rejection.config.url  === 'api/tokens') {
-
-                // Only redirect if not already on login page
-                if ($location.path() !== '/login/')
-                    $location.path('/login/');
-
-            }
-
-            return $q.reject(rejection);
-
-        }
-
-    };
-
-}]);
+/**
+ * Module which provides generic storage services.
+ */
+angular.module('storage', [
+    'auth'
+]);

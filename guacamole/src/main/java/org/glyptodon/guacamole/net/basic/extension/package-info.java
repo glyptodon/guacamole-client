@@ -20,7 +20,8 @@
  * THE SOFTWARE.
  */
 
-.preferences .update-password .form {
-    padding-left: 0.5em;
-    border-left: 3px solid rgba(0, 0, 0, 0.125);
-}
+/**
+ * Classes which represent and facilitate the loading of extensions to the
+ * Guacamole web application.
+ */
+package org.glyptodon.guacamole.net.basic.extension;

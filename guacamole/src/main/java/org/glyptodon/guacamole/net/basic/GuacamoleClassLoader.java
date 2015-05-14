@@ -33,15 +33,19 @@ import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.glyptodon.guacamole.GuacamoleException;
+import org.glyptodon.guacamole.environment.Environment;
+import org.glyptodon.guacamole.environment.LocalEnvironment;
 import org.glyptodon.guacamole.net.basic.properties.BasicGuacamoleProperties;
-import org.glyptodon.guacamole.properties.GuacamoleProperties;
 
 /**
  * A ClassLoader implementation which finds classes within a configurable
- * directory. This directory is set within guacamole.properties.
+ * directory. This directory is set within guacamole.properties. This class
+ * is deprecated in favor of DirectoryClassLoader, which is automatically
+ * configured based on the presence/absence of GUACAMOLE_HOME/lib.
  *
  * @author Michael Jumper
  */
+@Deprecated
 public class GuacamoleClassLoader extends ClassLoader {
 
     /**
@@ -69,9 +73,14 @@ public class GuacamoleClassLoader extends ClassLoader {
 
                 @Override
                 public GuacamoleClassLoader run() throws GuacamoleException {
+
+                    // TODONT: This should be injected, but GuacamoleClassLoader will be removed soon.
+                    Environment environment = new LocalEnvironment();
+                    
                     return new GuacamoleClassLoader(
-                        GuacamoleProperties.getProperty(BasicGuacamoleProperties.LIB_DIRECTORY)
+                        environment.getProperty(BasicGuacamoleProperties.LIB_DIRECTORY)
                     );
+
                 }
 
             });

@@ -21,11 +21,7 @@
  */
 
 /**
- * The config block for setting up the authentication interceptor.
+ * Classes related to the language retrieval aspect of the Guacamole REST API.
  */
-angular.module('index').config(['$httpProvider', 
-        function indexInterceptorConfig($httpProvider) {
-    $httpProvider.interceptors.push('authenticationInterceptor');
-}]);
-
+package org.glyptodon.guacamole.net.basic.rest.language;
 

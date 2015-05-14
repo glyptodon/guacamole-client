@@ -29,11 +29,11 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.glyptodon.guacamole.GuacamoleException;
+import org.glyptodon.guacamole.environment.Environment;
 import org.glyptodon.guacamole.net.GuacamoleTunnel;
 import org.glyptodon.guacamole.net.auth.Credentials;
 import org.glyptodon.guacamole.net.auth.UserContext;
 import org.glyptodon.guacamole.net.basic.properties.BasicGuacamoleProperties;
-import org.glyptodon.guacamole.properties.GuacamoleProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,11 +61,6 @@ public class GuacamoleSession {
     private UserContext userContext;
 
     /**
-     * Collection of all event listeners configured in guacamole.properties.
-     */
-    private final Collection<Object> listeners = new ArrayList<Object>();
-    
-    /**
      * The current clipboard state.
      */
     private final ClipboardState clipboardState = new ClipboardState();
@@ -83,58 +78,24 @@ public class GuacamoleSession {
     /**
      * Creates a new Guacamole session associated with the given user context.
      *
-     * @param credentials The credentials provided by the user during login.
-     * @param userContext The user context to associate this session with.
-     * @throws GuacamoleException If an error prevents the session from being
-     *                            created.
+     * @param environment
+     *     The environment of the Guacamole server associated with this new
+     *     session.
+     *
+     * @param credentials
+     *     The credentials provided by the user during login.
+     *
+     * @param userContext
+     *     The user context to associate this session with.
+     *
+     * @throws GuacamoleException
+     *     If an error prevents the session from being created.
      */
-    public GuacamoleSession(Credentials credentials, UserContext userContext) throws GuacamoleException {
-
+    public GuacamoleSession(Environment environment, Credentials credentials,
+            UserContext userContext) throws GuacamoleException {
         this.lastAccessedTime = System.currentTimeMillis();
         this.credentials = credentials;
         this.userContext = userContext;
-
-        // Load listeners from guacamole.properties
-        try {
-
-            // Get all listener classes from properties
-            Collection<Class> listenerClasses =
-                    GuacamoleProperties.getProperty(BasicGuacamoleProperties.EVENT_LISTENERS);
-
-            // Add an instance of each class to the list
-            if (listenerClasses != null) {
-                for (Class listenerClass : listenerClasses) {
-
-                    // Instantiate listener
-                    Object listener = listenerClass.getConstructor().newInstance();
-
-                    // Add listener to collection of listeners
-                    listeners.add(listener);
-
-                }
-            }
-
-        }
-        catch (InstantiationException e) {
-            throw new GuacamoleException("Listener class is abstract.", e);
-        }
-        catch (IllegalAccessException e) {
-            throw new GuacamoleException("No access to listener constructor.", e);
-        }
-        catch (IllegalArgumentException e) {
-            // This should not happen, given there ARE no arguments
-            throw new GuacamoleException("Illegal arguments to listener constructor.", e);
-        }
-        catch (InvocationTargetException e) {
-            throw new GuacamoleException("Error while instantiating listener.", e);
-        }
-        catch (NoSuchMethodException e) {
-            throw new GuacamoleException("Listener has no default constructor.", e);
-        }
-        catch (SecurityException e) {
-            throw new GuacamoleException("Security restrictions prevent instantiation of listener.", e);
-        }
-
     }
 
     /**
@@ -187,19 +148,6 @@ public class GuacamoleSession {
      */
     public ClipboardState getClipboardState() {
         return clipboardState;
-    }
-
-    /**
-     * Returns a collection which iterates over instances of all listeners
-     * defined in guacamole.properties. For each listener defined in
-     * guacamole.properties, a new instance is created and stored in this
-     * collection.
-     *
-     * @return A collection which iterates over instances of all listeners
-     *         defined in guacamole.properties.
-     */
-    public Collection<Object> getListeners() {
-        return Collections.unmodifiableCollection(listeners);
     }
 
     /**

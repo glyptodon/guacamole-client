@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import org.glyptodon.guacamole.GuacamoleException;
+import org.glyptodon.guacamole.environment.Environment;
+import org.glyptodon.guacamole.environment.LocalEnvironment;
 import org.glyptodon.guacamole.net.auth.Credentials;
 import org.glyptodon.guacamole.net.auth.simple.SimpleAuthenticationProvider;
 import org.glyptodon.guacamole.net.basic.auth.Authorization;
@@ -36,7 +38,6 @@ import org.glyptodon.guacamole.net.basic.auth.UserMapping;
 import org.glyptodon.guacamole.xml.DocumentHandler;
 import org.glyptodon.guacamole.net.basic.xml.user_mapping.UserMappingTagHandler;
 import org.glyptodon.guacamole.properties.FileGuacamoleProperty;
-import org.glyptodon.guacamole.properties.GuacamoleProperties;
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +71,12 @@ public class BasicFileAuthenticationProvider extends SimpleAuthenticationProvide
     private UserMapping user_mapping;
 
     /**
-     * The filename of the XML file to read the user user_mapping from.
+     * Guacamole server environment.
+     */
+    private final Environment environment;
+
+    /**
+     * The XML file to read the user mapping from.
      */
     public static final FileGuacamoleProperty BASIC_USER_MAPPING = new FileGuacamoleProperty() {
 
@@ -78,6 +84,24 @@ public class BasicFileAuthenticationProvider extends SimpleAuthenticationProvide
         public String getName() { return "basic-user-mapping"; }
 
     };
+
+    /**
+     * The default filename to use for the user mapping, if not defined within
+     * guacamole.properties.
+     */
+    public static final String DEFAULT_USER_MAPPING = "user-mapping.xml";
+    
+    /**
+     * Creates a new BasicFileAuthenticationProvider that authenticates users
+     * against simple, monolithic XML file.
+     *
+     * @throws GuacamoleException
+     *     If a required property is missing, or an error occurs while parsing
+     *     a property.
+     */
+    public BasicFileAuthenticationProvider() throws GuacamoleException {
+        environment = new LocalEnvironment();
+    }
 
     /**
      * Returns a UserMapping containing all authorization data given within
@@ -92,9 +116,10 @@ public class BasicFileAuthenticationProvider extends SimpleAuthenticationProvide
      */
     private UserMapping getUserMapping() throws GuacamoleException {
 
-        // Get user user_mapping file
-        File user_mapping_file =
-                GuacamoleProperties.getRequiredProperty(BASIC_USER_MAPPING);
+        // Get user mapping file, defaulting to GUACAMOLE_HOME/user-mapping.xml
+        File user_mapping_file = environment.getProperty(BASIC_USER_MAPPING);
+        if (user_mapping_file == null)
+            user_mapping_file = new File(environment.getGuacamoleHome(), DEFAULT_USER_MAPPING);
 
         // If user_mapping not yet read, or user_mapping has been modified, reread
         if (user_mapping == null ||

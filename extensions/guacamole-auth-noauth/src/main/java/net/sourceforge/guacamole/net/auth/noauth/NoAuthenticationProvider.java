@@ -30,10 +30,11 @@ import java.io.IOException;
 import java.io.Reader;
 import org.glyptodon.guacamole.GuacamoleException;
 import org.glyptodon.guacamole.GuacamoleServerException;
+import org.glyptodon.guacamole.environment.Environment;
+import org.glyptodon.guacamole.environment.LocalEnvironment;
 import org.glyptodon.guacamole.net.auth.simple.SimpleAuthenticationProvider;
 import org.glyptodon.guacamole.net.auth.Credentials;
 import org.glyptodon.guacamole.properties.FileGuacamoleProperty;
-import org.glyptodon.guacamole.properties.GuacamoleProperties;
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -53,7 +54,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
  *
  * Example `guacamole.properties`:
  *
- *  auth-provider: net.sourceforge.guacamole.net.auth.noauth.NoAuthenticationProvider
  *  noauth-config: /etc/guacamole/noauth-config.xml
  *
  *
@@ -87,7 +87,12 @@ public class NoAuthenticationProvider extends SimpleAuthenticationProvider {
     private long configTime;
 
     /**
-     * The filename of the XML file to read the user mapping from.
+     * Guacamole server environment.
+     */
+    private final Environment environment;
+    
+    /**
+     * The XML file to read the configuration from.
      */
     public static final FileGuacamoleProperty NOAUTH_CONFIG = new FileGuacamoleProperty() {
 
@@ -99,6 +104,25 @@ public class NoAuthenticationProvider extends SimpleAuthenticationProvider {
     };
 
     /**
+     * The default filename to use for the configuration, if not defined within
+     * guacamole.properties.
+     */
+    public static final String DEFAULT_NOAUTH_CONFIG = "noauth-config.xml";
+
+    /**
+     * Creates a new NoAuthenticationProvider that does not perform any
+     * authentication at all. All attempts to access the Guacamole system are
+     * presumed to be authorized.
+     *
+     * @throws GuacamoleException
+     *     If a required property is missing, or an error occurs while parsing
+     *     a property.
+     */
+    public NoAuthenticationProvider() throws GuacamoleException {
+        environment = new LocalEnvironment();
+    }
+
+    /**
      * Retrieves the configuration file, as defined within guacamole.properties.
      *
      * @return The configuration file, as defined within guacamole.properties.
@@ -106,7 +130,14 @@ public class NoAuthenticationProvider extends SimpleAuthenticationProvider {
      *                            property.
      */
     private File getConfigurationFile() throws GuacamoleException {
-        return GuacamoleProperties.getRequiredProperty(NOAUTH_CONFIG);
+
+        // Get config file, defaulting to GUACAMOLE_HOME/noauth-config.xml
+        File configFile = environment.getProperty(NOAUTH_CONFIG);
+        if (configFile == null)
+            configFile = new File(environment.getGuacamoleHome(), DEFAULT_NOAUTH_CONFIG);
+
+        return configFile;
+
     }
 
     public synchronized void init() throws GuacamoleException {

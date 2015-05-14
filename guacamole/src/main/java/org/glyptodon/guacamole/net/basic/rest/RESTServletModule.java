@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Glyptodon LLC
+ * Copyright (C) 2015 Glyptodon LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 package org.glyptodon.guacamole.net.basic.rest;
 
 import com.google.inject.Scopes;
+import com.google.inject.matcher.Matchers;
 import com.google.inject.servlet.ServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
@@ -32,32 +33,44 @@ import org.glyptodon.guacamole.net.basic.rest.connection.ConnectionRESTService;
 import org.glyptodon.guacamole.net.basic.rest.connectiongroup.ConnectionGroupRESTService;
 import org.glyptodon.guacamole.net.basic.rest.protocol.ProtocolRESTService;
 import org.glyptodon.guacamole.net.basic.rest.activeconnection.ActiveConnectionRESTService;
+import org.glyptodon.guacamole.net.basic.rest.language.LanguageRESTService;
 import org.glyptodon.guacamole.net.basic.rest.user.UserRESTService;
 
 /**
  * A Guice Module to set up the servlet mappings for the Guacamole REST API.
- * 
+ *
  * @author James Muehlner
  */
 public class RESTServletModule extends ServletModule {
-    
+
     @Override
     protected void configureServlets() {
-        
+
+        // Bind @AuthProviderRESTExposure annotation
+        bindInterceptor(
+            Matchers.any(),
+            Matchers.annotatedWith(AuthProviderRESTExposure.class),
+            new AuthProviderRESTExceptionWrapper()
+        );
+
+        // Bind convenience services used by the REST API
+        bind(ObjectRetrievalService.class);
+
         // Set up the API endpoints
-        bind(ClipboardRESTService.class);
-        bind(ConnectionRESTService.class);
-        bind(ConnectionGroupRESTService.class);
-        bind(ProtocolRESTService.class);
-        bind(UserRESTService.class);
-        bind(TokenRESTService.class);
         bind(ActiveConnectionRESTService.class);
-        
+        bind(ClipboardRESTService.class);
+        bind(ConnectionGroupRESTService.class);
+        bind(ConnectionRESTService.class);
+        bind(LanguageRESTService.class);
+        bind(ProtocolRESTService.class);
+        bind(TokenRESTService.class);
+        bind(UserRESTService.class);
+
         // Set up the servlet and JSON mappings
         bind(GuiceContainer.class);
         bind(JacksonJsonProvider.class).in(Scopes.SINGLETON);
         serve("/api/*").with(GuiceContainer.class);
 
     }
-    
+
 }
