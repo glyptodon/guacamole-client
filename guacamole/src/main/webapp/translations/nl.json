@@ -1,6 +1,6 @@
 {
     
-    "NAME" : "Nederlands",
+    "NAME" : "Nederlands (NL)",
     
     "APP" : {
 
@@ -30,8 +30,6 @@
         "FIELD_HEADER_PASSWORD"       : "Wachtwoord:",
         "FIELD_HEADER_PASSWORD_AGAIN" : "Nogmaals uw wachtwoord:",
 
-        "FIELD_PLACEHOLDER_FILTER" : "Filter",
-
         "FORMAT_DATE_TIME_PRECISE" : "yyyy-MM-dd HH:mm:ss",
 
         "INFO_ACTIVE_USER_COUNT" : "Op dit moment in gebruik door {USERS} {USERS, plural, one{gebruiker} other{gebruikers}}.",
@@ -43,9 +41,8 @@
     "CLIENT" : {
 
         "ACTION_ACKNOWLEDGE"               : "@:APP.ACTION_ACKNOWLEDGE",
-        "ACTION_CLEAR_COMPLETED_TRANSFERS" : "Wis lijst",
+        "ACTION_CLEAR_COMPLETED_TRANSFERS" : "Wis lijst Voltooide Overdrachten",
         "ACTION_DISCONNECT"                : "Verbreek Verbinding",
-        "ACTION_NAVIGATE_BACK"             : "@:APP.ACTION_NAVIGATE_BACK",
         "ACTION_NAVIGATE_HOME"             : "@:APP.ACTION_NAVIGATE_HOME",
         "ACTION_RECONNECT"                 : "Verbind Opnieuw",
         "ACTION_SAVE_FILE"                 : "@:APP.ACTION_SAVE",
@@ -249,10 +246,10 @@
     
     "PROTOCOL_RDP" : {
 
-        "FIELD_HEADER_CLIENT_NAME"     : "Client naam:",
         "FIELD_HEADER_COLOR_DEPTH"     : "Kleurdiepte:",
         "FIELD_HEADER_CONSOLE"         : "Administrator console:",
         "FIELD_HEADER_CONSOLE_AUDIO"   : "Support audio in console:",
+        "FIELD_HEADER_CLIENT_NAME"     : "Client naam:",
         "FIELD_HEADER_DISABLE_AUDIO"   : "Uitschakelen geluid:",
         "FIELD_HEADER_DISABLE_AUTH"    : "Uitschakelen authenticatie:",
         "FIELD_HEADER_DOMAIN"          : "Domein:",
@@ -260,7 +257,6 @@
         "FIELD_HEADER_DRIVE_PATH"      : "Station map:",
         "FIELD_HEADER_ENABLE_DRIVE"    : "Inschakelen station:",
         "FIELD_HEADER_ENABLE_PRINTING" : "Printen mogelijk maken:",
-        "FIELD_HEADER_ENABLE_SFTP"     : "SFTP mogelijk maken:",
         "FIELD_HEADER_HEIGHT"          : "Hoogte:",
         "FIELD_HEADER_HOSTNAME"        : "Servernaam:",
         "FIELD_HEADER_IGNORE_CERT"     : "Negeer server certificaat:",
@@ -272,15 +268,9 @@
         "FIELD_HEADER_REMOTE_APP"      : "Programma:",
         "FIELD_HEADER_SECURITY"        : "Beveiligings modus:",
         "FIELD_HEADER_SERVER_LAYOUT"   : "Toetsenbord lay-out:",
-        "FIELD_HEADER_SFTP_HOSTNAME"    : "Servernaam:",
-        "FIELD_HEADER_SFTP_PASSPHRASE"  : "Wachtwoordzin:",
-        "FIELD_HEADER_SFTP_PASSWORD"    : "Wachtwoord:",
-        "FIELD_HEADER_SFTP_PORT"        : "Poort:",
-        "FIELD_HEADER_SFTP_PRIVATE_KEY" : "Persoonlijke sleutel:",
-        "FIELD_HEADER_SFTP_USERNAME"    : "Gebruikersnaam:",
-        "FIELD_HEADER_STATIC_CHANNELS" : "Vaste kanaalnamen:",
         "FIELD_HEADER_USERNAME"        : "Gebruikersnaam:",
         "FIELD_HEADER_WIDTH"           : "Breedte:",
+        "FIELD_HEADER_STATIC_CHANNELS" : "Vaste kanaalnamen:",
 
         "FIELD_OPTION_COLOR_DEPTH_16"    : "Minder Kleuren (16-bit)",
         "FIELD_OPTION_COLOR_DEPTH_24"    : "Echte Kleuren (24-bit)",
@@ -309,8 +299,7 @@
         "SECTION_HEADER_DEVICE_REDIRECTION" : "Device Redirection",
         "SECTION_HEADER_DISPLAY"            : "Scherm",
         "SECTION_HEADER_NETWORK"            : "Netwerk",
-        "SECTION_HEADER_REMOTEAPP"          : "ExterneApp",
-        "SECTION_HEADER_SFTP"               : "SFTP"
+        "SECTION_HEADER_REMOTEAPP"          : "ExterneApp"
 
     },
 
@@ -393,17 +382,10 @@
         "FIELD_HEADER_DEST_HOST"        : "Externe server:",
         "FIELD_HEADER_DEST_PORT"        : "Externe poort:",
         "FIELD_HEADER_ENABLE_AUDIO"     : "Inschakelen geluid:",
-        "FIELD_HEADER_ENABLE_SFTP"      : "SFTP mogelijk maken:",
         "FIELD_HEADER_HOSTNAME"         : "Servernaam:",
         "FIELD_HEADER_PASSWORD"         : "Wachtwoord:",
         "FIELD_HEADER_PORT"             : "Poort:",
         "FIELD_HEADER_READ_ONLY"        : "Alleen lezen:",
-        "FIELD_HEADER_SFTP_HOSTNAME"    : "Servernaam:",
-        "FIELD_HEADER_SFTP_PASSPHRASE"  : "Wachtwoordzin:",
-        "FIELD_HEADER_SFTP_PASSWORD"    : "Wachtwoord:",
-        "FIELD_HEADER_SFTP_PORT"        : "Poort:",
-        "FIELD_HEADER_SFTP_PRIVATE_KEY" : "Persoonlijke sleutel:",
-        "FIELD_HEADER_SFTP_USERNAME"    : "Gebruikersnaam:",
         "FIELD_HEADER_SWAP_RED_BLUE"    : "Verwissel rood/blauw componenten:",
 
         "FIELD_OPTION_COLOR_DEPTH_8"     : "256 kleuren",
@@ -420,11 +402,9 @@
 
         "SECTION_HEADER_AUDIO"          : "Geluid",
         "SECTION_HEADER_AUTHENTICATION" : "Authenticatie",
-        "SECTION_HEADER_CLIPBOARD"      : "Klembord",
         "SECTION_HEADER_DISPLAY"        : "Scherm",
         "SECTION_HEADER_NETWORK"        : "Netwerk",
-        "SECTION_HEADER_REPEATER"       : "VNC Repeater",
-        "SECTION_HEADER_SFTP"           : "SFTP"
+        "SECTION_HEADER_REPEATER"       : "VNC Repeater"
 
     },
 
@@ -446,12 +426,6 @@
         "INFO_ACTIVE_USER_COUNT" : "@:APP.INFO_ACTIVE_USER_COUNT",
 
         "SECTION_HEADER_CONNECTIONS"     : "Verbindingen"
-
-    },
-
-    "SETTINGS_CONNECTION_HISTORY" : {
-
-        "FIELD_PLACEHOLDER_FILTER" : "@:APP.FIELD_PLACEHOLDER_FILTER"
 
     },
 
@@ -517,7 +491,7 @@
         "DIALOG_HEADER_CONFIRM_DELETE" : "Beeindig Sessie",
         "DIALOG_HEADER_ERROR"          : "@:APP.DIALOG_HEADER_ERROR",
         
-        "FIELD_PLACEHOLDER_FILTER" : "@:APP.FIELD_PLACEHOLDER_FILTER",
+        "FIELD_PLACEHOLDER_FILTER" : "Filter",
         
         "FORMAT_STARTDATE" : "@:APP.FORMAT_DATE_TIME_PRECISE",
 
