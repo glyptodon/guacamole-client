@@ -122,8 +122,8 @@
             "keysym"   : 65515
         }],
 
-        "\" : [
-            { "title" : "\", "requires" : [         ] },
+        "\\" : [
+            { "title" : "\\", "requires" : [         ] },
             { "title" : "|", "requires" : [ "shift" ] }
         ],
         "1" : [
