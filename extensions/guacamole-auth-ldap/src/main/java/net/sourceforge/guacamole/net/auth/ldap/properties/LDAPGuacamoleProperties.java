@@ -24,7 +24,7 @@ package net.sourceforge.guacamole.net.auth.ldap.properties;
 
 import org.glyptodon.guacamole.properties.IntegerGuacamoleProperty;
 import org.glyptodon.guacamole.properties.StringGuacamoleProperty;
-
+import org.glyptodon.guacamole.properties.BooleanGuacamoleProperty;
 
 /**
  * Provides properties required for use of the LDAP authentication provider.
@@ -39,7 +39,7 @@ public class LDAPGuacamoleProperties {
      * This class should not be instantiated.
      */
     private LDAPGuacamoleProperties() {}
-
+    
     /**
      * The base DN to search for Guacamole configurations.
      */
@@ -90,6 +90,17 @@ public class LDAPGuacamoleProperties {
 
         @Override
         public String getName() { return "ldap-hostname"; }
+
+    };
+    
+    /**
+     * If using LDAP with SSL, the file path to the keystore that contains the LDAP server's 
+     * trusted certificate.
+     */
+    public static final StringGuacamoleProperty LDAP_KEYSTORE_PATH = new StringGuacamoleProperty() {
+
+        @Override
+        public String getName() { return "ldap-keystore-path"; }
 
     };
 

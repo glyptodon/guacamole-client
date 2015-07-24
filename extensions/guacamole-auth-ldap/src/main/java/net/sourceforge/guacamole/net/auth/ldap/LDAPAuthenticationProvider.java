@@ -59,8 +59,6 @@ public class LDAPAuthenticationProvider extends SimpleAuthenticationProvider {
      * Logger for this class.
      */
     private Logger logger = LoggerFactory.getLogger(LDAPAuthenticationProvider.class);
-    private int ldapPort = LDAPConnection.DEFAULT_SSL_PORT;
-    private LDAPSocketFactory ssf;
 
     /**
      * Guacamole server environment.
@@ -162,23 +160,32 @@ public class LDAPAuthenticationProvider extends SimpleAuthenticationProvider {
             logger.debug("Anonymous bind is not currently allowed by the LDAP authentication provider.");
             return null;
         }
-
-        // Connect to LDAP server
+        
+//        String ldapKeystorePath = "/att/scdmzfs/home/bdwills/sslkey.keystore";
+       	
+       //LDAPSocketFactory, if LDAP with SSL is used
+       	LDAPSocketFactory ssf;
+       
+       	// Connect to LDAP server
         LDAPConnection ldapConnection;
         try {
-            Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-            //TODO: change path to be grabbed from system properties
-            String path = "/home/bdwills";
-            System.setProperty("javax.net.ssl.trustStore", path);
-	    
-            ssf = new LDAPJSSESecureSocketFactory();
-            LDAPConnection.setSocketFactory(ssf);
-            ldapConnection = new LDAPConnection();
+        	
+        	//Populated if LDAP with SSL is used
+            String ldapKeystorePath = environment.getProperty(LDAPGuacamoleProperties.LDAP_KEYSTORE_PATH);
+        	
+        	//check for LDAP with SSL
+        	if (ldapKeystorePath != null) {
+        		Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+                System.setProperty("javax.net.ssl.trustStore", ldapKeystorePath);
+                ssf = new LDAPJSSESecureSocketFactory();
+                LDAPConnection.setSocketFactory(ssf);
+        	}
+        	
+        	ldapConnection = new LDAPConnection();
             ldapConnection.connect(
                     environment.getRequiredProperty(LDAPGuacamoleProperties.LDAP_HOSTNAME),
                     environment.getRequiredProperty(LDAPGuacamoleProperties.LDAP_PORT)
             );
-
         }
         catch (LDAPException e) {
             throw new GuacamoleServerException("Unable to connect to LDAP server.", e);
