@@ -160,9 +160,7 @@ public class LDAPAuthenticationProvider extends SimpleAuthenticationProvider {
             logger.debug("Anonymous bind is not currently allowed by the LDAP authentication provider.");
             return null;
         }
-        
-//        String ldapKeystorePath = "/att/scdmzfs/home/bdwills/sslkey.keystore";
-       	
+               	
        //LDAPSocketFactory, if LDAP with SSL is used
        	LDAPSocketFactory ssf;
        
