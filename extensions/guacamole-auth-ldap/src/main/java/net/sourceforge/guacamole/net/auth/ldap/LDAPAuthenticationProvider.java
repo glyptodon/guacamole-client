@@ -28,7 +28,10 @@ import com.novell.ldap.LDAPConnection;
 import com.novell.ldap.LDAPEntry;
 import com.novell.ldap.LDAPException;
 import com.novell.ldap.LDAPSearchResults;
+import com.novell.ldap.LDAPSocketFactory;
+import com.novell.ldap.LDAPJSSESecureSocketFactory;
 import java.io.UnsupportedEncodingException;
+import java.security.Security;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.TreeMap;
@@ -157,17 +160,30 @@ public class LDAPAuthenticationProvider extends SimpleAuthenticationProvider {
             logger.debug("Anonymous bind is not currently allowed by the LDAP authentication provider.");
             return null;
         }
-
-        // Connect to LDAP server
+               	
+       //LDAPSocketFactory, if LDAP with SSL is used
+       	LDAPSocketFactory ssf;
+       
+       	// Connect to LDAP server
         LDAPConnection ldapConnection;
         try {
-
-            ldapConnection = new LDAPConnection();
+        	
+        	//Populated if LDAP with SSL is used
+            String ldapKeystorePath = environment.getProperty(LDAPGuacamoleProperties.LDAP_KEYSTORE_PATH);
+        	
+        	//check for LDAP with SSL
+        	if (ldapKeystorePath != null) {
+        		Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+                System.setProperty("javax.net.ssl.trustStore", ldapKeystorePath);
+                ssf = new LDAPJSSESecureSocketFactory();
+                LDAPConnection.setSocketFactory(ssf);
+        	}
+        	
+        	ldapConnection = new LDAPConnection();
             ldapConnection.connect(
                     environment.getRequiredProperty(LDAPGuacamoleProperties.LDAP_HOSTNAME),
                     environment.getRequiredProperty(LDAPGuacamoleProperties.LDAP_PORT)
             );
-
         }
         catch (LDAPException e) {
             throw new GuacamoleServerException("Unable to connect to LDAP server.", e);

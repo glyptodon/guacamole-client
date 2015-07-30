@@ -99,7 +99,7 @@
         <dependency>
             <groupId>com.novell.ldap</groupId>
             <artifactId>jldap</artifactId>
-            <version>4.3</version>
+            <version>2009-10-07</version>
         </dependency>
 
     </dependencies>

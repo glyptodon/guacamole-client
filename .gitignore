@@ -2,3 +2,7 @@
 target/
 nb-configuration.xml
 guacamole/customs.json
+.project
+.DS_Store
+.settings/org.eclipse.core.resources.prefs
+.settings/org.eclipse.m2e.core.prefs
