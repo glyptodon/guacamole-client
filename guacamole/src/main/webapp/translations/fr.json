@@ -89,7 +89,6 @@
         "HELP_CLIPBOARD"           : "Texte copié/coupé dans Guacamole apparaîtra ici. Changer le texte ci dessous affectera le presse-papiers distant.",
         "HELP_INPUT_METHOD_NONE"   : "Aucune méthode de saisie utilisée. Clavier accepté depuis un clavier physique connecté.",
         "HELP_INPUT_METHOD_OSK"    : "Affiche et utilise la saisie du clavier virtuel intégré dans Guacamole. Le clavier virtuel permet d'utiliser des combinaisons de touches autrement impossibles (comme Ctrl-Alt-Supp).",
-
         "HELP_INPUT_METHOD_TEXT"   : "Affiche et utilise la saisie du clavier virtuel intégré dans Guacamole. Ceci est nécessaire pou les périphériques mobiles ne disposant pas de clavier physique.",
         "HELP_MOUSE_MODE"          : "Détermine comment la souris distante se comporte selon les événements.", 
         "HELP_MOUSE_MODE_ABSOLUTE" : "Appuyer pour cliquer. Le clique s'effectue à l'endroit de l'appui.",
@@ -251,7 +250,6 @@
 
         "FIELD_HEADER_CLIENT_NAME"     : "Nom du Client:",
         "FIELD_HEADER_COLOR_DEPTH"     : "Qualité couleur:",
-
         "FIELD_HEADER_CONSOLE"         : "Console Administrateur:",
         "FIELD_HEADER_CONSOLE_AUDIO"   : "Support son en console:",
         "FIELD_HEADER_DISABLE_AUDIO"   : "Désactiver son:",
@@ -259,7 +257,6 @@
         "FIELD_HEADER_DOMAIN"          : "Nom du domaine:",
         "FIELD_HEADER_DPI"             : "Résolution (ppp):",
         "FIELD_HEADER_DRIVE_PATH"      : "Chemin du lecteur:",
-
         "FIELD_HEADER_ENABLE_DESKTOP_COMPOSITION" : "Activer la composition du bureau (Aero):",
         "FIELD_HEADER_ENABLE_DRIVE"    : "Activer lecteur réseau:",
         "FIELD_HEADER_ENABLE_FONT_SMOOTHING" : "Enable font smoothing (ClearType):",
@@ -317,7 +314,6 @@
         "SECTION_HEADER_DEVICE_REDIRECTION" : "Redirection Périphérique",
         "SECTION_HEADER_DISPLAY"            : "Affichage",
         "SECTION_HEADER_NETWORK"            : "Réseau",
-
         "SECTION_HEADER_PERFORMANCE"        : "Performance",
         "SECTION_HEADER_REMOTEAPP"          : "RemoteApp",
         "SECTION_HEADER_SFTP"               : "SFTP"
@@ -430,7 +426,6 @@
 
         "SECTION_HEADER_AUDIO"          : "Son",
         "SECTION_HEADER_AUTHENTICATION" : "Authentification",
-
         "SECTION_HEADER_CLIPBOARD"      : "Presse-papiers",
         "SECTION_HEADER_DISPLAY"        : "Affichage",
         "SECTION_HEADER_NETWORK"        : "Réseau",
