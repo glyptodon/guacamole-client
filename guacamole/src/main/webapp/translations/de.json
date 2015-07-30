@@ -43,6 +43,7 @@
         "ACTION_ACKNOWLEDGE"               : "@:APP.ACTION_ACKNOWLEDGE",
         "ACTION_CLEAR_COMPLETED_TRANSFERS" : "Entferne abgeschlossene Übertragungen",
         "ACTION_DISCONNECT"                : "Trennen",
+        "ACTION_NAVIGATE_BACK"             : "@:APP.ACTION_NAVIGATE_BACK",
         "ACTION_NAVIGATE_HOME"             : "@:APP.ACTION_NAVIGATE_HOME",
         "ACTION_RECONNECT"                 : "Neu Verbinden",
         "ACTION_SAVE_FILE"                 : "@:APP.ACTION_SAVE",
@@ -87,7 +88,7 @@
 
         "HELP_CLIPBOARD"           : "Kopierter oder ausgeschnittener Text aus Guacamole wird hier angezeigt. Änderungen am Text werden direkt auf die entfernte Zwischenablage angewandt.",
         "HELP_INPUT_METHOD_NONE"   : "Keine Eingabemethode in Verwendung. Tastatureingaben werden von der Hardwaretastatur akzeptiert.",
-        "HELP_INPUT_METHOD_OSK"    : "Bildschirmeingaben und die eingebettete Guacamole Bildschrimtastatur werden akzeptiert. Die Bildschirmtastatur gestattet Tastenkombinationen die ansonsten unmöglich sind (z.B.: Strl-Alt-Del).",
+        "HELP_INPUT_METHOD_OSK"    : "Bildschirmeingaben und die eingebettete Guacamole Bildschrimtastatur werden akzeptiert. Die Bildschirmtastatur gestattet Tastenkombinationen die ansonsten unmöglich sind (z.B.: Strg-Alt-Del).",
         "HELP_INPUT_METHOD_TEXT"   : "Gestattet Eingaben von Text und emuliert Tastaturkombinationen basierend auf den eingegebenen Text. Dies wird benötigt für Geräte ohne Hardwaretastatur.",
         "HELP_MOUSE_MODE"          : "Beeinflusst, wie sich die entfernte Maus bei Touchpadberührungen verhält.",
         "HELP_MOUSE_MODE_ABSOLUTE" : "Tippen Sie auf die Zielposition, der Klick erfolgt am Ort der Berührung des Touchscreen's.",
@@ -106,7 +107,8 @@
         "NAME_MOUSE_MODE_RELATIVE" : "Touchpad",
 
         "SECTION_HEADER_CLIPBOARD"      : "Zwischenablage",
-        "SECTION_HEADER_DISPLAY"        : "Display",
+        "SECTION_HEADER_DEVICES"        : "Geräte",
+        "SECTION_HEADER_DISPLAY"        : "Anzeige",
         "SECTION_HEADER_FILE_TRANSFERS" : "Dateiübertragung",
         "SECTION_HEADER_INPUT_METHOD"   : "Eingabemethode",
         "SECTION_HEADER_MOUSE_MODE"     : "Mausemulationsmodus",
@@ -119,7 +121,7 @@
         "TEXT_RECONNECT_COUNTDOWN"        : "Neuverbindung in {REMAINING} {REMAINING, plural, one{Sekunde} other{Sekunden}}...",
         "TEXT_FILE_TRANSFER_PROGRESS"     : "{PROGRESS} {UNIT, select, b{B} kb{KB} mb{MB} gb{GB} other{}}",
 
-        "URL_OSK_LAYOUT" : "layouts/en-us-qwerty.json"
+        "URL_OSK_LAYOUT" : "layouts/de-de-qwertz.json"
 
     },
 
@@ -424,6 +426,7 @@
 
         "SECTION_HEADER_AUDIO"          : "Audio",
         "SECTION_HEADER_AUTHENTICATION" : "Authentifizierung",
+        "SECTION_HEADER_CLIPBOARD"      : "Zwischenablage",
         "SECTION_HEADER_DISPLAY"        : "Bildschirm",
         "SECTION_HEADER_NETWORK"        : "Netzwerk",
         "SECTION_HEADER_REPEATER"       : "VNC Repeater",

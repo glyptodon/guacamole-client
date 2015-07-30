@@ -83,8 +83,26 @@
 
 .login-ui .login-dialog .logo {
     display: block;
-    max-width: 3em;
     margin: 0.5em auto;
+    width: 3em;
+    height: 3em;
+    background-size:         3em 3em;
+    -moz-background-size:    3em 3em;
+    -webkit-background-size: 3em 3em;
+    -khtml-background-size:  3em 3em;
+    background-image: url("images/guac-tricolor.png");
+}
+
+.login-ui.continuation div.login-dialog {
+    border-right: none;
+    border-left: none;
+    box-shadow: none;
+    max-width: 6in;
+}
+
+.login-ui.continuation .login-dialog .logo,
+.login-ui.continuation .login-dialog .version {
+    display: none;
 }
 
 .login-ui.continuation div.login-dialog {
