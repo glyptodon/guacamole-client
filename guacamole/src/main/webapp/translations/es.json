@@ -320,7 +320,7 @@
         "SECTION_HEADER_DISPLAY"            : "Pantalla",
         "SECTION_HEADER_PERFORMANCE"        : "Rendimiento",
         "SECTION_HEADER_NETWORK"            : "Red",
-        "SECTION_HEADER_REMOTEAPP"          : "RemoteApp"
+        "SECTION_HEADER_REMOTEAPP"          : "RemoteApp",
         "SECTION_HEADER_SFTP"               : "SFTP"
 
     },
@@ -456,7 +456,7 @@
         "SECTION_HEADER_CLIPBOARD"      : "Portapapeles",
         "SECTION_HEADER_DISPLAY"        : "Pantalla",
         "SECTION_HEADER_NETWORK"        : "Red",
-        "SECTION_HEADER_REPEATER"       : "Repetidor VNC"
+        "SECTION_HEADER_REPEATER"       : "Repetidor VNC",
         "SECTION_HEADER_SFTP"           : "SFTP"
 
     },
