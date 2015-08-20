@@ -1,0 +1,526 @@
+{
+    
+    "NAME" : "Español",
+    
+    "APP" : {
+
+        "ACTION_ACKNOWLEDGE"        : "Aceptar",
+        "ACTION_CANCEL"             : "Cancelar",
+        "ACTION_CLONE"              : "Clonar",
+        "ACTION_CONTINUE"           : "Continuar",
+        "ACTION_DELETE"             : "Borrar",
+        "ACTION_DELETE_SESSIONS"    : "Cerrar Sesiones",
+        "ACTION_LOGIN"              : "Registro",
+        "ACTION_LOGOUT"             : "Salir",
+        "ACTION_MANAGE_CONNECTIONS" : "Conexiones",
+        "ACTION_MANAGE_PREFERENCES" : "Preferencias",
+        "ACTION_MANAGE_SETTINGS"    : "Ajustes",
+        "ACTION_MANAGE_SESSIONS"    : "Sesiones Activas",
+        "ACTION_MANAGE_USERS"       : "Usuarios",
+        "ACTION_NAVIGATE_BACK"      : "Atrás",
+        "ACTION_NAVIGATE_HOME"      : "Inicio",
+        "ACTION_SAVE"               : "Guardar",
+        "ACTION_UPDATE_PASSWORD"    : "Actualizar contraseña",
+
+        "DIALOG_HEADER_ERROR" : "Error",
+
+        "ERROR_PASSWORD_BLANK"    : "La contraseña no puede estar vacía.",
+        "ERROR_PASSWORD_MISMATCH" : "Las contraseñas no coinciden.",
+        
+        "FIELD_HEADER_PASSWORD"       : "Contraseña:",
+        "FIELD_HEADER_PASSWORD_AGAIN" : "Repita Contraseña:",
+
+        "FORMAT_DATE_TIME_PRECISE" : "yyyy-MM-dd HH:mm:ss",
+
+        "INFO_ACTIVE_USER_COUNT" : "En uso por {USERS} {USERS, plural, one{usuario} other{usuarios}}.",
+
+        "NAME" : "Guacamole ${project.version}"
+
+    },
+
+    "CLIENT" : {
+
+        "ACTION_ACKNOWLEDGE"               : "@:APP.ACTION_ACKNOWLEDGE",
+        "ACTION_CLEAR_COMPLETED_TRANSFERS" : "Borrar transferencias completadas",
+        "ACTION_DISCONNECT"                : "Desconectar",
+        "ACTION_NAVIGATE_HOME"             : "@:APP.ACTION_NAVIGATE_HOME",
+        "ACTION_RECONNECT"                 : "Reconectar",
+        "ACTION_SAVE_FILE"                 : "@:APP.ACTION_SAVE",
+        "ACTION_UPLOAD_FILES"              : "Subir Ficheros",
+
+        "DIALOG_HEADER_CONNECTING"       : "Conectando",
+        "DIALOG_HEADER_CONNECTION_ERROR" : "Error de conexión",
+        "DIALOG_HEADER_DISCONNECTED"     : "Desconectado",
+
+        "ERROR_CLIENT_201"     : "La conexión ha sido cerrada porque el servidor está ocupado. Por favor, espere unos minutos y vuelva a intentarlo.",
+        "ERROR_CLIENT_202"     : "El servidor Guacamole ha cerrado la conexión porque el escritorio remoto estáa tardando mucho en responder. Por favor intentenlo de nuevo o póngase en contacto con su administrador.",
+        "ERROR_CLIENT_203"     : "El escritorio remoto ha encontrado un error y ha cerrado la conexión. Por favor intentelo de nuevo o póngase en contacto con su administrador.",
+        "ERROR_CLIENT_205"     : "Esta conexión has sido cerrada porque entra en conflicto con otra conexión. Por favor intentelo más tarde.",
+        "ERROR_CLIENT_301"     : "El inicio de sesión ha fallado. Por favor conectese e intentelo de nuevo.",
+        "ERROR_CLIENT_303"     : "No tiene permisos para acceder a esta conexión. Si necesita acceder, por favor pida a su administrador que le añada a la lista de usuarios permitidos o compruebe los ajustes de su sistema.",
+        "ERROR_CLIENT_308"     : "El servidor Guacamole ha cerrado esta conexión porque no ha habido respuesta de su navegador y parece estar desconectado. Esto es normalmente debido a errores de la red como señal WiFi débil o simplemente una velocidad de red demasiado baja. Por favor compruebe su conexión de red e intentelo de nuevo.",
+        "ERROR_CLIENT_31D"     : "El servidor Guacamole ha denegado esta conexión debido a que ha excedido el límite de conexiones simultaneas permitidas para un solo usuario. Por favor cierre una o mas conexiones e intentelo de nuevo.",
+        "ERROR_CLIENT_DEFAULT" : "Ha ocurrido un error interno en el servidor Guacamole y la conexión ha sido cerrada. Si el problema persiste, por favor notifiqueselo a su administrador o compruebe el registro del sistema.",
+
+        "ERROR_TUNNEL_201"     : "El servidor Guacamole ha rechazado el intento de conexión porque hay demasiadas conexiones activas en este momento. Por favor vuelva a intentarlo pasados unos minutos.",
+        "ERROR_TUNNEL_202"     : "La conexión ha sido cerrada porque el servidor está tardando demasiado en responder. Esto es debido normalmente a problemas en la red como por ejemplo red WiFi débil o insuficiente ancho de banda. Por favor compruebe su conexión de red e intentelo de nuevo o póngase en contacto con su administrador.",
+        "ERROR_TUNNEL_203"     : "El servidor ha encontrado un error y ha cerrado la conexión. Por favor intentelo de nuevo o póngase en contacto con su administrador.",
+        "ERROR_TUNNEL_204"     : "La conexión solicitada no existe. Por favor compruebe el nombre de la conexión e intentelo de nuevo.",
+        "ERROR_TUNNEL_205"     : "Esta conexión está actualmente en uso y no se permite el acceso concurrente. Por favor intentelo más tarde.",
+        "ERROR_TUNNEL_301"     : "No tiene permiso para utilizar esta conexión porque no ha iniciado sesión. Por favor inicie sesión e intentelo de nuevo.",
+        "ERROR_TUNNEL_303"     : "No tiene permiso para utilizar esta conexión. Si necesita acceder por favor pida a su administrador que lo añada a la lista de usuario permitidos, o compruebe los ajustes de su sistema.",
+        "ERROR_TUNNEL_308"     : "El servidor Guacamole ha cerrado la conexión porque no ha habido respuesta de su navegador durante demasiado tiempo y parace que está desconectado. Esto ocurre normalmente por una señal WiFi débil o por insuficiente ancho de banda. Por favor compruebe su conexión e intentelo de nuevo.",
+        "ERROR_TUNNEL_31D"     : "El servidor Guacamole ha denegado la conexión porque ha agotado el límite de conexiones simultaneas permitidas para un usuario. Por favor cierre una o más conexiones y pruebe de nuevo.",
+        "ERROR_TUNNEL_DEFAULT" : "Ha ocurrido un error interno en el servidor Guacamole y la conexión ha sido cerrada. Si el problema persiste, por favor notifique a su administrador o compruebe el registro del sistema.",
+
+        "ERROR_UPLOAD_100"     : "No se soporta la transferencia de ficheros o no está habilitada. Por favor contacte con su administrador o compruebe el registro de sistema.",
+        "ERROR_UPLOAD_201"     : "Hay demasiados fichero transfiriendose. Por favor espere a que algunas transferencias hayan terminado y pruebe de nuevo.",
+        "ERROR_UPLOAD_202"     : "El fichero no puede transferirse porque el servidor de escritorio remoto está tardando demasiado en responder. Por favor intenlo de nuevo o contacte con su administrador.",
+        "ERROR_UPLOAD_203"     : "El servidor de escritorio remoto ha encontrado un error durante la transferencia. Por favor intentelo de nuevo o contacte con su administrador.",
+        "ERROR_UPLOAD_204"     : "El destino de la transferencia del fichero no existe. Por favor compruebe que el destino existe e inténtelo de nuevo.",
+        "ERROR_UPLOAD_205"     : "El fichero de destino está en uso. Por favor espere a que cualquier tarea en curso termine e inténtelo de nuevo.",
+        "ERROR_UPLOAD_301"     : "No tiene permisos para subir el fichero porque no ha iniciado sesión. Por favor inicie su sesión e inténtelo de nuevo.",
+        "ERROR_UPLOAD_303"     : "No tiene permisos para subir el fichero. Si necesita permisos, por favor comprube sus ajustes o contacte con su administrador.",
+        "ERROR_UPLOAD_308"     : "La transferencia del fichero está detenida. Esto normálmente se debe a problemas de red como por ejemplo red WiFi débil o insuficiente ancho de banda. Por favor compruebe la red inténtelo de nuevo.",
+        "ERROR_UPLOAD_31D"     : "Hay demasiadas transferencias de ficheros en curso. Por favor espere a que se completen algunas transferencias e inténtelo de nuevo.",
+        "ERROR_UPLOAD_DEFAULT" : "Ha ocurrido un error interno en el servidor Guacamole y ha finalizado su conexión. Si el problema persiste por favor indíqueselo a su administrador de sistema o compruebe el registro de sistema.",
+
+        "HELP_CLIPBOARD"           : "El texto copiado o pegado en Guacamole aparecerá aquí. Los cambios realizados aquí también afectarán al portapapeles remoto.",
+        "HELP_INPUT_METHOD_NONE"   : "No utilizar ningún método de entrada. Las entradas de teclado provienen de un teclado físico conectado.",
+        "HELP_INPUT_METHOD_OSK"    : "Mostrar y aceptar texto desde el teclado en pantalla de Guacamole. El teclado en pantalla permite escribir combinaciones de teclas que de otra forma no serían posibles como por ejemplo Ctrl-Alt-Supr.",
+        "HELP_INPUT_METHOD_TEXT"   : "Permitir escribir texto y emula los evento de teclado basado en el texto que se ha escrito. Esto es necesario para dispositivos móviles que no tienen un teclado físico.",
+        "HELP_MOUSE_MODE"          : "Determina el comportamiento de ráton en pantallas táctiles.",
+        "HELP_MOUSE_MODE_ABSOLUTE" : "Tap para hacer clic. El clic ocurre donde se ha tocado.",
+        "HELP_MOUSE_MODE_RELATIVE" : "Arrastre para move el puntero y haga tap para clic. El clic ocurre en la posición del puntero.",
+
+        "INFO_NO_FILE_TRANSFERS" : "Sin transferencias de ficheros.",
+
+        "NAME_INPUT_METHOD_NONE"   : "Ninguno",
+        "NAME_INPUT_METHOD_OSK"    : "Teclado en pantalla",
+        "NAME_INPUT_METHOD_TEXT"   : "Entrada de texto",
+        "NAME_KEY_CTRL"            : "Ctrl",
+        "NAME_KEY_ALT"             : "Alt",
+        "NAME_KEY_ESC"             : "Esc",
+        "NAME_KEY_TAB"             : "Tab",
+        "NAME_MOUSE_MODE_ABSOLUTE" : "Pantalla táctil",
+        "NAME_MOUSE_MODE_RELATIVE" : "Touchpad",
+
+        "SECTION_HEADER_CLIPBOARD"      : "Portapapeles",
+        "SECTION_HEADER_DISPLAY"        : "Pantalla",
+        "SECTION_HEADER_FILE_TRANSFERS" : "Transferencias de ficheros",
+        "SECTION_HEADER_INPUT_METHOD"   : "Método de entrada",
+        "SECTION_HEADER_MOUSE_MODE"     : "Modo de emulación de ratón",
+
+        "TEXT_ZOOM_AUTO_FIT"              : "Ajustar la pantalla automáticamente",
+        "TEXT_CLIENT_STATUS_IDLE"         : "Inactivo.",
+        "TEXT_CLIENT_STATUS_CONNECTING"   : "Conectando a Guacamole...",
+        "TEXT_CLIENT_STATUS_DISCONNECTED" : "Ha sido desconectado.",
+        "TEXT_CLIENT_STATUS_WAITING"      : "Conectado a Guacamole. Esperando respuesta...",
+        "TEXT_RECONNECT_COUNTDOWN"        : "Conectando de nuevo en {REMAINING} {REMAINING, plural, one{segundo} other{segundos}}...",
+        "TEXT_FILE_TRANSFER_PROGRESS"     : "{PROGRESS} {UNIT, select, b{B} kb{KB} mb{MB} gb{GB} other{}}",
+
+        "URL_OSK_LAYOUT" : "layouts/en-us-qwerty.json"
+
+    },
+
+    "FORM" : {
+
+        "HELP_SHOW_PASSWORD" : "Mostrar contraseña",
+        "HELP_HIDE_PASSWORD" : "Ocultar contraseña"
+
+    },
+
+    "HOME" : {
+
+        "INFO_ACTIVE_USER_COUNT" : "@:APP.INFO_ACTIVE_USER_COUNT",
+
+        "INFO_NO_RECENT_CONNECTIONS" : "No hay conexiones recientes.",
+        
+        "PASSWORD_CHANGED" : "Contraseña cambiada.",
+
+        "SECTION_HEADER_ALL_CONNECTIONS"    : "Todas las conexiones",
+        "SECTION_HEADER_RECENT_CONNECTIONS" : "Conexiones recientes"
+
+    },
+
+    "LOGIN": {
+
+        "ACTION_ACKNOWLEDGE" : "@:APP.ACTION_ACKNOWLEDGE",
+        "ACTION_CONTINUE"    : "@:APP.ACTION_CONTINUE",
+        "ACTION_LOGIN"       : "@:APP.ACTION_LOGIN",
+
+        "DIALOG_HEADER_ERROR" : "@:APP.DIALOG_HEADER_ERROR",
+
+        "ERROR_INVALID_LOGIN" : "Inicio de sesión inválido",
+
+        "FIELD_HEADER_USERNAME" : "Nombre de usuario",
+        "FIELD_HEADER_PASSWORD" : "Contraseña"
+
+    },
+
+    "MANAGE_CONNECTION" : {
+
+        "ACTION_ACKNOWLEDGE"          : "@:APP.ACTION_ACKNOWLEDGE",
+        "ACTION_CANCEL"               : "@:APP.ACTION_CANCEL",
+        "ACTION_CLONE"                : "@:APP.ACTION_CLONE",
+        "ACTION_DELETE"               : "@:APP.ACTION_DELETE",
+        "ACTION_SAVE"                 : "@:APP.ACTION_SAVE",
+
+        "DIALOG_HEADER_CONFIRM_DELETE" : "Borrar Conexión",
+        "DIALOG_HEADER_ERROR"          : "@:APP.DIALOG_HEADER_ERROR",
+
+        "FIELD_HEADER_LOCATION" : "Dirección:",
+        "FIELD_HEADER_NAME"     : "Nombre:",
+        "FIELD_HEADER_PROTOCOL" : "Protocolo:",
+
+        "FORMAT_HISTORY_START" : "@:APP.FORMAT_DATE_TIME_PRECISE",
+
+        "INFO_CONNECTION_DURATION_UNKNOWN" : "--",
+        "INFO_CONNECTION_ACTIVE_NOW"       : "Activo Ahora",
+        "INFO_CONNECTION_NOT_USED"         : "Esta conexión no ha sido utilizada todavía.",
+
+        "SECTION_HEADER_EDIT_CONNECTION" : "Editar Conexión",
+        "SECTION_HEADER_HISTORY"         : "Historial de Uso",
+        "SECTION_HEADER_PARAMETERS"      : "Parámetros",
+
+        "TABLE_HEADER_HISTORY_USERNAME" : "Nombre de usuario",
+        "TABLE_HEADER_HISTORY_START"    : "Hora de inicio",
+        "TABLE_HEADER_HISTORY_DURATION" : "Duración",
+
+        "TEXT_CONFIRM_DELETE"   : "Las conexiones no borradas no pueden ser restauradas ¿Está seguro que desea borrar esta conexión?",
+        "TEXT_HISTORY_DURATION" : "{VALUE} {UNIT, select, second{{VALUE, plural, one{second} other{seconds}}} minute{{VALUE, plural, one{minute} other{minutes}}} hour{{VALUE, plural, one{hour} other{hours}}} day{{VALUE, plural, one{day} other{days}}} other{}}"
+
+    },
+
+    "MANAGE_CONNECTION_GROUP" : {
+
+        "ACTION_ACKNOWLEDGE"   : "@:APP.ACTION_ACKNOWLEDGE",
+        "ACTION_CANCEL"        : "@:APP.ACTION_CANCEL",
+        "ACTION_DELETE"        : "@:APP.ACTION_DELETE",
+        "ACTION_SAVE"          : "@:APP.ACTION_SAVE",
+
+        "DIALOG_HEADER_CONFIRM_DELETE" : "Borrar Grupo de Conexiones",
+        "DIALOG_HEADER_ERROR"          : "@:APP.DIALOG_HEADER_ERROR",
+
+        "FIELD_HEADER_LOCATION" : "Dirección:",
+        "FIELD_HEADER_NAME"     : "Nombre:",
+        "FIELD_HEADER_TYPE"     : "Tipo:",
+
+        "NAME_TYPE_BALANCING"       : "Balanceando",
+        "NAME_TYPE_ORGANIZATIONAL"  : "Organizativo",
+
+        "SECTION_HEADER_EDIT_CONNECTION_GROUP" : "Editar el Grupo de Conexiones",
+
+        "TEXT_CONFIRM_DELETE" : "Los grupos de conexiones no se pueden restaurar una vez borrados ¿Está seguro que desea borrar este grupo de conexiones?"
+
+    },
+
+    "MANAGE_USER" : {
+
+        "ACTION_ACKNOWLEDGE"   : "@:APP.ACTION_ACKNOWLEDGE",
+        "ACTION_CANCEL"        : "@:APP.ACTION_CANCEL",
+        "ACTION_DELETE"        : "@:APP.ACTION_DELETE",
+        "ACTION_SAVE"          : "@:APP.ACTION_SAVE",
+
+        "DIALOG_HEADER_CONFIRM_DELETE" : "Borrar Usario",
+        "DIALOG_HEADER_ERROR"          : "@:APP.DIALOG_HEADER_ERROR",
+
+        "ERROR_PASSWORD_MISMATCH" : "@:APP.ERROR_PASSWORD_MISMATCH",
+
+        "FIELD_HEADER_ADMINISTER_SYSTEM"             : "Administrar sistema:",
+        "FIELD_HEADER_CHANGE_OWN_PASSWORD"           : "Cambiar la contraseña propia:",
+        "FIELD_HEADER_CREATE_NEW_USERS"              : "Crear nuevos usuarios:",
+        "FIELD_HEADER_CREATE_NEW_CONNECTIONS"        : "Crear nuevas conexiones:",
+        "FIELD_HEADER_CREATE_NEW_CONNECTION_GROUPS"  : "Crear un nuevo grupo de conexiones:",
+        "FIELD_HEADER_PASSWORD"                      : "@:APP.FIELD_HEADER_PASSWORD",
+        "FIELD_HEADER_PASSWORD_AGAIN"                : "@:APP.FIELD_HEADER_PASSWORD_AGAIN",
+        "FIELD_HEADER_USERNAME"                      : "Nombre de usuario:",
+        
+        "SECTION_HEADER_CONNECTIONS" : "Conexiones",
+        "SECTION_HEADER_EDIT_USER"   : "Editar Usario",
+        "SECTION_HEADER_PERMISSIONS" : "Permisos",
+
+        "TEXT_CONFIRM_DELETE" : "Los usuarios no pueden ser restaurados una vez eliminados ¿Está seguro que desea borrar este usuario?"
+
+    },
+    
+    "PROTOCOL_RDP" : {
+
+        "FIELD_HEADER_COLOR_DEPTH"     : "Profundidad de Color:",
+        "FIELD_HEADER_CONSOLE"         : "Consola de administración:",
+        "FIELD_HEADER_CONSOLE_AUDIO"   : "Soportar audio en la consola:",
+        "FIELD_HEADER_CLIENT_NAME"     : "Nombre del cliente:",
+        "FIELD_HEADER_DISABLE_AUDIO"   : "Deshabilitar audio:",
+        "FIELD_HEADER_DISABLE_AUTH"    : "Deshabilitar autenticación:",
+        "FIELD_HEADER_DOMAIN"          : "Dominio:",
+        "FIELD_HEADER_DPI"             : "Resolución (DPI):",
+        "FIELD_HEADER_DRIVE_PATH"      : "Ruta de unidad:",
+        "FIELD_HEADER_ENABLE_DRIVE"    : "Habilitar unidad:",
+        "FIELD_HEADER_ENABLE_PRINTING" : "Habilitar impresión:",
+        "FIELD_HEADER_HEIGHT"          : "Altura:",
+        "FIELD_HEADER_HOSTNAME"        : "Nombre de equipo:",
+        "FIELD_HEADER_IGNORE_CERT"     : "Ignorar el ceritificado del servidor:",
+        "FIELD_HEADER_INITIAL_PROGRAM" : "Programa inicial:",
+        "FIELD_HEADER_PASSWORD"        : "Contras:",
+        "FIELD_HEADER_PORT"            : "Puerto:",
+        "FIELD_HEADER_REMOTE_APP_ARGS" : "Parámetros:",
+        "FIELD_HEADER_REMOTE_APP_DIR"  : "Directorio de Trabajo:",
+        "FIELD_HEADER_REMOTE_APP"      : "Programa:",
+        "FIELD_HEADER_SECURITY"        : "Modo de seguridad:",
+        "FIELD_HEADER_SERVER_LAYOUT"   : "Distribución de teclado:",
+        "FIELD_HEADER_USERNAME"        : "Nombre de usuarios:",
+        "FIELD_HEADER_WIDTH"           : "Ancho:",
+        "FIELD_HEADER_STATIC_CHANNELS" : "Nombre de canales estáticos:",
+
+        "FIELD_OPTION_COLOR_DEPTH_16"    : "Color bajo (16-bit)",
+        "FIELD_OPTION_COLOR_DEPTH_24"    : "Color verdadero (24-bit)",
+        "FIELD_OPTION_COLOR_DEPTH_32"    : "Color verdadero (32-bit)",
+        "FIELD_OPTION_COLOR_DEPTH_8"     : "256 color",
+        "FIELD_OPTION_COLOR_DEPTH_EMPTY" : "",
+
+        "FIELD_OPTION_SECURITY_ANY"   : "Cualquiera",
+        "FIELD_OPTION_SECURITY_EMPTY" : "",
+        "FIELD_OPTION_SECURITY_NLA"   : "NLA (Network Level Authentication)",
+        "FIELD_OPTION_SECURITY_RDP"   : "Encriptación RDP",
+        "FIELD_OPTION_SECURITY_TLS"   : "Encriptación TLS",
+
+        "FIELD_OPTION_SERVER_LAYOUT_DE_DE_QWERTZ" : "Alemán (Qwertz)",
+        "FIELD_OPTION_SERVER_LAYOUT_EMPTY"        : "",
+        "FIELD_OPTION_SERVER_LAYOUT_EN_US_QWERTY" : "Inglés Estados Unidos (Qwerty)",
+        "FIELD_OPTION_SERVER_LAYOUT_FAILSAFE"     : "Unicode",
+        "FIELD_OPTION_SERVER_LAYOUT_FR_FR_AZERTY" : "Francés (Azerty)",
+        "FIELD_OPTION_SERVER_LAYOUT_IT_IT_QWERTY" : "Italiano (Qwerty)",
+        "FIELD_OPTION_SERVER_LAYOUT_SV_SE_QWERTY" : "Sueco (Qwerty)",
+
+        "NAME" : "RDP",
+
+        "SECTION_HEADER_AUTHENTICATION"     : "Autenticación",
+        "SECTION_HEADER_BASIC_PARAMETERS"   : "Ajustes Básicos",
+        "SECTION_HEADER_DEVICE_REDIRECTION" : "Redirección de Dispositivos",
+        "SECTION_HEADER_DISPLAY"            : "Pantalla",
+        "SECTION_HEADER_NETWORK"            : "Red",
+        "SECTION_HEADER_REMOTEAPP"          : "RemoteApp"
+
+    },
+
+    "PROTOCOL_SSH" : {
+
+        "FIELD_HEADER_FONT_NAME"   : "Fuente:",
+        "FIELD_HEADER_FONT_SIZE"   : "Tamaño de fuente:",
+        "FIELD_HEADER_ENABLE_SFTP" : "Habilitar SFTP:",
+        "FIELD_HEADER_HOSTNAME"    : "Dirección:",
+        "FIELD_HEADER_USERNAME"    : "Nombre de usuario:",
+        "FIELD_HEADER_PASSWORD"    : "Contraseña:",
+        "FIELD_HEADER_PASSPHRASE"  : "Frase de paso:",
+        "FIELD_HEADER_PORT"        : "Puerto:",
+        "FIELD_HEADER_PRIVATE_KEY" : "Clave privada:",
+
+        "FIELD_OPTION_FONT_SIZE_8"     : "8",
+        "FIELD_OPTION_FONT_SIZE_9"     : "9",
+        "FIELD_OPTION_FONT_SIZE_10"    : "10",
+        "FIELD_OPTION_FONT_SIZE_11"    : "11",
+        "FIELD_OPTION_FONT_SIZE_12"    : "12",
+        "FIELD_OPTION_FONT_SIZE_14"    : "14",
+        "FIELD_OPTION_FONT_SIZE_18"    : "18",
+        "FIELD_OPTION_FONT_SIZE_24"    : "24",
+        "FIELD_OPTION_FONT_SIZE_30"    : "30",
+        "FIELD_OPTION_FONT_SIZE_36"    : "36",
+        "FIELD_OPTION_FONT_SIZE_48"    : "48",
+        "FIELD_OPTION_FONT_SIZE_60"    : "60",
+        "FIELD_OPTION_FONT_SIZE_72"    : "72",
+        "FIELD_OPTION_FONT_SIZE_96"    : "96",
+        "FIELD_OPTION_FONT_SIZE_EMPTY" : "",
+
+        "NAME" : "SSH",
+
+        "SECTION_HEADER_AUTHENTICATION" : "Autenticación",
+        "SECTION_HEADER_DISPLAY"        : "Pantalla",
+        "SECTION_HEADER_NETWORK"        : "Red",
+        "SECTION_HEADER_SFTP"           : "SFTP"
+
+    },
+
+    "PROTOCOL_TELNET" : {
+
+        "FIELD_HEADER_FONT_NAME"      : "Fuente:",
+        "FIELD_HEADER_FONT_SIZE"      : "Tamaño de fuente:",
+        "FIELD_HEADER_HOSTNAME"       : "Dirección:",
+        "FIELD_HEADER_USERNAME"       : "Nombre de usuario:",
+        "FIELD_HEADER_PASSWORD"       : "Contraseña:",
+        "FIELD_HEADER_PASSWORD_REGEX" : "Expresión regular contraseña:",
+        "FIELD_HEADER_PORT"           : "Puerto:",
+
+        "FIELD_OPTION_FONT_SIZE_8"     : "8",
+        "FIELD_OPTION_FONT_SIZE_9"     : "9",
+        "FIELD_OPTION_FONT_SIZE_10"    : "10",
+        "FIELD_OPTION_FONT_SIZE_11"    : "11",
+        "FIELD_OPTION_FONT_SIZE_12"    : "12",
+        "FIELD_OPTION_FONT_SIZE_14"    : "14",
+        "FIELD_OPTION_FONT_SIZE_18"    : "18",
+        "FIELD_OPTION_FONT_SIZE_24"    : "24",
+        "FIELD_OPTION_FONT_SIZE_30"    : "30",
+        "FIELD_OPTION_FONT_SIZE_36"    : "36",
+        "FIELD_OPTION_FONT_SIZE_48"    : "48",
+        "FIELD_OPTION_FONT_SIZE_60"    : "60",
+        "FIELD_OPTION_FONT_SIZE_72"    : "72",
+        "FIELD_OPTION_FONT_SIZE_96"    : "96",
+        "FIELD_OPTION_FONT_SIZE_EMPTY" : "",
+
+        "NAME" : "Telnet",
+
+        "SECTION_HEADER_AUTHENTICATION" : "Autenticación",
+        "SECTION_HEADER_DISPLAY"        : "Pantalla",
+        "SECTION_HEADER_NETWORK"        : "Red"
+
+    },
+
+    "PROTOCOL_VNC" : {
+
+        "FIELD_HEADER_AUDIO_SERVERNAME" : "Servidor de Audio:",
+        "FIELD_HEADER_COLOR_DEPTH"      : "Profundidad de color:",
+        "FIELD_HEADER_CURSOR"           : "Cursor:",
+        "FIELD_HEADER_DEST_HOST"        : "Dirección:",
+        "FIELD_HEADER_DEST_PORT"        : "Puerto de destino:",
+        "FIELD_HEADER_ENABLE_AUDIO"     : "Habilitar audio:",
+        "FIELD_HEADER_HOSTNAME"         : "Dirección:",
+        "FIELD_HEADER_PASSWORD"         : "Contraseña:",
+        "FIELD_HEADER_PORT"             : "Puerto:",
+        "FIELD_HEADER_READ_ONLY"        : "Solo lectura:",
+        "FIELD_HEADER_SWAP_RED_BLUE"    : "Intercambiar componentes rojo/azul:",
+
+        "FIELD_OPTION_COLOR_DEPTH_8"     : "256 colores",
+        "FIELD_OPTION_COLOR_DEPTH_16"    : "Bajos colores (16-bit)",
+        "FIELD_OPTION_COLOR_DEPTH_24"    : "Color verdadero (24-bit)",
+        "FIELD_OPTION_COLOR_DEPTH_32"    : "Color verdadero (32-bit)",
+        "FIELD_OPTION_COLOR_DEPTH_EMPTY" : "",
+
+        "FIELD_OPTION_CURSOR_EMPTY"  : "",
+        "FIELD_OPTION_CURSOR_LOCAL"  : "Local",
+        "FIELD_OPTION_CURSOR_REMOTE" : "Remoto",
+
+        "NAME" : "VNC",
+
+        "SECTION_HEADER_AUDIO"          : "Audio",
+        "SECTION_HEADER_AUTHENTICATION" : "Autenticación",
+        "SECTION_HEADER_DISPLAY"        : "Pantalla",
+        "SECTION_HEADER_NETWORK"        : "Red",
+        "SECTION_HEADER_REPEATER"       : "Repetidor VNC"
+
+    },
+
+    "SETTINGS" : {
+
+        "SECTION_HEADER_SETTINGS" : "Ajustes"
+
+    },
+
+    "SETTINGS_CONNECTIONS" : {
+
+        "ACTION_ACKNOWLEDGE"          : "@:APP.ACTION_ACKNOWLEDGE",
+        "ACTION_NEW_CONNECTION"       : "New Connection",
+        "ACTION_NEW_CONNECTION_GROUP" : "New Group",
+
+        "DIALOG_HEADER_ERROR" : "@:APP.DIALOG_HEADER_ERROR",
+
+        "HELP_CONNECTIONS"   : "Haga click o tap en una conexión para gestionarla. Dependiendo de su nivel de acceso puede añadir o eleminar conexiones y modificar sus propiedades (protocolo, dirección, puerto, etc.).",
+        
+        "INFO_ACTIVE_USER_COUNT" : "@:APP.INFO_ACTIVE_USER_COUNT",
+
+        "SECTION_HEADER_CONNECTIONS"     : "Conexiones"
+
+    },
+
+    "SETTINGS_PREFERENCES" : {
+
+        "ACTION_ACKNOWLEDGE"        : "@:APP.ACTION_ACKNOWLEDGE",
+        "ACTION_CANCEL"             : "@:APP.ACTION_CANCEL",
+        "ACTION_UPDATE_PASSWORD"    : "@:APP.ACTION_UPDATE_PASSWORD",
+
+        "DIALOG_HEADER_ERROR"    : "@:APP.DIALOG_HEADER_ERROR",
+
+        "ERROR_PASSWORD_BLANK"    : "@:APP.ERROR_PASSWORD_BLANK",
+        "ERROR_PASSWORD_MISMATCH" : "@:APP.ERROR_PASSWORD_MISMATCH",
+
+        "FIELD_HEADER_LANGUAGE"           : "Idioma a mostrar:",
+        "FIELD_HEADER_PASSWORD"           : "Contraseña:",
+        "FIELD_HEADER_PASSWORD_OLD"       : "Contraseña actual:",
+        "FIELD_HEADER_PASSWORD_NEW"       : "Nueva contraseña:",
+        "FIELD_HEADER_PASSWORD_NEW_AGAIN" : "Confirme nueva contraseña:",
+        "FIELD_HEADER_USERNAME"           : "Nombre de usuario:",
+        
+        "HELP_DEFAULT_INPUT_METHOD" : "El método de entrada por defecto determina como recibe el servidor Guacamole los eventos de teclado. Puede ser necesario cambiar estos ajustes cuando se utiliza un dispositivo móvil, o cuando utiliza un teclado IME. Este ajuste puede ser anulado por conexión desde el menú de Guacamole.",
+        "HELP_DEFAULT_MOUSE_MODE"   : "El método por defecto de emulación de ratón determina como se comportará a los toques en conexiones nuevas. Este ajuste puede ser anulado por conexión dentro del menú de Guacamole.",
+        "HELP_INPUT_METHOD_NONE"    : "@:CLIENT.HELP_INPUT_METHOD_NONE",
+        "HELP_INPUT_METHOD_OSK"     : "@:CLIENT.HELP_INPUT_METHOD_OSK",
+        "HELP_INPUT_METHOD_TEXT"    : "@:CLIENT.HELP_INPUT_METHOD_TEXT",
+        "HELP_LANGUAGE"             : "Seleccione un idioma diferente para cambiar el idioma en Guacamole. Las opciones disponibles variarán dependiendo de que idiomas se encuentren instalados.",
+        "HELP_MOUSE_MODE_ABSOLUTE"  : "@:CLIENT.HELP_MOUSE_MODE_ABSOLUTE",
+        "HELP_MOUSE_MODE_RELATIVE"  : "@:CLIENT.HELP_MOUSE_MODE_RELATIVE",
+        "HELP_UPDATE_PASSWORD"      : "Si desea cambiar su contraseña, introduzca su contraseña actual y la nueva contraseña más abajo y haga click en  \"Cambiar Contraseña\". El cambio se hará efectivo inmediatamente.",
+
+        "INFO_PASSWORD_CHANGED" : "Contraseña cambiada.",
+
+        "NAME_INPUT_METHOD_NONE" : "@:CLIENT.NAME_INPUT_METHOD_NONE",
+        "NAME_INPUT_METHOD_OSK"  : "@:CLIENT.NAME_INPUT_METHOD_OSK",
+        "NAME_INPUT_METHOD_TEXT" : "@:CLIENT.NAME_INPUT_METHOD_TEXT",
+
+        "SECTION_HEADER_DEFAULT_INPUT_METHOD" : "Método de entrada por defecto",
+        "SECTION_HEADER_DEFAULT_MOUSE_MODE"   : "Emulación de ratón por defector",
+        "SECTION_HEADER_UPDATE_PASSWORD"      : "Cambiar contraseña"
+
+    },
+
+    "SETTINGS_USERS" : {
+
+        "ACTION_ACKNOWLEDGE"   : "@:APP.ACTION_ACKNOWLEDGE",
+        "ACTION_NEW_USER"      : "Nuevo Usuario",
+
+        "DIALOG_HEADER_ERROR" : "@:APP.DIALOG_HEADER_ERROR",
+
+        "HELP_USERS" : "Haga clic o toque en un usuario para gestionarlo. Dependiendo de su nivel de acceso puede añadir o borrar usuarios y cambiar las contraseñas.",
+
+        "SECTION_HEADER_USERS"       : "Usuarios"
+
+    },
+    
+    "SETTINGS_SESSIONS" : {
+        
+        "ACTION_ACKNOWLEDGE" : "@:APP.ACTION_ACKNOWLEDGE",
+        "ACTION_CANCEL"      : "@:APP.ACTION_CANCEL",
+        "ACTION_DELETE"      : "Cerrar todas las sesiones",
+        
+        "DIALOG_HEADER_CONFIRM_DELETE" : "Cerrar todas las sesiones",
+        "DIALOG_HEADER_ERROR"          : "@:APP.DIALOG_HEADER_ERROR",
+        
+        "FIELD_PLACEHOLDER_FILTER" : "Filtrar",
+        
+        "FORMAT_STARTDATE" : "@:APP.FORMAT_DATE_TIME_PRECISE",
+
+        "HELP_SESSIONS" : "Todas las sesiones activas en Guacamole se muestran a continuación. Si desea cerrar una o mas conexiones, seleccione las sesiones y haga clic en \"Cerrar Sesiones\". Al cerrar una sesión desconectará al usuario asociado inmediatamente.",
+        
+        "INFO_NO_SESSIONS" : "No hay sesiones activas",
+
+        "SECTION_HEADER_SESSIONS" : "Sesiones Activas",
+        
+        "TABLE_HEADER_SESSION_USERNAME"        : "Nombre de usuario",
+        "TABLE_HEADER_SESSION_STARTDATE"       : "Activo desde",
+        "TABLE_HEADER_SESSION_REMOTEHOST"      : "Dirección remota",
+        "TABLE_HEADER_SESSION_CONNECTION_NAME" : "Nombre de la conexión",
+        
+        "TEXT_CONFIRM_DELETE" : "¿Está seguro que desea cerrar todas las sesiones seleccionadas? Los usuarios de estas sesiones serán desconectadoas inmediatamente."
+
+    },
+
+    "USER_MENU" : {
+
+        "ACTION_LOGOUT"             : "@:APP.ACTION_LOGOUT",
+        "ACTION_MANAGE_CONNECTIONS" : "@:APP.ACTION_MANAGE_CONNECTIONS",
+        "ACTION_MANAGE_PREFERENCES" : "@:APP.ACTION_MANAGE_PREFERENCES",
+        "ACTION_MANAGE_SESSIONS"    : "@:APP.ACTION_MANAGE_SESSIONS",
+        "ACTION_MANAGE_SETTINGS"    : "@:APP.ACTION_MANAGE_SETTINGS",
+        "ACTION_MANAGE_USERS"       : "@:APP.ACTION_MANAGE_USERS",
+        "ACTION_NAVIGATE_HOME"      : "@:APP.ACTION_NAVIGATE_HOME"
+
+    }
+
+}
