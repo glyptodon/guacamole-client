@@ -133,6 +133,24 @@ public class ConfigurationService {
             LDAPGuacamoleProperties.LDAP_CONFIG_BASE_DN
         );
     }
+    
+    /**
+     * Returns the base DN under which all Guacamole role based access control 
+     * (RBAC) groups will be stored within the LDAP directory.
+     *
+     * @return
+     *     The base DN under which all Guacamole RBAC groups will be stored 
+     *     within the LDAP directory.
+     *
+     * @throws GuacamoleException
+     *     If guacamole.properties cannot be parsed, or if the user base DN
+     *     property is not specified.
+     */
+    public String getGroupBaseDN() throws GuacamoleException {
+        return environment.getRequiredProperty(
+            LDAPGuacamoleProperties.LDAP_GROUP_BASE_DN
+        );
+    }
 
     /**
      * Returns the DN that should be used when searching for the DNs of users

@@ -109,11 +109,32 @@ public class ConnectionService {
             // possibly be null
             assert(userDN != null);
 
-            // Find all Guacamole connections for the given user
+            // Get all groups the user is a member of, excluding guacConfigGroups
+            LDAPSearchResults userRoleGroupResults = ldapConnection.search(
+                    confService.getGroupBaseDN(), 
+                    LDAPConnection.SCOPE_SUB,
+                    "(&(!(objectClass=guacConfigGroup))(member=" + escapingService.escapeLDAPSearchFilter(userDN) + "))",
+                    null,
+                    false
+            );
+            
+            // Create filter with seeAlso groups, the seeAlso attribute on
+            // the guacConfigGroup will refer to other groups, any members
+            // in these groups have access to the connection also
+            StringBuilder userRoleGroupFilter = new StringBuilder();
+        	while (userRoleGroupResults.hasMore()) {
+                LDAPEntry entry = userRoleGroupResults.next();
+                userRoleGroupFilter.append("(seeAlso=").append(escapingService.escapeLDAPSearchFilter(entry.getDN())).append(")");
+        	}
+
+        	// Find all Guacamole connections for the given user by
+        	// looking for direct membership in the guacConfigGroup
+        	// and any groups the user is a member of that are referred
+        	// to in the seeAlso attribute of the guacConfigGroup
             LDAPSearchResults results = ldapConnection.search(
                 configurationBaseDN,
                 LDAPConnection.SCOPE_SUB,
-                "(&(objectClass=guacConfigGroup)(member=" + escapingService.escapeLDAPSearchFilter(userDN) + "))",
+                "(&(objectClass=guacConfigGroup)(|(member=" + escapingService.escapeLDAPSearchFilter(userDN) + ")" + userRoleGroupFilter.toString() + "))",
                 null,
                 false
             );
