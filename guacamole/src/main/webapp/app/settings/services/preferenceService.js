@@ -121,7 +121,16 @@ angular.module('settings').provider('preferenceService', function preferenceServ
          * @type String
          */
         inputMethod : inputMethods.NONE,
-        
+
+
+        /**
+         * Whether to enable native IME activation keycode hack.
+         * Some OSes (most likely Windows) alternatively report the keycode of the IME activation key as two different codes.
+         * Enabling this option absorbs such a quirk and sends the server a single correct keycode.
+         */
+        nativeIMEActivationKeycodeHack: false,
+
+
         /**
          * The key of the desired display language.
          * 

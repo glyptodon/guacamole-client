@@ -97,7 +97,12 @@
                         <!-- No IME -->
                         <div class="choice">
                             <label><input id="ime-none" name="input-method" ng-change="closeMenu()" ng-model="menu.inputMethod" type="radio" value="none"/> {{'CLIENT.NAME_INPUT_METHOD_NONE' | translate}}</label>
-                            <p class="caption"><label for="ime-none">{{'CLIENT.HELP_INPUT_METHOD_NONE' | translate}}</label></p>
+                            <p class="caption">
+                                <label for="ime-none">{{'CLIENT.HELP_INPUT_METHOD_NONE' | translate}}</label>
+                            </p>
+                            <p class="caption">
+                                <label><input id="ime-native-ime-keycode-hack" name="input-method" ng-model="menu.nativeIMEActivationKeycodeHack" type="checkbox"/> {{'CLIENT.FIELD_OPTION_INPUT_METHOD_NATIVE_IME_ACTIVATION_KEYCODE_HACK' | translate}}</label>
+                            </p>
                         </div>
 
                         <!-- Text input -->

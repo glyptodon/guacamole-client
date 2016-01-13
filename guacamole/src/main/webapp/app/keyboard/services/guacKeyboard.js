@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Glyptodon LLC
+ * Copyright (C) 2015 Glyptodon LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,17 +21,8 @@
  */
 
 /**
- * The module for code used to connect to a connection or balancing group.
+ * A service for keyboard input. 
  */
-angular.module('client', [
-    'auth',
-    'element',
-    'history',
-    'navigation',
-    'notification',
-    'osk',
-    'rest',
-    'textInput',
-    'touch',
-    'keyboard'
-]);
+angular.module('keyboard').factory('guacKeyboard', ['$document', function guacKeyboard($document) {
+    return new Guacamole.Keyboard($document[0]);
+}]);

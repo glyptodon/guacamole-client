@@ -59,6 +59,13 @@ Guacamole.Keyboard = function(element) {
     this.onkeyup = null;
 
     /**
+     * Whether to enable native IME activation key code hack.
+     * Some OSes (most likely Windows) alternatively report the keycode of the IME activation key as two different codes.
+     * Enabling this option absorbs such a quirk and sends the server a single correct keycode.
+     */
+    this.nativeIMEActivationKeycodeHackEnabled = false;
+
+    /**
      * A key event having a corresponding timestamp. This event is non-specific.
      * Its subclasses should be used instead when recording specific key
      * events.
@@ -377,7 +384,9 @@ Guacamole.Keyboard = function(element) {
         123: [0xFFC9], // f12
         144: [0xFF7F], // num lock
         145: [0xFF14], // scroll lock
-        225: [0xFE03]  // altgraph (iso_level3_shift)
+        225: [0xFE03], // altgraph (iso_level3_shift)
+        243: [0xFF28], // Zenkaku
+        244: [0xFF29]  // Hankaku
     };
 
     /**
@@ -522,7 +531,10 @@ Guacamole.Keyboard = function(element) {
         0xFFE9: true, // Left alt
         0xFFEA: true, // Right alt
         0xFFEB: true, // Left hyper
-        0xFFEC: true  // Right hyper
+        0xFFEC: true, // Right hyper
+        0xFF28: true, // Zenkaku
+        0xFF29: true, // Hankaku
+        0xFF2A: true  // ZenkakuHankaku
     };
 
     /**
@@ -783,6 +795,27 @@ Guacamole.Keyboard = function(element) {
     };
 
     /**
+     * Sets whether to enable native IME activation keycode hack
+     */
+    this.setNativeIMEActivationKeycodeHackEnabled = function(enabled) {
+        this.nativeIMEActivationKeycodeHackEnabled = enabled;
+    };
+
+    /**
+     * A hookpoint to apply various filters on keycode.
+     * @private
+     * @param {Number} keyCode The keycode
+     * @return {Number} The filtered keycode (null if the key is to be ignored)
+     */
+    var apply_keycode_filters = function apply_keycode_filters(keyCode) {
+        // IME activation key code hack
+        if (guac_keyboard.nativeIMEActivationKeycodeHackEnabled && keyCode === 244) {
+            keyCode = 243;
+        }
+        return keyCode;
+    }
+
+    /**
      * Given a keyboard event, updates the local modifier state and remote
      * key state based on the modifier flags within the event. This function
      * pays no attention to keycodes.
@@ -1032,6 +1065,11 @@ Guacamole.Keyboard = function(element) {
         // Fix modifier states
         update_modifier_state(e);
 
+        keyCode = apply_keycode_filters(keyCode);
+        // apply_keycode_filters may return null (ignore the specific keyCode)
+        if (keyCode === null)
+            return;
+
         // Ignore (but do not prevent) the "composition" keycode sent by some
         // browsers when an IME is in use (see: http://lists.w3.org/Archives/Public/www-dom/2010JulSep/att-0182/keyCode-spec.html)
         if (keyCode === 229)
@@ -1081,7 +1119,12 @@ Guacamole.Keyboard = function(element) {
         var keyCode;
         if (window.event) keyCode = window.event.keyCode;
         else if (e.which) keyCode = e.which;
-        
+
+        keyCode = apply_keycode_filters(keyCode);
+        // apply_keycode_filters may return null (ignore the specific keyCode)
+        if (keyCode === null)
+            return;
+
         // Fix modifier states
         update_modifier_state(e);
 
