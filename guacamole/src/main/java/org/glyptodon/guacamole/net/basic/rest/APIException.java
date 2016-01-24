@@ -37,6 +37,19 @@ import org.glyptodon.guacamole.form.Field;
  */
 public class APIException extends WebApplicationException {
 
+    /* Build a Response with necessary headers according to given APIError */
+    private static Response getResponse(APIError error) {
+        Response.Status status = error.getType().getStatus();
+
+        /* Add WWW-Authenticate to 401 Unauthorized response as required */
+        if (status == Response.Status.UNAUTHORIZED) {
+            return Response.status(status).header("WWW-Authenticate",
+                      "Basic realm=\"Guacamole\"").entity(error).build();
+        }
+
+        return Response.status(status).entity(error).build();
+    }
+
     /**
      * Construct a new APIException with the given error. All information
      * associated with this new exception will be extracted from the given
@@ -46,7 +59,7 @@ public class APIException extends WebApplicationException {
      *     The error that occurred.
      */
     public APIException(APIError error) {
-        super(Response.status(error.getType().getStatus()).entity(error).build());
+        super(getResponse(error));
     }
 
     /**
