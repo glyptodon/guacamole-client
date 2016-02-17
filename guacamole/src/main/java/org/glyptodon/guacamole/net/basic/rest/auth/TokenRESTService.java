@@ -90,10 +90,11 @@ public class TokenRESTService {
     private Credentials getCredentials(HttpServletRequest request,
             String username, String password) {
 
-        // If no username/password given, try Authorization header
+        // If no username/password given, try Authorization or REMOTE_USER header
         if (username == null && password == null) {
 
             String authorization = request.getHeader("Authorization");
+            String remoteuser = request.getHeader("REMOTE_USER");
             if (authorization != null && authorization.startsWith("Basic ")) {
 
                 try {
@@ -120,7 +121,15 @@ public class TokenRESTService {
 
             }
 
-        } // end Authorization header fallback
+            // Try to use REMOTE_USER header, useful for external authentication, e.g. WebAuth or Shibboleth with NoAuth extension
+            else if (remoteuser != null) {
+
+                username = remoteuser;
+                password = "";
+
+            }
+
+        } // end Authorization or REMOTE_USER header fallback
 
         // Build credentials
         Credentials credentials = new Credentials();
