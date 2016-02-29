@@ -1,0 +1,27 @@
+{
+  "name": "guacamole-common-js",
+  "homepage": "https://github.com/Padarom/guacamole-client",
+  "authors": [
+    "Glyptodon LLC"
+  ],
+  "description": "Guacamole's JavaScript code",
+  "main": "",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "guacamole",
+    "common",
+    "js",
+    "guac",
+    "remote"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

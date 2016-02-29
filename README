@@ -6,63 +6,73 @@
 This README is intended to provide quick and to-the-point documentation for
 technical users intending to compile parts of Guacamole themselves.
 
-Source archives and pre-built .war files are available from the files section
-of the main project page:
+Distribution-specific packages are available from the files section of the main
+project page:
  
     http://sourceforge.net/projects/guacamole/files/
 
-A full manual is provided on the Guacamole web site:
+Distribution-specific documentation is provided on the Guacamole wiki:
 
     http://guac-dev.org/
 
 
 ------------------------------------------------------------
- What is guacamole-client?
+ What is guacamole-common-js?
 ------------------------------------------------------------
 
-guacamole-client is the superproject containing all Maven-based projects that
-make Guacamole, an HTML5 web application that provides access to your desktop
-using remote desktop protocols.
+guacamole-common-js is the core JavaScript library used by the Guacamole web
+application.
 
-guacamole-client is used to build the subprojects that make up Guacamole, and
-to provide a common central repository. Each project contained here is
-completely independent of guacamole-client and can be built separately, though
-the others may have to be built first. If all projects are built using
-guacamole-client, Maven will take care of the proper build order.
+guacamole-common-js provides an efficient HTTP tunnel for transporting
+protocol data between JavaScript and the web application, as well as an
+implementation of a Guacamole protocol client and abstract synchronized
+drawing layers. 
 
 
 ------------------------------------------------------------
- Compiling and installing Guacamole
+ Compiling and installing guacamole-common-js
 ------------------------------------------------------------
 
-Guacamole is built using Maven. Building Guacamole compiles all classes and
-packages them into a deployable .war file. This .war file can be installed
-and deployed under servlet containers like Apache Tomcat or Jetty.
+guacamole-common-js is built using Maven. Note that this is JavaScript code
+and not actually compiled. "Building" guacamole-common-js actually simply
+packages it into a redistributable .zip file. This .zip file can be easily
+included and expanded into other Maven-based projects (like Guacamole).
+
+Note that prebuilt versions of guacamole-common-js are available from the
+main guac-dev.org Maven repository which is referenced in all Maven
+projects in Guacamole. Unless you want to make changes to guacamole-common-js
+or you want to use a newer, unreleased version (such as the unstable branch),
+you do not need to build this manually. You can let Maven download it for
+you when you build Guacamole.
 
 1) Run mvn package
 
     $ mvn package
 
-    Maven will download any needed dependencies for building the .jar file.
-    Once all dependencies have been downloaded, the .war file will be
-    created in the guacamole/target/ subdirectory of the current directory.
+    Maven will download any needed dependencies for building the .zip file.
+    Once all dependencies have been downloaded, the .zip file will be
+    created in the target/ subdirectory of the current directory.
 
-2) Copy the .war file as directed in the instructions provided with
-   your servlet container.
+2) Run mvn install
 
-   Apache Tomcat, Jetty, and other servlet containers have specific and
-   varying locations that .war files must be placed for the web
-   application to be deployed.
+    $ mvn install
 
-   You will likely need to do this as root.
+    DO NOT RUN THIS AS ROOT!
+
+    Maven will install guacamole-common-js to your user's local Maven
+    repository where it can be used in future builds. It will not install
+    into a system-wide repository and does not require root privileges.
+
+    Once installed, building other Maven projects that depend on
+    guacamole-common-js (such as Guacamole) will be possible.
 
 
 ------------------------------------------------------------
  Reporting problems
 ------------------------------------------------------------
 
-Please report any bugs encountered by opening a new issue in the JIRA system
+Please report any bugs encountered by opening a new ticket at the Trac system
 hosted at:
     
-    http://glyptodon.org/jira/
+    http://guac-dev.org/trac/
 
