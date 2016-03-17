@@ -70,6 +70,16 @@ public interface Environment {
 
     };
 
+    /*
+     * Whether HTTP Basic Authentication is enabled.
+     */
+    public static final BooleanGuacamoleProperty ENABLE_HTTP_BASIC_AUTH = new BooleanGuacamoleProperty() {
+
+        @Override
+        public String getName() { return "enable-http-basic-auth"; }
+
+    };
+
     /**
      * Returns the Guacamole home directory as determined when this Environment
      * object was created. The Guacamole home directory is found by checking, in

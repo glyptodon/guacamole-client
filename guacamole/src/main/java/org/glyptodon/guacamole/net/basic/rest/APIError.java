@@ -25,6 +25,9 @@ package org.glyptodon.guacamole.net.basic.rest;
 import java.util.Collection;
 import javax.ws.rs.core.Response;
 import org.glyptodon.guacamole.form.Field;
+import org.glyptodon.guacamole.GuacamoleException;
+import org.glyptodon.guacamole.environment.Environment;
+import org.glyptodon.guacamole.environment.LocalEnvironment;
 
 /**
  * Describes an error that occurred within a REST endpoint.
@@ -63,7 +66,7 @@ public class APIError {
         /**
          * The credentials provided were invalid.
          */
-        INVALID_CREDENTIALS(Response.Status.FORBIDDEN),
+        INVALID_CREDENTIALS(Response.Status.UNAUTHORIZED),
 
         /**
          * The credentials provided were not necessarily invalid, but were not
@@ -108,6 +111,20 @@ public class APIError {
          *     The HTTP status associated with this error type.
          */
         public Response.Status getStatus() {
+
+            /* Unless HTTP Basic Auth is enabled,
+             * override UNAUTHORIZED with FORBIDDEN */
+            if (status == Response.Status.UNAUTHORIZED) {
+                try {
+                    Environment env = new LocalEnvironment();
+
+                    if (env.getProperty(Environment.ENABLE_HTTP_BASIC_AUTH, false))
+                        return status;
+                } catch (GuacamoleException e) { }
+
+                return Response.Status.FORBIDDEN;
+            }
+
             return status;
         }
 
