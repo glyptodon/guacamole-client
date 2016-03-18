@@ -719,9 +719,10 @@ Guacamole.Client = function(tunnel) {
             var mimetype = parameters[2];
             var name = parameters[3];
 
+            var stream = streams[streamIndex] = new Guacamole.InputStream(guac_client, streamIndex);
+                
             // Create stream if handler defined
             if (object && object.onbody) {
-                var stream = streams[streamIndex] = new Guacamole.InputStream(guac_client, streamIndex);
                 object.onbody(stream, mimetype, name);
             }
 
@@ -758,9 +759,10 @@ Guacamole.Client = function(tunnel) {
             var stream_index = parseInt(parameters[0]);
             var mimetype = parameters[1];
 
+            var stream = streams[stream_index] = new Guacamole.InputStream(guac_client, stream_index);
+                
             // Create stream 
             if (guac_client.onclipboard) {
-                var stream = streams[stream_index] = new Guacamole.InputStream(guac_client, stream_index);
                 guac_client.onclipboard(stream, mimetype);
             }
 
@@ -922,9 +924,10 @@ Guacamole.Client = function(tunnel) {
             var mimetype = parameters[1];
             var filename = parameters[2];
 
+            var stream = streams[stream_index] = new Guacamole.InputStream(guac_client, stream_index);
+                
             // Create stream 
             if (guac_client.onfile) {
-                var stream = streams[stream_index] = new Guacamole.InputStream(guac_client, stream_index);
                 guac_client.onfile(stream, mimetype, filename);
             }
 
@@ -1055,9 +1058,10 @@ Guacamole.Client = function(tunnel) {
             var mimetype = parameters[1];
             var name = parameters[2];
 
+            var stream = streams[stream_index] = new Guacamole.InputStream(guac_client, stream_index);
+                
             // Create stream 
             if (guac_client.onpipe) {
-                var stream = streams[stream_index] = new Guacamole.InputStream(guac_client, stream_index);
                 guac_client.onpipe(stream, mimetype, name);
             }
 
