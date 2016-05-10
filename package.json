@@ -1,6 +1,6 @@
 {
   "name": "padarom-guacamole-common-js",
-  "version": "0.9.9",
+  "version": "0.9.9-d",
   "description": "The JavaScript Guacamole client as a NPM package",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "ssh",
     "telnet"
   ],
-  "author": "Christopher Mühl <cmuehl@unitybox.de> (https://padarom.io)",
+  "author": "Christopher Mühl <christopher@padarom.io> (https://padarom.io)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Padarom/guacamole-common-js/issues"
