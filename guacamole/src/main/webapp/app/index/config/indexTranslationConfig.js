@@ -36,7 +36,8 @@ angular.module('index').config(['$injector', function($injector) {
     $translateProvider.preferredLanguage(preferenceServiceProvider.preferences.language);
 
     // Escape any HTML in translation strings
-    $translateProvider.useSanitizeValueStrategy('escape');
+	// D² Note: disabled because it breaks non breaking spaces
+    // $translateProvider.useSanitizeValueStrategy('escape');
 
     // Load translations via translationLoader service
     $translateProvider.useLoader('translationLoader');

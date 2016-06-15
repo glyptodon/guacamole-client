@@ -6,6 +6,46 @@
 
     "keys" : {
 
+        "Back"  : {
+            "title"  : "⟵",
+            "keysym" : 65288
+        },
+        "Tab"   : {
+            "title"  : "↹",
+            "keysym" : 65289
+        },
+        "Enter"  : {
+            "title"  : "Entrée",
+            "keysym" : 65293
+        },
+        "Enter2"  : {
+            "title"  : "⭶",
+            "keysym" : 65293
+        },
+        "Esc" : {
+            "title"  : "Échap",
+            "keysym" : 65307
+        },
+        "Home" : {
+            "title"  : "⭮",
+            "keysym" : 65360
+        },
+        "PgUp" : {
+            "title"  : "⇞",
+            "keysym" : 65365
+        },
+        "PgDn" : {
+            "title"  : "⇟",
+            "keysym" : 65366
+        },
+        "End" : {
+            "title"  : "Fin",
+            "keysym" : 65367
+        },
+        "Ins" : {
+            "title"  : "Inser",
+            "keysym" : 65379
+        },
         "F1"    : 65470,
         "F2"    : 65471,
         "F3"    : 65472,
@@ -19,63 +59,27 @@
         "F11"   : 65480,
         "F12"   : 65481,
 
-        "Space" : " ",
-
-        "Esc" : [{
-            "title"  : "Echap",
-            "keysym" : 65307
-        }],
-        "Back" : [{
-            "title"  : "⟵",
-            "keysym" : 65288
-        }],
-        "Tab" : [{
-            "title"  : "↹",
-            "keysym" : 65289
-        }],
-        "Enter" : [{
-            "title"  : "Entrée",
-            "keysym" : 65293
-        }],
-        "Home" : [{
-            "title"  : "Origine",
-            "keysym" : 65360
-        }],
-        "PgUp" : [{
-            "title"  : "Pg préc.",
-            "keysym" : 65365
-        }],
-        "PgDn" : [{
-            "title"  : "Pg suiv.",
-            "keysym" : 65366
-        }],
-        "End" : [{
-            "title"  : "Fin",
-            "keysym" : 65367
-        }],
-        "Ins" : [{
-            "title"  : "Inser",
-            "keysym" : 65379
-        }],
-        "Del" : [{
+        "Del" : {
             "title"  : "Suppr",
             "keysym" : 65535
-        }],
+        },
+
+        "Space" : " ",
 
         "Left" : [{
-            "title"  : "←",
+            "title"  : "🠠",
             "keysym" : 65361
         }],
         "Up" : [{
-            "title"  : "↑",
+            "title"  : "🠢",
             "keysym" : 65362
         }],
         "Right" : [{
-            "title"  : "→",
+            "title"  : "🠡",
             "keysym" : 65363
         }],
         "Down" : [{
-            "title"  : "↓",
+            "title"  : "🠣",
             "keysym" : 65364
         }],
 
@@ -84,12 +88,12 @@
             "keysym"   : 65383
         }],
         "LShift" : [{
-            "title"    : "Shift",
+            "title"    : "🢂",
             "modifier" : "shift",
             "keysym"   : 65505
         }],
         "RShift" : [{
-            "title"    : "Shift",
+            "title"    : "🢂",
             "modifier" : "shift",
             "keysym"   : 65506
         }],
@@ -104,87 +108,114 @@
             "keysym"   : 65508
         }],
         "Caps" : [{
-            "title"    : "Caps",
+            "title"    : "🔒",
             "modifier" : "caps",
             "keysym"   : 65509
         }],
-        "LAlt" : [{
+        "Alt" : [{
             "title"    : "Alt",
             "modifier" : "alt",
             "keysym"   : 65513
         }],
-        "AltGr" : [{
-            "title"    : "AltGr",
-            "modifier" : "alt-gr",
+        "Altgr" : [{
+            "title"    : "Alt Gr",
+            "modifier" : "altgr",
             "keysym"   : 65027
         }],
-        "Super" : [{
+        "LSuper" : [{
             "title"    : "Super",
             "modifier" : "super",
             "keysym"   : 65515
         }],
+        "RSuper" : [{
+            "title"    : "Super",
+            "modifier" : "super",
+            "keysym"   : 65312
+        }],
 
         "²" : [
-            { "title" : "²", "requires" : [         ] }
+            { "title" : "²", "requires" : [         ] },
+            { "title" : "~", "requires" : [ "shift" ] },
+            { "title" : "¬", "requires" : [ "altgr" ] }
         ],
         "&" : [
             { "title" : "&", "requires" : [         ] },
-            { "title" : "1", "requires" : [ "shift" ] }
+            { "title" : "1", "requires" : [ "shift" ] },
+            { "title" : "¹", "requires" : [ "altgr" ] },
+            { "title" : "¡", "requires" : [ "altgr","shift" ] }
         ],
         "é" : [
             { "title" : "é", "requires" : [         ] },
+            { "title" : "É", "requires" : [ "caps"  ] },
             { "title" : "2", "requires" : [ "shift" ] },
-            { "title" : "~", "requires" : [ "alt-gr" ] }
+            { "title" : "2", "requires" : [ "caps","shift" ] },
+            { "title" : "~", "requires" : [ "altgr" ] },
+            { "title" : "⅛", "requires" : [ "altgr","shift" ] }
         ],
         "\"" : [
-            { "title" : "\"", "requires" : [         ] },
+            { "title" : "\"","requires" : [         ] },
             { "title" : "3", "requires" : [ "shift" ] },
-            { "title" : "#", "requires" : [ "alt-gr" ] }
+            { "title" : "#", "requires" : [ "altgr" ] },
+            { "title" : "£", "requires" : [ "altgr","shift" ] }
         ],
         "'" : [
             { "title" : "'", "requires" : [         ] },
             { "title" : "4", "requires" : [ "shift" ] },
-            { "title" : "{", "requires" : [ "alt-gr" ] }
+            { "title" : "{", "requires" : [ "altgr" ] },
+            { "title" : "$", "requires" : [ "altgr","shift" ] }
         ],
         "(" : [
             { "title" : "(", "requires" : [         ] },
             { "title" : "5", "requires" : [ "shift" ] },
-            { "title" : "[", "requires" : [ "alt-gr" ] }
+            { "title" : "[", "requires" : [ "altgr" ] },
+            { "title" : "⅜", "requires" : [ "altgr","shift" ] }
         ],
         "-" : [
             { "title" : "-", "requires" : [         ] },
             { "title" : "6", "requires" : [ "shift" ] },
-            { "title" : "|", "requires" : [ "alt-gr" ] }
+            { "title" : "|", "requires" : [ "altgr" ] },
+            { "title" : "⅝", "requires" : [ "altgr","shift" ] }
         ],
         "è" : [
             { "title" : "è", "requires" : [         ] },
+            { "title" : "È", "requires" : [ "caps"  ] },
             { "title" : "7", "requires" : [ "shift" ] },
-            { "title" : "`", "requires" : [ "alt-gr" ] }
+            { "title" : "7", "requires" : [ "caps","shift" ] },
+            { "title" : "`", "requires" : [ "altgr" ] },
+            { "title" : "⅞", "requires" : [ "altgr","shift" ] }
         ],
         "_" : [
             { "title" : "_", "requires" : [         ] },
             { "title" : "8", "requires" : [ "shift" ] },
-            { "title" : "\\", "requires" : [ "alt-gr" ] }
+            { "title" : "\\","requires" : [ "altgr" ] },
+            { "title" : "™", "requires" : [ "altgr","shift" ] }
         ],
         "ç" : [
             { "title" : "ç", "requires" : [         ] },
+            { "title" : "Ç", "requires" : [ "caps"  ] },
             { "title" : "9", "requires" : [ "shift" ] },
-            { "title" : "^", "requires" : [ "alt-gr" ] }
+            { "title" : "9", "requires" : [ "caps","shift" ] },
+            { "title" : "^", "requires" : [ "altgr" ] },
+            { "title" : "±", "requires" : [ "altgr","shift" ] }
         ],
         "à" : [
             { "title" : "à", "requires" : [         ] },
+            { "title" : "À", "requires" : [ "caps"  ] },
             { "title" : "0", "requires" : [ "shift" ] },
-            { "title" : "@", "requires" : [ "alt-gr" ] }
+            { "title" : "0", "requires" : [ "caps","shift" ] },
+            { "title" : "@", "requires" : [ "altgr" ] },
+            { "title" : "°", "requires" : [ "altgr","shift" ] }
         ],
         ")" : [
             { "title" : ")", "requires" : [         ] },
             { "title" : "°", "requires" : [ "shift" ] },
-            { "title" : "]", "requires" : [ "alt-gr" ] }
+            { "title" : "]", "requires" : [ "altgr" ] },
+            { "title" : "¿", "requires" : [ "altgr","shift" ] }
         ],
         "=" : [
             { "title" : "=", "requires" : [         ] },
             { "title" : "+", "requires" : [ "shift" ] },
-            { "title" : "}", "requires" : [ "alt-gr" ] }
+            { "title" : "}", "requires" : [ "altgr" ] }
         ],
         "^" : [
             { "title" : "^", "requires" : [         ] },
@@ -193,11 +224,13 @@
         "$" : [
             { "title" : "$", "requires" : [         ] },
             { "title" : "£", "requires" : [ "shift" ] },
-            { "title" : "¤", "requires" : [ "alt-gr" ] }
+            { "title" : "¤", "requires" : [ "altgr" ] }
         ],
         "ù" : [
             { "title" : "ù", "requires" : [         ] },
-            { "title" : "%", "requires" : [ "shift" ] }
+            { "title" : "Ù", "requires" : [ "caps"  ] },
+            { "title" : "%", "requires" : [ "shift" ] },
+            { "title" : "%", "requires" : [ "caps","shift" ] }
         ],
         "*" : [
             { "title" : "*", "requires" : [         ] },
@@ -205,7 +238,9 @@
         ],
         "<" : [
             { "title" : "<", "requires" : [         ] },
-            { "title" : ">", "requires" : [ "shift" ] }
+            { "title" : ">", "requires" : [ "shift" ] },
+            { "title" : "|", "requires" : [ "altgr" ] },
+            { "title" : "¦", "requires" : [ "altgr","shift" ] }
         ],
         "," : [
             { "title" : ",", "requires" : [         ] },
@@ -213,14 +248,18 @@
         ],
         ";" : [
             { "title" : ";", "requires" : [         ] },
-            { "title" : ".", "requires" : [ "shift" ] }
+            { "title" : ".", "requires" : [ "shift" ] },
+            { "title" : "─", "requires" : [ "altgr" ] },
+            { "title" : "×", "requires" : [ "altgr","shift" ] }
         ],
         ":" : [
-            { "title" : ":",  "requires" : [         ] },
-            { "title" : "/", "requires" : [ "shift" ] }
+            { "title" : ":", "requires" : [         ] },
+            { "title" : "/", "requires" : [ "shift" ] },
+            { "title" : "·", "requires" : [ "altgr" ] },
+            { "title" : "÷", "requires" : [ "altgr","shift" ] }
         ],
         "!" : [
-            { "title" : "!",  "requires" : [         ] },
+            { "title" : "!", "requires" : [         ] },
             { "title" : "§", "requires" : [ "shift" ] }
         ],
 
@@ -228,98 +267,129 @@
             { "title" : "a", "requires" : [                 ] },
             { "title" : "A", "requires" : [ "caps"          ] },
             { "title" : "A", "requires" : [ "shift"         ] },
-            { "title" : "a", "requires" : [ "caps", "shift" ] }
+            { "title" : "a", "requires" : [ "caps", "shift" ] },
+            { "title" : "æ", "requires" : [ "altgr"         ] },
+            { "title" : "Æ", "requires" : [ "altgr","shift" ] }
         ],
         "z" : [
             { "title" : "z", "requires" : [                 ] },
             { "title" : "Z", "requires" : [ "caps"          ] },
             { "title" : "Z", "requires" : [ "shift"         ] },
-            { "title" : "z", "requires" : [ "caps", "shift" ] }
+            { "title" : "z", "requires" : [ "caps", "shift" ] },
+            { "title" : "«", "requires" : [ "altgr"         ] },
+            { "title" : "<", "requires" : [ "altgr","shift" ] }
         ],
         "e" : [
             { "title" : "e", "requires" : [                 ] },
             { "title" : "E", "requires" : [ "caps"          ] },
             { "title" : "E", "requires" : [ "shift"         ] },
             { "title" : "e", "requires" : [ "caps", "shift" ] },
-            { "title" : "€", "requires" : [ "alt-gr"        ] }
+            { "title" : "€", "requires" : [ "altgr"         ] },
+            { "title" : "¢", "requires" : [ "altgr","shift" ] }
         ],
         "r" : [
             { "title" : "r", "requires" : [                 ] },
             { "title" : "R", "requires" : [ "caps"          ] },
             { "title" : "R", "requires" : [ "shift"         ] },
-            { "title" : "r", "requires" : [ "caps", "shift" ] }
+            { "title" : "r", "requires" : [ "caps", "shift" ] },
+            { "title" : "¶", "requires" : [ "altgr"         ] },
+            { "title" : "®", "requires" : [ "altgr","shift" ] }
         ],
         "t" : [
             { "title" : "t", "requires" : [                 ] },
             { "title" : "T", "requires" : [ "caps"          ] },
             { "title" : "T", "requires" : [ "shift"         ] },
-            { "title" : "t", "requires" : [ "caps", "shift" ] }
+            { "title" : "t", "requires" : [ "caps", "shift" ] },
+            { "title" : "ŧ", "requires" : [ "altgr"         ] },
+            { "title" : "Ŧ", "requires" : [ "altgr","shift" ] }
         ],
         "y" : [
             { "title" : "y", "requires" : [                 ] },
             { "title" : "Y", "requires" : [ "caps"          ] },
             { "title" : "Y", "requires" : [ "shift"         ] },
-            { "title" : "y", "requires" : [ "caps", "shift" ] }
+            { "title" : "y", "requires" : [ "caps", "shift" ] },
+            { "title" : "←", "requires" : [ "altgr"         ] },
+            { "title" : "¥", "requires" : [ "altgr","shift" ] }
         ],
         "u" : [
             { "title" : "u", "requires" : [                 ] },
             { "title" : "U", "requires" : [ "caps"          ] },
             { "title" : "U", "requires" : [ "shift"         ] },
-            { "title" : "u", "requires" : [ "caps", "shift" ] }
+            { "title" : "u", "requires" : [ "caps", "shift" ] },
+            { "title" : "↓", "requires" : [ "altgr"         ] },
+            { "title" : "↑", "requires" : [ "altgr","shift" ] }
         ],
         "i" : [
             { "title" : "i", "requires" : [                 ] },
             { "title" : "I", "requires" : [ "caps"          ] },
             { "title" : "I", "requires" : [ "shift"         ] },
-            { "title" : "i", "requires" : [ "caps", "shift" ] }
+            { "title" : "i", "requires" : [ "caps", "shift" ] },
+            { "title" : "→", "requires" : [ "altgr"         ] },
+            { "title" : "ı", "requires" : [ "altgr","shift" ] }
         ],
         "o" : [
             { "title" : "o", "requires" : [                 ] },
             { "title" : "O", "requires" : [ "caps"          ] },
             { "title" : "O", "requires" : [ "shift"         ] },
-            { "title" : "o", "requires" : [ "caps", "shift" ] }
+            { "title" : "o", "requires" : [ "caps", "shift" ] },
+            { "title" : "œ", "requires" : [ "altgr"         ] },
+            { "title" : "Œ", "requires" : [ "altgr","shift" ] }
         ],
         "p" : [
             { "title" : "p", "requires" : [                 ] },
             { "title" : "P", "requires" : [ "caps"          ] },
             { "title" : "P", "requires" : [ "shift"         ] },
-            { "title" : "p", "requires" : [ "caps", "shift" ] }
+            { "title" : "p", "requires" : [ "caps", "shift" ] },
+            { "title" : "þ", "requires" : [ "altgr"         ] },
+            { "title" : "Þ", "requires" : [ "altgr","shift" ] }
         ],
         "q" : [
             { "title" : "q", "requires" : [                 ] },
             { "title" : "Q", "requires" : [ "caps"          ] },
             { "title" : "Q", "requires" : [ "shift"         ] },
-            { "title" : "q", "requires" : [ "caps", "shift" ] }
+            { "title" : "q", "requires" : [ "caps", "shift" ] },
+            { "title" : "@", "requires" : [ "altgr"         ] },
+            { "title" : "Ω", "requires" : [ "altgr","shift" ] }
         ],
         "s" : [
             { "title" : "s", "requires" : [                 ] },
             { "title" : "S", "requires" : [ "caps"          ] },
             { "title" : "S", "requires" : [ "shift"         ] },
-            { "title" : "s", "requires" : [ "caps", "shift" ] }
+            { "title" : "s", "requires" : [ "caps", "shift" ] },
+            { "title" : "ß", "requires" : [ "altgr"         ] },
+            { "title" : "§", "requires" : [ "altgr","shift" ] }
         ],
         "d" : [
             { "title" : "d", "requires" : [                 ] },
             { "title" : "D", "requires" : [ "caps"          ] },
             { "title" : "D", "requires" : [ "shift"         ] },
-            { "title" : "d", "requires" : [ "caps", "shift" ] }
+            { "title" : "d", "requires" : [ "caps", "shift" ] },
+            { "title" : "ð", "requires" : [ "altgr"         ] },
+            { "title" : "Ð", "requires" : [ "altgr","shift" ] }
         ],
         "f" : [
             { "title" : "f", "requires" : [                 ] },
             { "title" : "F", "requires" : [ "caps"          ] },
             { "title" : "F", "requires" : [ "shift"         ] },
-            { "title" : "f", "requires" : [ "caps", "shift" ] }
+            { "title" : "f", "requires" : [ "caps", "shift" ] },
+            { "title" : "đ", "requires" : [ "altgr"         ] },
+            { "title" : "ª", "requires" : [ "altgr","shift" ] }
         ],
         "g" : [
             { "title" : "g", "requires" : [                 ] },
             { "title" : "G", "requires" : [ "caps"          ] },
             { "title" : "G", "requires" : [ "shift"         ] },
-            { "title" : "g", "requires" : [ "caps", "shift" ] }
+            { "title" : "g", "requires" : [ "caps", "shift" ] },
+            { "title" : "ŋ", "requires" : [ "altgr"         ] },
+            { "title" : "Ŋ", "requires" : [ "altgr","shift" ] }
         ],
         "h" : [
             { "title" : "h", "requires" : [                 ] },
             { "title" : "H", "requires" : [ "caps"          ] },
             { "title" : "H", "requires" : [ "shift"         ] },
-            { "title" : "h", "requires" : [ "caps", "shift" ] }
+            { "title" : "h", "requires" : [ "caps", "shift" ] },
+            { "title" : "ħ", "requires" : [ "altgr"         ] },
+            { "title" : "Ħ", "requires" : [ "altgr","shift" ] }
         ],
         "j" : [
             { "title" : "j", "requires" : [                 ] },
@@ -331,49 +401,65 @@
             { "title" : "k", "requires" : [                 ] },
             { "title" : "K", "requires" : [ "caps"          ] },
             { "title" : "K", "requires" : [ "shift"         ] },
-            { "title" : "k", "requires" : [ "caps", "shift" ] }
+            { "title" : "k", "requires" : [ "caps", "shift" ] },
+            { "title" : "ĸ", "requires" : [ "altgr"         ] },
+            { "title" : "&", "requires" : [ "altgr","shift" ] }
         ],
         "l" : [
             { "title" : "l", "requires" : [                 ] },
             { "title" : "L", "requires" : [ "caps"          ] },
             { "title" : "L", "requires" : [ "shift"         ] },
-            { "title" : "l", "requires" : [ "caps", "shift" ] }
+            { "title" : "l", "requires" : [ "caps", "shift" ] },
+            { "title" : "ł", "requires" : [ "altgr"         ] },
+            { "title" : "Ł", "requires" : [ "altgr","shift" ] }
         ],
         "m" : [
             { "title" : "m", "requires" : [                 ] },
             { "title" : "M", "requires" : [ "caps"          ] },
             { "title" : "M", "requires" : [ "shift"         ] },
-            { "title" : "m", "requires" : [ "caps", "shift" ] }
+            { "title" : "m", "requires" : [ "caps", "shift" ] },
+            { "title" : "µ", "requires" : [ "altgr"         ] },
+            { "title" : "º", "requires" : [ "altgr","shift" ] }
         ],
         "w" : [
             { "title" : "w", "requires" : [                 ] },
             { "title" : "W", "requires" : [ "caps"          ] },
             { "title" : "W", "requires" : [ "shift"         ] },
-            { "title" : "w", "requires" : [ "caps", "shift" ] }
+            { "title" : "w", "requires" : [ "caps", "shift" ] },
+            { "title" : "ł", "requires" : [ "altgr"         ] },
+            { "title" : "Ł", "requires" : [ "altgr","shift" ] }
         ],
         "x" : [
             { "title" : "x", "requires" : [                 ] },
             { "title" : "X", "requires" : [ "caps"          ] },
             { "title" : "X", "requires" : [ "shift"         ] },
-            { "title" : "x", "requires" : [ "caps", "shift" ] }
+            { "title" : "x", "requires" : [ "caps", "shift" ] },
+            { "title" : "»", "requires" : [ "altgr"         ] },
+            { "title" : ">", "requires" : [ "altgr","shift" ] }
         ],
         "c" : [
             { "title" : "c", "requires" : [                 ] },
             { "title" : "C", "requires" : [ "caps"          ] },
             { "title" : "C", "requires" : [ "shift"         ] },
-            { "title" : "c", "requires" : [ "caps", "shift" ] }
+            { "title" : "c", "requires" : [ "caps", "shift" ] },
+            { "title" : "¢", "requires" : [ "altgr"         ] },
+            { "title" : "©", "requires" : [ "altgr","shift" ] }
         ],
         "v" : [
             { "title" : "v", "requires" : [                 ] },
             { "title" : "V", "requires" : [ "caps"          ] },
             { "title" : "V", "requires" : [ "shift"         ] },
-            { "title" : "v", "requires" : [ "caps", "shift" ] }
+            { "title" : "v", "requires" : [ "caps", "shift" ] },
+            { "title" : "“", "requires" : [ "altgr"         ] },
+            { "title" : "‘", "requires" : [ "altgr","shift" ] }
         ],
         "b" : [
             { "title" : "b", "requires" : [                 ] },
             { "title" : "B", "requires" : [ "caps"          ] },
             { "title" : "B", "requires" : [ "shift"         ] },
-            { "title" : "b", "requires" : [ "caps", "shift" ] }
+            { "title" : "b", "requires" : [ "caps", "shift" ] },
+            { "title" : "”", "requires" : [ "altgr"         ] },
+            { "title" : "’", "requires" : [ "altgr","shift" ] }
         ],
         "n" : [
             { "title" : "n", "requires" : [                 ] },
@@ -386,21 +472,19 @@
 
     "layout" : [
 
-        [ "Esc", 0.5, "F1", "F2",  "F3",  "F4",
-                 0.7, "F5", "F6",  "F7",  "F8",
-                 0.7, "F9", "F10", "F11", "F12" ],
+        [ "Esc", 1.05, "F1", "F2", "F3", "F4", 0.55, "F5", "F6", "F7", "F8", 0.55, "F9", "F10", "F11", "F12" ],
 
-        [ 0.1 ],
+        [ 0.2 ],
 
         {
             "main" : {
                 "alpha" : [
 
-                    [ "²", "&", "é", "\"", "'", "(", "-", "è", "_", "ç", "à", ")", "=", "Back" ],
-                    [ "Tab", "a", "z", "e", "r", "t", "y", "u", "i", "o", "p", "^", "$", 1, 0.8 ],
-                    [ "Caps",  "q", "s", "d", "f", "g", "h", "j", "k", "l", "m", "ù", "*", "Enter" ],
-                    [ "LShift", "<", "w", "x", "c", "v",  "b", "n", ",", ";", ":", "!", "RShift" ],
-                    [ "LCtrl", "Super", "LAlt",       "Space",        "AltGr", "Menu", "RCtrl" ]
+                    [ "²", "&", "é", "\"", "'", "(", "-", "è", "_", "ç", "à", ")", "=",   "Back"  ],
+                    [ "Tab",  "a", "z", "e", "r", "t", "y", "u", "i", "o", "p", "^", "$", "Enter" ],
+                    [ "Caps", "q", "s", "d", "f", "g", "h", "j", "k", "l", "m", "ù", "*", "Enter2"],
+                    [ "LShift", "<", "w", "x", "c", "v",  "b", "n", ",", ";", ":", "!",  "RShift" ],
+                    [ "LCtrl", "LSuper", "Alt",    "Space",   "Altgr", "RSuper", "Menu", "RCtrl"  ]
 
                 ],
 
@@ -418,28 +502,22 @@
 
     "keyWidths" : {
 
-        "Esc"    : 1.2,
-        "Back"   : 2,
-        "Tab"    : 1.3,
-        "Caps"   : 1.3,
-        "Enter"  : 1.7,
-        "LShift" : 2,
-        "RShift" : 2.1,
+        "Back"   : 2.1,
+        "Tab"    : 1.55,
+        "Caps"   : 1.80,
+        "Enter"  : 1.55,
+        "Enter2" : 1.275,
+        "LShift" : 1.275,
+        "RShift" : 2.925,
 
-        "LCtrl" : 1.6,
-        "Super" : 1.6,
-        "LAlt"  : 1.6,
-        "Space" : 6.1,
-        "AltGr" : 1.6,
-        "Menu"  : 1.6,
-        "RCtrl" : 1.6,
-
-        "Ins"  : 1.6,
-        "Home" : 1.6,
-        "PgUp" : 1.6,
-        "Del"  : 1.6,
-        "End"  : 1.6,
-        "PgDn" : 1.6
+        "LCtrl"  : 1.275,
+        "LSuper" : 1.275,
+        "Alt"    : 1.275,
+        "Space"  : 6.775,
+        "Altgr"  : 1.275,
+        "RSuper" : 1.275,
+        "Menu"   : 1.275,
+        "RCtrl"  : 1.275
 
     }
 
