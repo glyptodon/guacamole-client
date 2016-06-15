@@ -3,10 +3,55 @@
     "LOGIN" : {
 
         "ERROR_PASSWORD_BLANK"    : "@:APP.ERROR_PASSWORD_BLANK",
+        "ERROR_PASSWORD_SAME"     : "Le nouveau mot de passe doit être différent de celui expiré.",
         "ERROR_PASSWORD_MISMATCH" : "@:APP.ERROR_PASSWORD_MISMATCH",
+        "ERROR_NOT_VALID"         : "Ce compte utilisateur n’est actuellement pas valable.",
+        "ERROR_NOT_ACCESSIBLE"    : "L’accès à ce compte n’est actuellement pas autorisé. Veuillez réessayer plus tard.",
 
-        "FIELD_HEADER_NEW_PASSWORD"         : "Mot de passe",
-        "FIELD_HEADER_CONFIRM_NEW_PASSWORD" : "Répéter mot de passe"
+        "INFO_PASSWORD_EXPIRED" : "Votre mot de passe a expiré et doit être mis à jour. Veuillez saisir un nouveau mot de passe pour continuer.",
+
+        "FIELD_HEADER_NEW_PASSWORD"         : "Nouveau mot de passe",
+        "FIELD_HEADER_CONFIRM_NEW_PASSWORD" : "Retapez le mot de passe"
+
+    },
+
+    "CONNECTION_ATTRIBUTES" : {
+
+        "FIELD_HEADER_MAX_CONNECTIONS"          : "Nombre maximum de connexions :",
+        "FIELD_HEADER_MAX_CONNECTIONS_PER_USER" : "Nombre maximum de connexions par utilisateur :",
+
+        "SECTION_HEADER_CONCURRENCY" : "Limites de concurrence"
+
+    },
+
+    "CONNECTION_GROUP_ATTRIBUTES" : {
+
+        "FIELD_HEADER_MAX_CONNECTIONS"          : "Nombre maximum de connexions :",
+        "FIELD_HEADER_MAX_CONNECTIONS_PER_USER" : "Nombre maximum de connexions par utilisateur :",
+
+        "SECTION_HEADER_CONCURRENCY" : "Limites de concurrence (groupes d’équilibrage)"
+
+    },
+
+    "DATA_SOURCE_MYSQL" : {
+        "NAME" : "MySQL"
+    },
+
+    "DATA_SOURCE_POSTGRESQL" : {
+        "NAME" : "PostgreSQL"
+    },
+
+    "USER_ATTRIBUTES" : {
+
+        "FIELD_HEADER_DISABLED"            : "Compte désactivé :",
+        "FIELD_HEADER_EXPIRED"             : "Mot de passe expiré :",
+        "FIELD_HEADER_ACCESS_WINDOW_END"   : "Interdire l’accès après :",
+        "FIELD_HEADER_ACCESS_WINDOW_START" : "Autoriser l’accès à partir de :",
+        "FIELD_HEADER_TIMEZONE"            : "Fuseau horaire de l’utilisateur :",
+        "FIELD_HEADER_VALID_FROM"          : "Activer le compte après :",
+        "FIELD_HEADER_VALID_UNTIL"         : "Désactiver le compte après :",
+
+        "SECTION_HEADER_RESTRICTIONS" : "Restrictions de compte"
 
     }
 
