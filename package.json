@@ -1,6 +1,6 @@
 {
   "name": "padarom-guacamole-common-js",
-  "version": "0.9.9-d",
+  "version": "1.0.0",
   "description": "The JavaScript Guacamole client as a NPM package",
   "repository": {
     "type": "git",

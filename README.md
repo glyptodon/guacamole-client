@@ -1,3 +1,5 @@
+[![npm version](https://img.shields.io/npm/v/padarom-guacamole-common-js.svg)](https://www.npmjs.com/package/padarom-guacamole-common-js) [![downloads](https://img.shields.io/npm/dt/padarom-guacamole-common-js.svg)](https://www.npmjs.com/package/padarom-guacamole-common-js)
+
 # What is guacamole-common-js?
 
 guacamole-common-js is the core JavaScript library used by the Guacamole web
