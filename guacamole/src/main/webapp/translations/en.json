@@ -134,7 +134,10 @@
         "TEXT_RECONNECT_COUNTDOWN"        : "Reconnecting in {REMAINING} {REMAINING, plural, one{second} other{seconds}}...",
         "TEXT_FILE_TRANSFER_PROGRESS"     : "{PROGRESS} {UNIT, select, b{B} kb{KB} mb{MB} gb{GB} other{}}",
 
-        "URL_OSK_LAYOUT" : "layouts/en-us-qwerty.json"
+        "URL_OSK_LAYOUT" : "layouts/en-us-qwerty.json",
+
+        "FIELD_OPTION_INPUT_METHOD_NATIVE_IME_ACTIVATION_KEYCODE_HACK" : "Enable native IME activation keycode hack (only works for some OSes)"
+
 
     },
 
@@ -636,8 +639,9 @@
 
         "SECTION_HEADER_DEFAULT_INPUT_METHOD" : "Default Input Method",
         "SECTION_HEADER_DEFAULT_MOUSE_MODE"   : "Default Mouse Emulation Mode",
-        "SECTION_HEADER_UPDATE_PASSWORD"      : "Change Password"
+        "SECTION_HEADER_UPDATE_PASSWORD"      : "Change Password",
 
+        "FIELD_OPTION_INPUT_METHOD_NATIVE_IME_ACTIVATION_KEYCODE_HACK" : "@:CLIENT.FIELD_OPTION_INPUT_METHOD_NATIVE_IME_ACTIVATION_KEYCODE_HACK"
     },
 
     "SETTINGS_USERS" : {

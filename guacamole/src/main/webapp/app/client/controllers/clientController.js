@@ -39,6 +39,7 @@ angular.module('client').controller('clientController', ['$scope', '$routeParams
     var preferenceService     = $injector.get('preferenceService');
     var tunnelService         = $injector.get('tunnelService');
     var userPageService       = $injector.get('userPageService');
+    var guacKeyboard          = $injector.get('guacKeyboard');
 
     /**
      * The minimum number of pixels a drag gesture must move to result in the
@@ -217,6 +218,11 @@ angular.module('client').controller('clientController', ['$scope', '$routeParams
         inputMethod : preferenceService.preferences.inputMethod,
 
         /**
+         * Whether to enable native IME activation keycode hack.
+         */
+        nativeIMEActivationKeycodeHack: preferenceService.preferences.nativeIMEActivationKeycodeHack,
+
+        /**
          * The current scroll state of the menu.
          *
          * @type ScrollState
@@ -391,6 +397,11 @@ angular.module('client').controller('clientController', ['$scope', '$routeParams
         $scope.showOSK       = (inputMethod === 'osk');
         $scope.showTextInput = (inputMethod === 'text');
 
+    });
+
+    // Enable/disable keycode hack
+    $scope.$watch('menu.nativeIMEActivationKeycodeHack', function setNativeIMEActivationKeycodeHack(keycodeHack) {
+        guacKeyboard.setNativeIMEActivationKeycodeHackEnabled(keycodeHack);
     });
 
     $scope.$watch('menu.shown', function menuVisibilityChanged(menuShown, menuShownPreviousState) {

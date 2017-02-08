@@ -24,10 +24,10 @@ angular.module('index').controller('indexController', ['$scope', '$injector',
         function indexController($scope, $injector) {
 
     // Required services
-    var $document        = $injector.get('$document');
     var $window          = $injector.get('$window');
     var clipboardService = $injector.get('clipboardService');
     var guacNotification = $injector.get('guacNotification');
+    var guacKeyboard     = $injector.get('guacKeyboard');
     
     /**
      * The notification service.
@@ -82,47 +82,44 @@ angular.module('index').controller('indexController', ['$scope', '$injector',
 
     };
 
-    // Create event listeners at the global level
-    var keyboard = new Guacamole.Keyboard($document[0]);
-
     // Broadcast keydown events
-    keyboard.onkeydown = function onkeydown(keysym) {
+    guacKeyboard.onkeydown = function onkeydown(keysym) {
 
         // Do not handle key events if not logged in
         if ($scope.expectedCredentials)
             return true;
 
         // Warn of pending keydown
-        var guacBeforeKeydownEvent = $scope.$broadcast('guacBeforeKeydown', keysym, keyboard);
+        var guacBeforeKeydownEvent = $scope.$broadcast('guacBeforeKeydown', keysym, guacKeyboard);
         if (guacBeforeKeydownEvent.defaultPrevented)
             return true;
 
         // If not prevented via guacBeforeKeydown, fire corresponding keydown event
-        var guacKeydownEvent = $scope.$broadcast('guacKeydown', keysym, keyboard);
+        var guacKeydownEvent = $scope.$broadcast('guacKeydown', keysym, guacKeyboard);
         return !guacKeydownEvent.defaultPrevented;
 
     };
     
     // Broadcast keyup events
-    keyboard.onkeyup = function onkeyup(keysym) {
+    guacKeyboard.onkeyup = function onkeyup(keysym) {
 
         // Do not handle key events if not logged in
         if ($scope.expectedCredentials)
             return;
 
         // Warn of pending keyup
-        var guacBeforeKeydownEvent = $scope.$broadcast('guacBeforeKeyup', keysym, keyboard);
+        var guacBeforeKeydownEvent = $scope.$broadcast('guacBeforeKeyup', keysym, guacKeyboard);
         if (guacBeforeKeydownEvent.defaultPrevented)
             return;
 
         // If not prevented via guacBeforeKeyup, fire corresponding keydown event
-        $scope.$broadcast('guacKeyup', keysym, keyboard);
+        $scope.$broadcast('guacKeyup', keysym, guacKeyboard);
 
     };
 
     // Release all keys when window loses focus
     $window.onblur = function () {
-        keyboard.reset();
+        guacKeyboard.reset();
     };
 
     /**
