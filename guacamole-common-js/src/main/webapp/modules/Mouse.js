@@ -37,10 +37,21 @@ Guacamole.Mouse = function(element) {
     var guac_mouse = this;
 
     /**
+     * Timeout before a single mouse scroll happens.
+     * @type Number
+     */
+    var mouseScrollTimeout = null;
+
+    /**
      * The number of mousemove events to require before re-enabling mouse
      * event handling after receiving a touch event.
      */
     this.touchMouseThreshold = 3;
+
+    /**
+     * The minimum amount of pixels scrolled required for a delayed scroll
+     */
+    this.delayedScrollThreshold = 4;
 
     /**
      * The minimum amount of pixels scrolled required for a single scroll button
@@ -119,7 +130,7 @@ Guacamole.Mouse = function(element) {
      *
      * @private
      */
-    var scroll_delta = 0;
+    var scrollDelta = 0;
 
     function cancelEvent(e) {
         e.stopPropagation();
@@ -270,59 +281,89 @@ Guacamole.Mouse = function(element) {
             delta = e.detail * guac_mouse.PIXELS_PER_LINE;
         
         // Update overall delta
-        scroll_delta += delta;
+        scrollDelta += delta;
 
-        // Up
-        if (scroll_delta <= -guac_mouse.scrollThreshold) {
+        // Do the mouse scroll. If the scroll delta was below the threshold, start
+        // a timer to handle minor scroll events.
+        if (doMouseScroll(guac_mouse.scrollThreshold) !== 0) {
 
-            // Repeatedly click the up button until insufficient delta remains
-            do {
-
-                if (guac_mouse.onmousedown) {
-                    guac_mouse.currentState.up = true;
-                    guac_mouse.onmousedown(guac_mouse.currentState);
-                }
-
-                if (guac_mouse.onmouseup) {
-                    guac_mouse.currentState.up = false;
-                    guac_mouse.onmouseup(guac_mouse.currentState);
-                }
-
-                scroll_delta += guac_mouse.scrollThreshold;
-
-            } while (scroll_delta <= -guac_mouse.scrollThreshold);
-
-            // Reset delta
-            scroll_delta = 0;
-
-        }
-
-        // Down
-        if (scroll_delta >= guac_mouse.scrollThreshold) {
-
-            // Repeatedly click the down button until insufficient delta remains
-            do {
-
-                if (guac_mouse.onmousedown) {
-                    guac_mouse.currentState.down = true;
-                    guac_mouse.onmousedown(guac_mouse.currentState);
-                }
-
-                if (guac_mouse.onmouseup) {
-                    guac_mouse.currentState.down = false;
-                    guac_mouse.onmouseup(guac_mouse.currentState);
-                }
-
-                scroll_delta -= guac_mouse.scrollThreshold;
-
-            } while (scroll_delta >= guac_mouse.scrollThreshold);
-
-            // Reset delta
-            scroll_delta = 0;
+            // Send actual mouse scroll event after a threshold
+            mouseScrollTimeout = window.setTimeout(doMouseScroll, 100, guac_mouse.delayedScrollThreshold);
 
         }
 
         cancelEvent(e);
+
+    }
+
+    /**
+     * Do the actual scrolling and issue scroll events.
+     *
+     * @param {Number} scrollThreshold The minimum scroll threshold for the scroll to happen.
+     * @returns {Number} 0 if the scroll was handled, the scroll delta otherwise.
+     */
+    function doMouseScroll(scrollThreshold) {
+
+        // Cancel any pending timers
+        if (mouseScrollTimeout !== null) {
+            window.clearTimeout(mouseScrollTimeout);
+            mouseScrollTimeout = null;
+        }
+
+        if (scrollDelta !== 0) {
+
+            // Up
+            if (scrollDelta <= -scrollThreshold) {
+
+                // Repeatedly click the up button until insufficient delta remains
+                do {
+
+                    if (guac_mouse.onmousedown) {
+                        guac_mouse.currentState.up = true;
+                        guac_mouse.onmousedown(guac_mouse.currentState);
+                    }
+
+                    if (guac_mouse.onmouseup) {
+                        guac_mouse.currentState.up = false;
+                        guac_mouse.onmouseup(guac_mouse.currentState);
+                    }
+
+                    scrollDelta += guac_mouse.scrollThreshold;
+
+                } while (scrollDelta <= -scrollThreshold);
+
+                // Reset delta
+                scrollDelta = 0;
+
+            }
+
+            // Down
+            else if (scrollDelta >= scrollThreshold) {
+
+                // Repeatedly click the down button until insufficient delta remains
+                do {
+
+                    if (guac_mouse.onmousedown) {
+                        guac_mouse.currentState.down = true;
+                        guac_mouse.onmousedown(guac_mouse.currentState);
+                    }
+
+                    if (guac_mouse.onmouseup) {
+                        guac_mouse.currentState.down = false;
+                        guac_mouse.onmouseup(guac_mouse.currentState);
+                    }
+
+                    scrollDelta -= guac_mouse.scrollThreshold;
+
+                } while (scrollDelta >= guac_mouse.scrollThreshold);
+
+                // Reset delta
+                scrollDelta = 0;
+
+            }
+        }
+
+        return scrollDelta;
 
     }
 
