@@ -10801,3 +10801,5 @@ Guacamole.VideoPlayer.getInstance = function getInstance(stream, layer, mimetype
     return null;
 
 };
+
+module.exports = Guacamole;
