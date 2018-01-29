@@ -66,6 +66,7 @@
                     "options" : [
                         "",
                         "de-de-qwertz",
+                        "en-gb-qwerty",
                         "en-us-qwerty",
                         "es-es-qwerty",
                         "failsafe",
