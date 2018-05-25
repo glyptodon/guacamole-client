@@ -64,11 +64,6 @@ public class OpenIDAuthenticationProvider implements AuthenticationProvider {
     }
 
     @Override
-    public Object getResource() throws GuacamoleException {
-        return null;
-    }
-
-    @Override
     public AuthenticatedUser authenticateUser(Credentials credentials)
             throws GuacamoleException {
 
@@ -105,11 +100,6 @@ public class OpenIDAuthenticationProvider implements AuthenticationProvider {
         // No update necessary
         return context;
 
-    }
-
-    @Override
-    public void shutdown() {
-        // Do nothing
     }
 
 }
