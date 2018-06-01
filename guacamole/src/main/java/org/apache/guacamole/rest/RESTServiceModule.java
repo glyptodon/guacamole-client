@@ -82,9 +82,7 @@ public class RESTServiceModule extends ServletModule {
         bind(AuthTokenGenerator.class).to(SecureRandomAuthTokenGenerator.class);
 
         // Automatically translate GuacamoleExceptions for REST methods
-        MethodInterceptor interceptor = new RESTExceptionWrapper();
-        requestInjection(interceptor);
-        bindInterceptor(Matchers.any(), new RESTMethodMatcher(), interceptor);
+        bind(RESTExceptionMapper.class);
 
         // Set up the API endpoints
         bind(LanguageRESTService.class);
