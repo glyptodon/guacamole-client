@@ -301,6 +301,10 @@
                     "type"  : "NUMERIC"
                 },
                 {
+                    "name"  : "sftp-host-key",
+                    "type"  : "TEXT"
+                },
+                {
                     "name"  : "sftp-username",
                     "type"  : "USERNAME"
                 },
