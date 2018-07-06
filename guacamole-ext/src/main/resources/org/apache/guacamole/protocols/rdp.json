@@ -144,6 +144,10 @@
                     "options" : [ "true" ]
                 },
                 {
+                    "name"   : "printer-name",
+                    "type"   : "TEXT"
+                },
+                {
                     "name"    : "enable-drive",
                     "type"    : "BOOLEAN",
                     "options" : [ "true" ]
