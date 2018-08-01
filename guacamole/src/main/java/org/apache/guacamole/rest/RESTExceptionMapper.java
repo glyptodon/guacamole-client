@@ -93,7 +93,7 @@ public class RESTExceptionMapper implements ExceptionMapper<Throwable> {
         // Translate GuacamoleException subclasses to HTTP error codes 
         if (t instanceof GuacamoleException)
             return Response
-                    .status(((GuacamoleException) t).getHttpStatusCode())
+                    .status(((GuacamoleException) t).getStatus().getHttpStatusCode())
                     .entity(new APIError((GuacamoleException) t))
                     .type(MediaType.APPLICATION_JSON)
                     .build();
