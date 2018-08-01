@@ -20,10 +20,13 @@
 package org.apache.guacamole.auth.ldap;
 
 import com.google.inject.Inject;
+import com.novell.ldap.LDAPSearchConstraints;
 import java.util.Collections;
 import java.util.List;
 import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.environment.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Service for retrieving configuration information regarding the LDAP server.
@@ -31,6 +34,11 @@ import org.apache.guacamole.environment.Environment;
  * @author Michael Jumper
  */
 public class ConfigurationService {
+
+    /**
+     * Logger for this class.
+     */
+    private final Logger logger = LoggerFactory.getLogger(ConfigurationService.class);
 
     /**
      * The Guacamole server environment.
@@ -218,10 +226,123 @@ public class ConfigurationService {
      * @throws GuacamoleException
      *     If guacamole.properties cannot be parsed.
      */
-    public int getMaxResults() throws GuacamoleException {
+    private int getMaxResults() throws GuacamoleException {
         return environment.getProperty(
             LDAPGuacamoleProperties.LDAP_MAX_SEARCH_RESULTS,
             1000 
+        );
+    }
+
+    /**
+     * Returns whether or not LDAP aliases will be dereferenced,
+     * as configured with guacamole.properties. The default
+     * behavior if not explicitly defined is to never
+     * dereference them.
+     *
+     * @return
+     *     The behavior for handling dereferencing of aliases
+     *     as configured in guacamole.properties.
+     *
+     * @throws GuacamoleException
+     *     If guacamole.properties cannot be parsed.
+     */
+    private DereferenceAliasesMode getDereferenceAliases() throws GuacamoleException {
+        return environment.getProperty(
+            LDAPGuacamoleProperties.LDAP_DEREFERENCE_ALIASES,
+            DereferenceAliasesMode.NEVER
+        );
+    }
+
+    /**
+     * Returns the boolean value for whether the connection should
+     * follow referrals or not.  By default, it will not.
+     *
+     * @return
+     *     The boolean value of whether to follow referrals
+     *     as configured in guacamole.properties.
+     *
+     * @throws GuacamoleException
+     *     If guacamole.properties cannot be parsed.
+     */
+    public boolean getFollowReferrals() throws GuacamoleException {
+        return environment.getProperty(
+            LDAPGuacamoleProperties.LDAP_FOLLOW_REFERRALS,
+            false
+        );
+    }
+
+    /**
+     * Returns a set of LDAPSearchConstraints to apply globally
+     * to all LDAP searches.
+     *
+     * @return
+     *     A LDAPSearchConstraints object containing constraints
+     *     to be applied to all LDAP search operations.
+     *
+     * @throws GuacamoleException
+     *     If guacamole.properties cannot be parsed.
+     */
+    public LDAPSearchConstraints getLDAPSearchConstraints() throws GuacamoleException {
+
+        LDAPSearchConstraints constraints = new LDAPSearchConstraints();
+
+        constraints.setMaxResults(getMaxResults());
+        constraints.setDereference(getDereferenceAliases().DEREF_VALUE);
+
+        return constraints;
+    }
+
+    /**
+     * Returns the maximum number of referral hops to follow.
+     *
+     * @return
+     *     The maximum number of referral hops to follow
+     *     as configured in guacamole.properties.
+     *
+     * @throws GuacamoleException
+     *     If guacamole.properties cannot be parsed.
+     */
+    public int getMaxReferralHops() throws GuacamoleException {
+        return environment.getProperty(
+            LDAPGuacamoleProperties.LDAP_MAX_REFERRAL_HOPS,
+            5
+        );
+    }
+
+    /**
+     * Returns the search filter that should be used when querying the
+     * LDAP server for Guacamole users.  If no filter is specified,
+     * a default of "(objectClass=*)" is returned.
+     *
+     * @return
+     *     The search filter that should be used when querying the
+     *     LDAP server for users that are valid in Guacamole, or
+     *     "(objectClass=*)" if not specified.
+     *
+     * @throws GuacamoleException
+     *     If guacamole.properties cannot be parsed.
+     */
+    public String getUserSearchFilter() throws GuacamoleException {
+        return environment.getProperty(
+            LDAPGuacamoleProperties.LDAP_USER_SEARCH_FILTER,
+            "(objectClass=*)"
+        );
+    }
+
+    /**
+     * Returns the maximum number of seconds to wait for LDAP operations.
+     *
+     * @return
+     *     The maximum number of seconds to wait for LDAP operations
+     *     as configured in guacamole.properties.
+     *
+     * @throws GuacamoleException
+     *     If guacamole.properties cannot be parsed.
+     */
+    public int getOperationTimeout() throws GuacamoleException {
+        return environment.getProperty(
+            LDAPGuacamoleProperties.LDAP_OPERATION_TIMEOUT,
+            30
         );
     }
 

@@ -24,8 +24,8 @@ import com.novell.ldap.LDAPAttribute;
 import com.novell.ldap.LDAPConnection;
 import com.novell.ldap.LDAPEntry;
 import com.novell.ldap.LDAPException;
+import com.novell.ldap.LDAPReferralException;
 import com.novell.ldap.LDAPSearchResults;
-import com.novell.ldap.LDAPSearchConstraints;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,36 +87,59 @@ public class UserService {
             String usernameAttribute) throws GuacamoleException {
 
         try {
-            // Set search limits
-            LDAPSearchConstraints constraints = new LDAPSearchConstraints();
-            constraints.setMaxResults(confService.getMaxResults());
 
+            // Build a filter using the configured or default user search filter
+            // to find all user objects in the LDAP tree
+            StringBuilder userSearchFilter = new StringBuilder();
+            userSearchFilter.append("(&");
+            userSearchFilter.append(confService.getUserSearchFilter());
+            userSearchFilter.append("(");
+            userSearchFilter.append(escapingService.escapeLDAPSearchFilter(usernameAttribute));
+            userSearchFilter.append("=*))");
+         
             // Find all Guacamole users underneath base DN
             LDAPSearchResults results = ldapConnection.search(
                 confService.getUserBaseDN(),
                 LDAPConnection.SCOPE_SUB,
-                "(&(objectClass=*)(" + escapingService.escapeLDAPSearchFilter(usernameAttribute) + "=*))",
+                userSearchFilter.toString(),
                 null,
                 false,
-                constraints
+                confService.getLDAPSearchConstraints()
             );
 
             // Read all visible users
             while (results.hasMore()) {
 
-                LDAPEntry entry = results.next();
+                try {
 
-                // Get username from record
-                LDAPAttribute username = entry.getAttribute(usernameAttribute);
-                if (username == null) {
-                    logger.warn("Queried user is missing the username attribute \"{}\".", usernameAttribute);
-                    continue;
+                    LDAPEntry entry = results.next();
+
+                    // Get username from record
+                    LDAPAttribute username = entry.getAttribute(usernameAttribute);
+                    if (username == null) {
+                        logger.warn("Queried user is missing the username attribute \"{}\".", usernameAttribute);
+                        continue;
+                    }
+
+                    // Store user using their username as the identifier
+                    String identifier = username.getStringValue();
+                    if (users.put(identifier, new SimpleUser(identifier)) != null)
+                        logger.warn("Possibly ambiguous user account: \"{}\".", identifier);
+
                 }
 
-                // Store user using their username as the identifier
-                String identifier = username.getStringValue();
-                if (users.put(identifier, new SimpleUser(identifier)) != null)
-                    logger.warn("Possibly ambiguous user account: \"{}\".", identifier);
+                // Deal with errors trying to follow referrals
+                catch (LDAPReferralException e) {
+                    if (confService.getFollowReferrals()) {
+                        logger.error("Could not follow referral: {}", e.getFailedReferral());
+                        logger.debug("Error encountered trying to follow referral.", e);
+                        throw new GuacamoleServerException("Could not follow LDAP referral.", e);
+                    }
+                    else {
+                        logger.warn("Given a referral, but referrals are disabled. Error was: {}", e.getMessage());
+                        logger.debug("Got a referral, but configured to not follow them.", e);
+                    }
+                }
 
             }
 
@@ -194,8 +217,10 @@ public class UserService {
         List<String> usernameAttributes = confService.getUsernameAttributes();
 
         // Build LDAP query for users having at least one username attribute
-        // with the specified username as its value
-        StringBuilder ldapQuery = new StringBuilder("(&(objectClass=*)");
+        // and with the configured or default search filter
+        StringBuilder ldapQuery = new StringBuilder();
+        ldapQuery.append("(&");
+        ldapQuery.append(confService.getUserSearchFilter());
 
         // Include all attributes within OR clause if there are more than one
         if (usernameAttributes.size() > 1)
@@ -256,13 +281,29 @@ public class UserService {
                 LDAPConnection.SCOPE_SUB,
                 generateLDAPQuery(username),
                 null,
-                false
+                false,
+                confService.getLDAPSearchConstraints()
             );
 
             // Add all DNs for found users
             while (results.hasMore()) {
-                LDAPEntry entry = results.next();
-                userDNs.add(entry.getDN());
+                try {
+                    LDAPEntry entry = results.next();
+                    userDNs.add(entry.getDN());
+                }
+          
+                // Deal with errors following referrals
+                catch (LDAPReferralException e) {
+                    if (confService.getFollowReferrals()) {
+                        logger.error("Error trying to follow a referral: {}", e.getFailedReferral());
+                        logger.debug("Encountered an error trying to follow a referral.", e);
+                        throw new GuacamoleServerException("Failed while trying to follow referrals.", e);
+                    }
+                    else {
+                        logger.warn("Given a referral, not following it. Error was: {}", e.getMessage());
+                        logger.debug("Given a referral, but configured to not follow them.", e);
+                    }
+                }
             }
 
             // Return all discovered DNs (if any)

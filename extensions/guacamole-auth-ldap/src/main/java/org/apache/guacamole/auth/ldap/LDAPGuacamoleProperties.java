@@ -19,6 +19,7 @@
 
 package org.apache.guacamole.auth.ldap;
 
+import org.apache.guacamole.properties.BooleanGuacamoleProperty;
 import org.apache.guacamole.properties.IntegerGuacamoleProperty;
 import org.apache.guacamole.properties.StringGuacamoleProperty;
 
@@ -152,6 +153,57 @@ public class LDAPGuacamoleProperties {
 
         @Override
         public String getName() { return "ldap-max-search-results"; }
+
+    };
+
+    /**
+     * Property that controls whether or not the LDAP connection follows
+     * (dereferences) aliases as it searches the tree.
+     */
+    public static final DereferenceAliasesProperty LDAP_DEREFERENCE_ALIASES = new DereferenceAliasesProperty() {
+
+        @Override
+        public String getName() { return "ldap-dereference-aliases"; }
+
+    };
+
+    /**
+     * A search filter to apply to user LDAP queries.
+     */
+    public static final StringGuacamoleProperty LDAP_USER_SEARCH_FILTER = new StringGuacamoleProperty() {
+
+        @Override
+        public String getName() { return "ldap-user-search-filter"; }
+
+    };
+
+    /**
+     * Whether or not we should follow referrals.
+     */
+    public static final BooleanGuacamoleProperty LDAP_FOLLOW_REFERRALS = new BooleanGuacamoleProperty() {
+
+        @Override
+        public String getName() { return "ldap-follow-referrals"; }
+
+    };
+
+    /**
+     * Maximum number of referral hops to follow.
+     */
+    public static final IntegerGuacamoleProperty LDAP_MAX_REFERRAL_HOPS = new IntegerGuacamoleProperty() {
+
+        @Override
+        public String getName() { return "ldap-max-referral-hops"; }
+
+    };
+
+    /**
+     * Number of seconds to wait for LDAP operations to complete.
+     */
+    public static final IntegerGuacamoleProperty LDAP_OPERATION_TIMEOUT = new IntegerGuacamoleProperty() {
+
+        @Override
+        public String getName() { return "ldap-operation-timeout"; }
 
     };
 
