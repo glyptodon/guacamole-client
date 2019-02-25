@@ -409,6 +409,7 @@
 
         "SECTION_HEADER_AUTHENTICATION"     : "认证",
         "SECTION_HEADER_BASIC_PARAMETERS"   : "基础设置",
+        "SECTION_HEADER_CLIPBOARD"          : "剪贴板",
         "SECTION_HEADER_DEVICE_REDIRECTION" : "设备重定向",
         "SECTION_HEADER_DISPLAY"            : "显示",
         "SECTION_HEADER_GATEWAY"            : "远程桌面网关",
@@ -479,6 +480,7 @@
 
         "SECTION_HEADER_AUTHENTICATION" : "认证",
         "SECTION_HEADER_BEHAVIOR"       : "终端行为",
+        "SECTION_HEADER_CLIPBOARD"      : "剪贴板",
         "SECTION_HEADER_DISPLAY"        : "显示",
         "SECTION_HEADER_NETWORK"        : "网络",
         "SECTION_HEADER_RECORDING"      : "屏幕录像",
@@ -540,6 +542,7 @@
 
         "SECTION_HEADER_AUTHENTICATION" : "认证",
         "SECTION_HEADER_BEHAVIOR"       : "终端行为",
+        "SECTION_HEADER_CLIPBOARD"      : "剪贴板",
         "SECTION_HEADER_DISPLAY"        : "显示",
         "SECTION_HEADER_RECORDING"      : "屏幕录像",
         "SECTION_HEADER_TYPESCRIPT"     : "打字稿（文本会话录像）",
