@@ -353,6 +353,7 @@
 
         "SECTION_HEADER_AUTHENTICATION"     : "Authentification",
         "SECTION_HEADER_BASIC_PARAMETERS"   : "Paramètres de base",
+        "SECTION_HEADER_CLIPBOARD"          : "Presse-papiers",
         "SECTION_HEADER_DEVICE_REDIRECTION" : "Redirection Périphérique",
         "SECTION_HEADER_DISPLAY"            : "Affichage",
         "SECTION_HEADER_NETWORK"            : "Réseau",
@@ -403,6 +404,7 @@
         "NAME" : "SSH",
 
         "SECTION_HEADER_AUTHENTICATION" : "Authentification",
+        "SECTION_HEADER_CLIPBOARD"      : "Presse-papiers",
         "SECTION_HEADER_DISPLAY"        : "Affichage",
         "SECTION_HEADER_NETWORK"        : "Réseau",
         "SECTION_HEADER_SESSION"        : "Session / Environnement",
@@ -447,6 +449,7 @@
         "NAME" : "Telnet",
 
         "SECTION_HEADER_AUTHENTICATION" : "Authentification",
+        "SECTION_HEADER_CLIPBOARD"      : "Presse-papiers",
         "SECTION_HEADER_DISPLAY"        : "Affichage",
         "SECTION_HEADER_NETWORK"        : "Réseau"
 
