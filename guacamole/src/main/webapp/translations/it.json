@@ -334,6 +334,7 @@
 
         "SECTION_HEADER_AUTHENTICATION"     : "Authentication",
         "SECTION_HEADER_BASIC_PARAMETERS"   : "Basic Settings",
+        "SECTION_HEADER_CLIPBOARD"          : "Appunti",
         "SECTION_HEADER_DEVICE_REDIRECTION" : "Device Redirection",
         "SECTION_HEADER_DISPLAY"            : "Display",
         "SECTION_HEADER_NETWORK"            : "Network",
@@ -374,6 +375,7 @@
         "NAME" : "SSH",
 
         "SECTION_HEADER_AUTHENTICATION" : "Authentication",
+        "SECTION_HEADER_CLIPBOARD"      : "Appunti",
         "SECTION_HEADER_DISPLAY"        : "Display",
         "SECTION_HEADER_NETWORK"        : "Network",
         "SECTION_HEADER_SFTP"           : "SFTP"
@@ -409,6 +411,7 @@
         "NAME" : "Telnet",
 
         "SECTION_HEADER_AUTHENTICATION" : "Authentication",
+        "SECTION_HEADER_CLIPBOARD"      : "Appunti",
         "SECTION_HEADER_DISPLAY"        : "Display",
         "SECTION_HEADER_NETWORK"        : "Network"
 

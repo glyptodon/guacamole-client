@@ -350,6 +350,7 @@
 
         "SECTION_HEADER_AUTHENTICATION"     : "Autentisering",
         "SECTION_HEADER_BASIC_PARAMETERS"   : "Grunnleggende Innstillinger",
+        "SECTION_HEADER_CLIPBOARD"          : "Utklippstavle",
         "SECTION_HEADER_DEVICE_REDIRECTION" : "Enhet omdirigering",
         "SECTION_HEADER_DISPLAY"            : "Skjerm",
         "SECTION_HEADER_NETWORK"            : "Nettverk",
@@ -406,6 +407,7 @@
         "NAME" : "SSH",
 
         "SECTION_HEADER_AUTHENTICATION" : "Autentisering",
+        "SECTION_HEADER_CLIPBOARD"      : "Utklippstavle",
         "SECTION_HEADER_DISPLAY"        : "Skjerm",
         "SECTION_HEADER_NETWORK"        : "Nettverk",
         "SECTION_HEADER_RECORDING"      : "Skjermopptak",
@@ -457,6 +459,7 @@
         "NAME" : "Telnet",
 
         "SECTION_HEADER_AUTHENTICATION" : "Autentisering",
+        "SECTION_HEADER_CLIPBOARD"      : "Utklippstavle",
         "SECTION_HEADER_DISPLAY"        : "Skjerm",
         "SECTION_HEADER_RECORDING"      : "Skjermopptak",
         "SECTION_HEADER_TYPESCRIPT"     : "Typescript (Opptak av tekstsesjon)",
