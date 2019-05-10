@@ -80,6 +80,10 @@
                     ]
                 },
                 {
+                    "name"  : "timezone",
+                    "type"  : "TEXT"
+                },
+                {
                     "name"    : "console",
                     "type"    : "BOOLEAN",
                     "options" : [ "true" ]
