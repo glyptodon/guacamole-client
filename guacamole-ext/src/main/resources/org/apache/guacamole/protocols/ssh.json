@@ -92,7 +92,7 @@
                 },
                 {
                     "name"  : "timezone",
-                    "type"  : "TEXT"
+                    "type"  : "TIMEZONE"
                 },
                 {
                     "name"  : "server-alive-interval",
