@@ -65,6 +65,7 @@
                     "type"    : "ENUM",
                     "options" : [
                         "",
+                        "de-ch-qwertz",
                         "de-de-qwertz",
                         "en-gb-qwerty",
                         "en-us-qwerty",
