@@ -131,6 +131,21 @@ angular.module('form').provider('formService', function formServiceProvider() {
         },
 
         /**
+         * Field type which allows selection of languages. The languages
+         * displayed are the set of languages supported by the Guacamole web
+         * application. Legal values are valid language IDs, as dictated by
+         * the filenames of Guacamole's available translations.
+         *
+         * @see {@link Field.Type.LANGUAGE}
+         * @type FieldType
+         */
+        'LANGUAGE' : {
+            module      : 'form',
+            controller  : 'languageFieldController',
+            templateUrl : 'app/form/templates/languageField.html'
+        },
+
+        /**
          * Field type which allows selection of time zones.
          *
          * @see {@link Field.Type.TIMEZONE}
@@ -164,6 +179,19 @@ angular.module('form').provider('formService', function formServiceProvider() {
             module      : 'form',
             controller  : 'timeFieldController',
             templateUrl : 'app/form/templates/timeField.html'
+        },
+
+        /**
+         * Field type which allows selection of color schemes accepted by the
+         * Guacamole server terminal emulator and protocols which leverage it.
+         *
+         * @see {@link Field.Type.TERMINAL_COLOR_SCHEME}
+         * @type FieldType
+         */
+        'TERMINAL_COLOR_SCHEME' : {
+            module      : 'form',
+            controller  : 'terminalColorSchemeFieldController',
+            templateUrl : 'app/form/templates/terminalColorSchemeField.html'
         }
 
     };
@@ -205,6 +233,11 @@ angular.module('form').provider('formService', function formServiceProvider() {
          * namespace:
          *     A String which defines the unique namespace associated the
          *     translation strings used by the form using a field of this type.
+         *
+         * fieldId:
+         *     A String value which is reasonably likely to be unique and may
+         *     be used to associate the main element of the field with its
+         *     label.
          *
          * field:
          *     The Field object that is being rendered, representing a field of
