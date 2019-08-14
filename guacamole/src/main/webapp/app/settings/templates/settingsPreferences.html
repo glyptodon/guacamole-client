@@ -1,18 +1,9 @@
 <div class="preferences" ng-class="{loading: !isLoaded()}">
 
-    <!-- Language settings -->
-    <div class="settings section language">
-        <p>{{'SETTINGS_PREFERENCES.HELP_LANGUAGE' | translate}}</p>
-
-        <!-- Language selection -->
-        <div class="form">
-            <table class="fields">
-                <tr>
-                    <th>{{'SETTINGS_PREFERENCES.FIELD_HEADER_LANGUAGE' | translate}}</th>
-                    <td><select ng-model="preferences.language" ng-change="changeLanguage()" ng-options="language.key as language.value for language in languages | orderBy: key"></select></td>
-                </tr>
-            </table>
-        </div>
+    <!-- Locale settings -->
+    <div class="settings section locale">
+        <p>{{'SETTINGS_PREFERENCES.HELP_LOCALE' | translate}}</p>
+        <guac-form content="localeFields" model="preferences" namespace="'SETTINGS_PREFERENCES'"></guac-form>
     </div>
     
     <!-- Password update -->

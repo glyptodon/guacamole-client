@@ -19,7 +19,6 @@
 
 package org.apache.guacamole.protocol;
 
-
 import java.util.List;
 import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.GuacamoleServerException;
@@ -55,6 +54,15 @@ public class ConfiguredGuacamoleSocket implements GuacamoleSocket {
      * by the "ready" instruction received from the Guacamole proxy.
      */
     private String id;
+    
+    /**
+     * The protocol version that will be used to communicate with guacd.  The
+     * default is 1.0.0, and, if the server does not provide a specific version
+     * it will be assumed that it operates at this version and certain features
+     * may be unavailable.
+     */
+    private GuacamoleProtocolVersion protocolVersion =
+            GuacamoleProtocolVersion.VERSION_1_0_0;
     
     /**
      * Waits for the instruction having the given opcode, returning that
@@ -142,6 +150,23 @@ public class ConfiguredGuacamoleSocket implements GuacamoleSocket {
 
             // Retrieve argument name
             String arg_name = arg_names.get(i);
+            
+            // Check for valid protocol version as first argument
+            if (i == 0) {
+                GuacamoleProtocolVersion version = GuacamoleProtocolVersion.parseVersion(arg_name);
+                if (version != null) {
+
+                    // Use the lowest common version supported
+                    if (version.atLeast(GuacamoleProtocolVersion.LATEST))
+                        version = GuacamoleProtocolVersion.LATEST;
+
+                    // Respond with the version selected
+                    arg_values[i] = version.toString();
+                    protocolVersion = version;
+                    continue;
+
+                }
+            }
 
             // Get defined value for name
             String value = config.getParameter(arg_name);
@@ -184,6 +209,13 @@ public class ConfiguredGuacamoleSocket implements GuacamoleSocket {
                     "image",
                     info.getImageMimetypes().toArray(new String[0])
                 ));
+        
+        // Send client timezone, if supported and available
+        if (GuacamoleProtocolCapability.TIMEZONE_HANDSHAKE.isSupported(protocolVersion)) {
+            String timezone = info.getTimezone();
+            if (timezone != null)
+                writer.writeInstruction(new GuacamoleInstruction("timezone", info.getTimezone()));
+        }
 
         // Send args
         writer.writeInstruction(new GuacamoleInstruction("connect", arg_values));
@@ -219,6 +251,20 @@ public class ConfiguredGuacamoleSocket implements GuacamoleSocket {
      */
     public String getConnectionID() {
         return id;
+    }
+
+    /**
+     * Returns the version of the Guacamole protocol associated with the
+     * Guacamole connection negotiated by this ConfiguredGuacamoleSocket. This
+     * version is the lowest version common to both ConfiguredGuacamoleSocket
+     * and the relevant Guacamole proxy instance (guacd).
+     *
+     * @return
+     *     The protocol version that this ConfiguredGuacamoleSocket will use to
+     *     communicate with guacd.
+     */
+    public GuacamoleProtocolVersion getProtocolVersion() {
+        return protocolVersion;
     }
 
     @Override
