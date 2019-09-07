@@ -131,6 +131,21 @@ angular.module('form').provider('formService', function formServiceProvider() {
         },
 
         /**
+         * Field type which allows selection of languages. The languages
+         * displayed are the set of languages supported by the Guacamole web
+         * application. Legal values are valid language IDs, as dictated by
+         * the filenames of Guacamole's available translations.
+         *
+         * @see {@link Field.Type.LANGUAGE}
+         * @type FieldType
+         */
+        'LANGUAGE' : {
+            module      : 'form',
+            controller  : 'languageFieldController',
+            templateUrl : 'app/form/templates/languageField.html'
+        },
+
+        /**
          * Field type which allows selection of time zones.
          *
          * @see {@link Field.Type.TIMEZONE}
@@ -164,6 +179,19 @@ angular.module('form').provider('formService', function formServiceProvider() {
             module      : 'form',
             controller  : 'timeFieldController',
             templateUrl : 'app/form/templates/timeField.html'
+        },
+
+        /**
+         * Field type which allows selection of color schemes accepted by the
+         * Guacamole server terminal emulator and protocols which leverage it.
+         *
+         * @see {@link Field.Type.TERMINAL_COLOR_SCHEME}
+         * @type FieldType
+         */
+        'TERMINAL_COLOR_SCHEME' : {
+            module      : 'form',
+            controller  : 'terminalColorSchemeFieldController',
+            templateUrl : 'app/form/templates/terminalColorSchemeField.html'
         }
 
     };
@@ -192,9 +220,44 @@ angular.module('form').provider('formService', function formServiceProvider() {
         var $q               = $injector.get('$q');
         var $templateRequest = $injector.get('$templateRequest');
 
+        /**
+         * Map of module name to the injector instance created for that module.
+         *
+         * @type {Object.<String, injector>}
+         */
+        var injectors = {};
+
         var service = {};
 
         service.fieldTypes = provider.fieldTypes;
+
+        /**
+         * Given the name of a module, returns an injector instance which
+         * injects dependencies within that module. A new injector may be
+         * created and initialized if no such injector has yet been requested.
+         * If the injector available to formService already includes the
+         * requested module, that injector will simply be returned.
+         *
+         * @param {String} module
+         *     The name of the module to produce an injector for.
+         *
+         * @returns {injector}
+         *     An injector instance which injects dependencies for the given
+         *     module.
+         */
+        var getInjector = function getInjector(module) {
+
+            // Use the formService's injector if possible
+            if ($injector.modules[module])
+                return $injector;
+
+            // If the formService's injector does not include the requested
+            // module, create the necessary injector, reusing that injector for
+            // future calls
+            injectors[module] = injectors[module] || angular.injector(['ng', module]);
+            return injectors[module];
+
+        };
 
         /**
          * Compiles and links the field associated with the given name to the given
@@ -205,6 +268,11 @@ angular.module('form').provider('formService', function formServiceProvider() {
          * namespace:
          *     A String which defines the unique namespace associated the
          *     translation strings used by the form using a field of this type.
+         *
+         * fieldId:
+         *     A String value which is reasonably likely to be unique and may
+         *     be used to associate the main element of the field with its
+         *     label.
          *
          * field:
          *     The Field object that is being rendered, representing a field of
@@ -271,7 +339,7 @@ angular.module('form').provider('formService', function formServiceProvider() {
 
                 // Populate scope using defined controller
                 if (fieldType.module && fieldType.controller) {
-                    var $controller = angular.injector(['ng', fieldType.module]).get('$controller');
+                    var $controller = getInjector(fieldType.module).get('$controller');
                     $controller(fieldType.controller, {
                         '$scope'   : scope,
                         '$element' : angular.element(fieldContainer.childNodes)
