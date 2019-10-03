@@ -17,22 +17,21 @@
  * under the License.
  */
 
-package org.apache.guacamole.auth.ldap.conf;
+package org.apache.guacamole.auth.ldap;
 
-import org.apache.directory.api.ldap.model.message.AliasDerefMode;
 import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.GuacamoleServerException;
 import org.apache.guacamole.properties.GuacamoleProperty;
 
 /**
- * A GuacamoleProperty with a value of AliasDerefMode. The possible strings
- * "never", "searching", "finding", and "always" are mapped to their values as
- * an AliasDerefMode object. Anything else results in a parse error.
+ * A GuacamoleProperty with a value of DereferenceAliases. The possible strings
+ * "never", "searching", "finding", and "always" are mapped to their values as a
+ * DereferenceAliases enum. Anything else results in a parse error.
  */
-public abstract class DereferenceAliasesProperty implements GuacamoleProperty<AliasDerefMode> {
+public abstract class DereferenceAliasesProperty implements GuacamoleProperty<DereferenceAliasesMode> {
 
     @Override
-    public AliasDerefMode parseValue(String value) throws GuacamoleException {
+    public DereferenceAliasesMode parseValue(String value) throws GuacamoleException {
 
         // No value provided, so return null.
         if (value == null)
@@ -40,19 +39,19 @@ public abstract class DereferenceAliasesProperty implements GuacamoleProperty<Al
 
         // Never dereference aliases
         if (value.equals("never"))
-            return AliasDerefMode.NEVER_DEREF_ALIASES;
+            return DereferenceAliasesMode.NEVER;
 
         // Dereference aliases during search operations, but not at base
         if (value.equals("searching"))
-            return AliasDerefMode.DEREF_IN_SEARCHING;
+            return DereferenceAliasesMode.SEARCHING;
 
         // Dereference aliases to locate base, but not during searches
         if (value.equals("finding"))
-            return AliasDerefMode.DEREF_FINDING_BASE_OBJ;
+            return DereferenceAliasesMode.FINDING;
 
         // Always dereference aliases
         if (value.equals("always"))
-            return AliasDerefMode.DEREF_ALWAYS;
+            return DereferenceAliasesMode.ALWAYS;
 
         // Anything else is invalid and results in an error
         throw new GuacamoleServerException("Dereference aliases must be one of \"never\", \"searching\", \"finding\", or \"always\".");
