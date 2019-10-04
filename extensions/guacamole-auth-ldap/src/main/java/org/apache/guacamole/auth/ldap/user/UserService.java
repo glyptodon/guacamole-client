@@ -20,20 +20,16 @@
 package org.apache.guacamole.auth.ldap.user;
 
 import com.google.inject.Inject;
+import com.novell.ldap.LDAPConnection;
+import com.novell.ldap.LDAPEntry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import org.apache.directory.api.ldap.model.entry.Entry;
-import org.apache.directory.api.ldap.model.exception.LdapInvalidDnException;
-import org.apache.directory.api.ldap.model.exception.LdapInvalidAttributeValueException;
-import org.apache.directory.api.ldap.model.name.Dn;
-import org.apache.directory.api.ldap.model.name.Rdn;
-import org.apache.directory.ldap.client.api.LdapNetworkConnection;
-import org.apache.guacamole.auth.ldap.conf.ConfigurationService;
+import org.apache.guacamole.auth.ldap.ConfigurationService;
+import org.apache.guacamole.auth.ldap.EscapingService;
 import org.apache.guacamole.GuacamoleException;
-import org.apache.guacamole.GuacamoleServerException;
-import org.apache.guacamole.auth.ldap.conf.LDAPGuacamoleProperties;
+import org.apache.guacamole.auth.ldap.LDAPGuacamoleProperties;
 import org.apache.guacamole.auth.ldap.ObjectQueryService;
 import org.apache.guacamole.net.auth.User;
 import org.apache.guacamole.net.auth.simple.SimpleUser;
@@ -49,7 +45,13 @@ public class UserService {
     /**
      * Logger for this class.
      */
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    /**
+     * Service for escaping parts of LDAP queries.
+     */
+    @Inject
+    private EscapingService escapingService;
 
     /**
      * Service for retrieving LDAP server configuration information.
@@ -79,12 +81,12 @@ public class UserService {
      * @throws GuacamoleException
      *     If an error occurs preventing retrieval of users.
      */
-    public Map<String, User> getUsers(LdapNetworkConnection ldapConnection)
+    public Map<String, User> getUsers(LDAPConnection ldapConnection)
             throws GuacamoleException {
 
         // Retrieve all visible user objects
         Collection<String> attributes = confService.getUsernameAttributes();
-        List<Entry> results = queryService.search(ldapConnection,
+        List<LDAPEntry> results = queryService.search(ldapConnection,
                 confService.getUserBaseDN(),
                 confService.getUserSearchFilter(),
                 attributes,
@@ -94,20 +96,14 @@ public class UserService {
         return queryService.asMap(results, entry -> {
 
             // Get username from record
-            try {
-                String username = queryService.getIdentifier(entry, attributes);
-                if (username == null) {
-                    logger.warn("User \"{}\" is missing a username attribute "
-                            + "and will be ignored.", entry.getDn().toString());
-                    return null;
-                }
-                
-                return new SimpleUser(username);
-            }
-            catch (LdapInvalidAttributeValueException e) {
-                
+            String username = queryService.getIdentifier(entry, attributes);
+            if (username == null) {
+                logger.warn("User \"{}\" is missing a username attribute "
+                        + "and will be ignored.", entry.getDN());
                 return null;
             }
+
+            return new SimpleUser(username);
 
         });
 
@@ -134,19 +130,19 @@ public class UserService {
      *     If an error occurs while querying the user DNs, or if the username
      *     attribute property cannot be parsed within guacamole.properties.
      */
-    public List<Dn> getUserDNs(LdapNetworkConnection ldapConnection,
+    public List<String> getUserDNs(LDAPConnection ldapConnection,
             String username) throws GuacamoleException {
 
         // Retrieve user objects having a matching username
-        List<Entry> results = queryService.search(ldapConnection,
+        List<LDAPEntry> results = queryService.search(ldapConnection,
                 confService.getUserBaseDN(),
                 confService.getUserSearchFilter(),
                 confService.getUsernameAttributes(),
                 username);
 
         // Build list of all DNs for retrieved users
-        List<Dn> userDNs = new ArrayList<>(results.size());
-        results.forEach(entry -> userDNs.add(entry.getDn()));
+        List<String> userDNs = new ArrayList<>(results.size());
+        results.forEach(entry -> userDNs.add(entry.getDN()));
 
         return userDNs;
 
@@ -168,7 +164,7 @@ public class UserService {
      *     If required properties are missing, and thus the user DN cannot be
      *     determined.
      */
-    public Dn deriveUserDN(String username)
+    public String deriveUserDN(String username)
             throws GuacamoleException {
 
         // Pull username attributes from properties
@@ -185,13 +181,10 @@ public class UserService {
         }
 
         // Derive user DN from base DN
-        try {
-            return new Dn(new Rdn(usernameAttributes.get(0), username),
-                confService.getUserBaseDN());
-        }
-        catch (LdapInvalidAttributeValueException | LdapInvalidDnException e) {
-            throw new GuacamoleServerException("Error trying to derive user DN.", e);
-        }
+        return
+                    escapingService.escapeDN(usernameAttributes.get(0))
+            + "=" + escapingService.escapeDN(username)
+            + "," + confService.getUserBaseDN();
 
     }
 

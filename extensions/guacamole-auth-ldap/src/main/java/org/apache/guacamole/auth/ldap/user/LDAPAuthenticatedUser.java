@@ -23,7 +23,6 @@ import com.google.inject.Inject;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-import org.apache.directory.api.ldap.model.name.Dn;
 import org.apache.guacamole.net.auth.AbstractAuthenticatedUser;
 import org.apache.guacamole.net.auth.AuthenticationProvider;
 import org.apache.guacamole.net.auth.Credentials;
@@ -57,11 +56,6 @@ public class LDAPAuthenticatedUser extends AbstractAuthenticatedUser {
      * available to this user.
      */
     private Set<String> effectiveGroups;
-    
-    /**
-     * The LDAP DN used to bind this user.
-     */
-    private Dn bindDn;
 
     /**
      * Initializes this AuthenticatedUser with the given credentials,
@@ -77,19 +71,14 @@ public class LDAPAuthenticatedUser extends AbstractAuthenticatedUser {
      * @param effectiveGroups
      *     The unique identifiers of all user groups which affect the
      *     permissions available to this user.
-     * 
-     * @param bindDn
-     *     The LDAP DN used to bind this user.
      */
-    public void init(Credentials credentials, Map<String, String> tokens,
-            Set<String> effectiveGroups, Dn bindDn) {
+    public void init(Credentials credentials, Map<String, String> tokens, Set<String> effectiveGroups) {
         this.credentials = credentials;
         this.tokens = Collections.unmodifiableMap(tokens);
         this.effectiveGroups = effectiveGroups;
-        this.bindDn = bindDn;
         setIdentifier(credentials.getUsername());
     }
-    
+
     /**
      * Returns a Map of all name/value pairs that should be applied as
      * parameter tokens when connections are established using this
@@ -102,16 +91,6 @@ public class LDAPAuthenticatedUser extends AbstractAuthenticatedUser {
      */
     public Map<String, String> getTokens() {
         return tokens;
-    }
-    
-    /**
-     * Returns the LDAP DN used to bind this user.
-     * 
-     * @return 
-     *     The LDAP DN used to bind this user.
-     */
-    public Dn getBindDn() {
-        return bindDn;
     }
 
     @Override

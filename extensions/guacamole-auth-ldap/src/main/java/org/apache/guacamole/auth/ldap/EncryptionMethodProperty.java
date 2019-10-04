@@ -17,36 +17,41 @@
  * under the License.
  */
 
-package org.apache.guacamole.auth.ldap.conf;
+package org.apache.guacamole.auth.ldap;
 
-import java.text.ParseException;
-import org.apache.directory.api.ldap.model.filter.ExprNode;
-import org.apache.directory.api.ldap.model.filter.FilterParser;
 import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.GuacamoleServerException;
 import org.apache.guacamole.properties.GuacamoleProperty;
 
 /**
- * A GuacamoleProperty with a value of an ExprNode query filter.  The string
- * provided is passed through the FilterParser returning the ExprNode object,
- * or an exception is thrown if the filter is invalid and cannot be correctly
- * parsed.
+ * A GuacamoleProperty whose value is an EncryptionMethod. The string values
+ * "none", "ssl", and "starttls" are each parsed to their corresponding values
+ * within the EncryptionMethod enum. All other string values result in parse
+ * errors.
  */
-public abstract class LdapFilterGuacamoleProperty implements GuacamoleProperty<ExprNode> {
+public abstract class EncryptionMethodProperty implements GuacamoleProperty<EncryptionMethod> {
 
     @Override
-    public ExprNode parseValue(String value) throws GuacamoleException {
+    public EncryptionMethod parseValue(String value) throws GuacamoleException {
 
-        // No value provided, so return null.
+        // If no value provided, return null.
         if (value == null)
             return null;
 
-        try {
-            return FilterParser.parse(value);
-        }
-        catch (ParseException e) {
-            throw new GuacamoleServerException("\"" + value + "\" is not a valid LDAP filter.", e);
-        }
+        // Plaintext (no encryption)
+        if (value.equals("none"))
+            return EncryptionMethod.NONE;
+
+        // SSL
+        if (value.equals("ssl"))
+            return EncryptionMethod.SSL;
+
+        // STARTTLS
+        if (value.equals("starttls"))
+            return EncryptionMethod.STARTTLS;
+
+        // The provided value is not legal
+        throw new GuacamoleServerException("Encryption method must be one of \"none\", \"ssl\", or \"starttls\".");
 
     }
 

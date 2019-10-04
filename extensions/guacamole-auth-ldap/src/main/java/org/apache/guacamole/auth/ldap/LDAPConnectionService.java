@@ -20,28 +20,15 @@
 package org.apache.guacamole.auth.ldap;
 
 import com.google.inject.Inject;
-import java.io.IOException;
-import org.apache.directory.api.ldap.model.exception.LdapException;
-import org.apache.directory.api.ldap.model.filter.ExprNode;
-import org.apache.directory.api.ldap.model.message.BindRequest;
-import org.apache.directory.api.ldap.model.message.BindRequestImpl;
-import org.apache.directory.api.ldap.model.message.BindResponse;
-import org.apache.directory.api.ldap.model.message.ResultCodeEnum;
-import org.apache.directory.api.ldap.model.message.SearchRequest;
-import org.apache.directory.api.ldap.model.message.SearchRequestImpl;
-import org.apache.directory.api.ldap.model.message.SearchScope;
-import org.apache.directory.api.ldap.model.name.Dn;
-import org.apache.directory.api.ldap.model.url.LdapUrl;
-import org.apache.directory.ldap.client.api.LdapConnection;
-import org.apache.directory.ldap.client.api.LdapConnectionConfig;
-import org.apache.directory.ldap.client.api.LdapNetworkConnection;
+import com.novell.ldap.LDAPConnection;
+import com.novell.ldap.LDAPConstraints;
+import com.novell.ldap.LDAPException;
+import com.novell.ldap.LDAPJSSESecureSocketFactory;
+import com.novell.ldap.LDAPJSSEStartTLSFactory;
+import java.io.UnsupportedEncodingException;
 import org.apache.guacamole.GuacamoleException;
-import org.apache.guacamole.GuacamoleServerException;
 import org.apache.guacamole.GuacamoleUnsupportedException;
-import org.apache.guacamole.auth.ldap.conf.ConfigurationService;
-import org.apache.guacamole.auth.ldap.conf.EncryptionMethod;
-import org.apache.guacamole.net.auth.credentials.CredentialsInfo;
-import org.apache.guacamole.net.auth.credentials.GuacamoleInvalidCredentialsException;
+import org.apache.guacamole.auth.ldap.ReferralAuthHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +40,7 @@ public class LDAPConnectionService {
     /**
      * Logger for this class.
      */
-    private static final Logger logger = LoggerFactory.getLogger(LDAPConnectionService.class);
+    private final Logger logger = LoggerFactory.getLogger(LDAPConnectionService.class);
 
     /**
      * Service for retrieving LDAP server configuration information.
@@ -62,24 +49,19 @@ public class LDAPConnectionService {
     private ConfigurationService confService;
 
     /**
-     * Creates a new instance of LdapNetworkConnection, configured as required
-     * to use whichever encryption method is requested within
-     * guacamole.properties.
+     * Creates a new instance of LDAPConnection, configured as required to use
+     * whichever encryption method is requested within guacamole.properties.
      *
      * @return
-     *     A new LdapNetworkConnection instance which has already been 
-     *     configured to use the encryption method requested within 
-     *     guacamole.properties.
+     *     A new LDAPConnection instance which has already been configured to
+     *     use the encryption method requested within guacamole.properties.
      *
      * @throws GuacamoleException
      *     If an error occurs while parsing guacamole.properties, or if the
      *     requested encryption method is actually not implemented (a bug).
      */
-    private LdapNetworkConnection createLDAPConnection() throws GuacamoleException {
+    private LDAPConnection createLDAPConnection() throws GuacamoleException {
 
-        String host = confService.getServerHostname();
-        int port = confService.getServerPort();
-        
         // Map encryption method to proper connection and socket factory
         EncryptionMethod encryptionMethod = confService.getEncryptionMethod();
         switch (encryptionMethod) {
@@ -87,17 +69,17 @@ public class LDAPConnectionService {
             // Unencrypted LDAP connection
             case NONE:
                 logger.debug("Connection to LDAP server without encryption.");
-                return new LdapNetworkConnection(host, port);
+                return new LDAPConnection();
 
             // LDAP over SSL (LDAPS)
             case SSL:
                 logger.debug("Connecting to LDAP server using SSL/TLS.");
-                return new LdapNetworkConnection(host, port, true);
+                return new LDAPConnection(new LDAPJSSESecureSocketFactory());
 
             // LDAP + STARTTLS
             case STARTTLS:
                 logger.debug("Connecting to LDAP server using STARTTLS.");
-                return new LdapNetworkConnection(host, port);
+                return new LDAPConnection(new LDAPJSSEStartTLSFactory());
 
             // The encryption method, though known, is not actually
             // implemented. If encountered, this would be a bug.
@@ -125,105 +107,86 @@ public class LDAPConnectionService {
      * @throws GuacamoleException
      *     If an error occurs while binding to the LDAP server.
      */
-    public LdapNetworkConnection bindAs(Dn userDN, String password)
+    public LDAPConnection bindAs(String userDN, String password)
             throws GuacamoleException {
 
-        // Get ldapConnection and try to connect and bind.
-        LdapNetworkConnection ldapConnection = createLDAPConnection();
+        // Obtain appropriately-configured LDAPConnection instance
+        LDAPConnection ldapConnection = createLDAPConnection();
+
+        // Configure LDAP connection constraints
+        LDAPConstraints ldapConstraints = ldapConnection.getConstraints();
+        if (ldapConstraints == null)
+          ldapConstraints = new LDAPConstraints();
+
+        // Set whether or not we follow referrals
+        ldapConstraints.setReferralFollowing(confService.getFollowReferrals());
+
+        // Set referral authentication to use the provided credentials.
+        if (userDN != null && !userDN.isEmpty())
+            ldapConstraints.setReferralHandler(new ReferralAuthHandler(userDN, password));
+
+        // Set the maximum number of referrals we follow
+        ldapConstraints.setHopLimit(confService.getMaxReferralHops());
+
+        // Set timelimit to wait for LDAP operations, converting to ms
+        ldapConstraints.setTimeLimit(confService.getOperationTimeout() * 1000);
+
+        // Apply the constraints to the connection
+        ldapConnection.setConstraints(ldapConstraints);
+
         try {
 
             // Connect to LDAP server
-            ldapConnection.connect();
+            ldapConnection.connect(
+                confService.getServerHostname(),
+                confService.getServerPort()
+            );
 
             // Explicitly start TLS if requested
             if (confService.getEncryptionMethod() == EncryptionMethod.STARTTLS)
-                ldapConnection.startTls();
+                ldapConnection.startTLS();
 
-            // Bind using provided credentials
-            BindRequest bindRequest = new BindRequestImpl();
-            bindRequest.setDn(userDN);
-            bindRequest.setCredentials(password);
-            BindResponse bindResponse = ldapConnection.bind(bindRequest);
-            if (bindResponse.getLdapResult().getResultCode() == ResultCodeEnum.SUCCESS)
-                return ldapConnection;
-            
-            else
-                throw new GuacamoleInvalidCredentialsException("Error binding"
-                        + " to server: " + bindResponse.toString(),
-                        CredentialsInfo.USERNAME_PASSWORD);
+        }
+        catch (LDAPException e) {
+            logger.error("Unable to connect to LDAP server: {}", e.getMessage());
+            logger.debug("Failed to connect to LDAP server.", e);
+            return null;
+        }
+
+        // Bind using provided credentials
+        try {
+
+            byte[] passwordBytes;
+            try {
+
+                // Convert password into corresponding byte array
+                if (password != null)
+                    passwordBytes = password.getBytes("UTF-8");
+                else
+                    passwordBytes = null;
+
+            }
+            catch (UnsupportedEncodingException e) {
+                logger.error("Unexpected lack of support for UTF-8: {}", e.getMessage());
+                logger.debug("Support for UTF-8 (as required by Java spec) not found.", e);
+                disconnect(ldapConnection);
+                return null;
+            }
+
+            // Bind as user
+            ldapConnection.bind(LDAPConnection.LDAP_V3, userDN, passwordBytes);
 
         }
 
         // Disconnect if an error occurs during bind
-        catch (LdapException e) {
-            ldapConnection.close();
-            logger.debug("Unable to bind to LDAP server.", e);
-            throw new GuacamoleInvalidCredentialsException(
-                    "Unable to bind to the LDAP server.",
-                    CredentialsInfo.USERNAME_PASSWORD);
+        catch (LDAPException e) {
+            logger.debug("LDAP bind failed.", e);
+            disconnect(ldapConnection);
+            return null;
         }
 
-    }
-    
-    /**
-     * Generate a new LdapNetworkConnection object for following a referral
-     * with the given LdapUrl, and copy the username and password
-     * from the original connection.
-     * 
-     * @param referralUrl
-     *     The LDAP URL to follow.
-     * 
-     * @param ldapConfig
-     *     The connection configuration to use to retrieve username and
-     *     password.
-     * 
-     * @param hop
-     *     The current hop number of this referral - once the configured
-     *     limit is reached, this method will throw an exception.
-     * 
-     * @return
-     *     A LdapNetworkConnection object that points at the location
-     *     specified in the referralUrl.
-     *     
-     * @throws GuacamoleException
-     *     If an error occurs parsing out the LdapUrl object or the
-     *     maximum number of referral hops is reached.
-     */
-    public LdapNetworkConnection getReferralConnection(LdapUrl referralUrl,
-            LdapConnectionConfig ldapConfig, int hop)
-            throws GuacamoleException {
-       
-        if (hop >= confService.getMaxReferralHops())
-            throw new GuacamoleServerException("Maximum number of referrals reached.");
-        
-        LdapConnectionConfig referralConfig = new LdapConnectionConfig();
-        
-        // Copy bind name and password from original config
-        referralConfig.setName(ldapConfig.getName());
-        referralConfig.setCredentials(ldapConfig.getCredentials());        
-        
-        // Look for host - if not there, bail out.
-        String host = referralUrl.getHost();
-        if (host == null || host.isEmpty())
-            throw new GuacamoleServerException("Referral URL contains no host.");
-       
-        referralConfig.setLdapHost(host);
-       
-        // Look for port, or assign a default.
-        int port = referralUrl.getPort();
-        if (port < 1)
-            referralConfig.setLdapPort(389);
-        else
-            referralConfig.setLdapPort(port);
-        
-        // Deal with SSL connections
-        if (referralUrl.getScheme().equals(LdapUrl.LDAPS_SCHEME))
-            referralConfig.setUseSsl(true);
-        else
-            referralConfig.setUseSsl(false);
-        
-        return new LdapNetworkConnection(referralConfig);
-        
+        return ldapConnection;
+
     }
 
     /**
@@ -233,53 +196,19 @@ public class LDAPConnectionService {
      * @param ldapConnection
      *     The LDAP connection to disconnect.
      */
-    public void disconnect(LdapConnection ldapConnection) {
+    public void disconnect(LDAPConnection ldapConnection) {
 
         // Attempt disconnect
         try {
-            ldapConnection.close();
+            ldapConnection.disconnect();
         }
 
         // Warn if disconnect unexpectedly fails
-        catch (IOException e) {
+        catch (LDAPException e) {
             logger.warn("Unable to disconnect from LDAP server: {}", e.getMessage());
             logger.debug("LDAP disconnect failed.", e);
         }
 
-    }
-    
-    /**
-     * Generate a SearchRequest object using the given Base DN and filter
-     * and retrieving other properties from the LDAP configuration service.
-     * 
-     * @param baseDn
-     *     The LDAP Base DN at which to search the search.
-     * 
-     * @param filter
-     *     A string representation of a LDAP filter to use for the search.
-     * 
-     * @return
-     *     The properly-configured SearchRequest object.
-     * 
-     * @throws GuacamoleException
-     *     If an error occurs retrieving any of the configuration values.
-     */
-    public SearchRequest getSearchRequest(Dn baseDn, ExprNode filter)
-            throws GuacamoleException {
-        
-        SearchRequest searchRequest = new SearchRequestImpl();
-        searchRequest.setBase(baseDn);
-        searchRequest.setDerefAliases(confService.getDereferenceAliases());
-        searchRequest.setScope(SearchScope.SUBTREE);
-        searchRequest.setFilter(filter);
-        searchRequest.setSizeLimit(confService.getMaxResults());
-        searchRequest.setTimeLimit(confService.getOperationTimeout());
-        searchRequest.setTypesOnly(false);
-        
-        if (confService.getFollowReferrals())
-            searchRequest.followReferrals();
-        
-        return searchRequest;
     }
 
 }
