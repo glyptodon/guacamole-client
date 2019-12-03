@@ -25,6 +25,7 @@
         "ACTION_SHARE"              : "共享",
         "ACTION_UPDATE_PASSWORD"    : "更新密码",
         "ACTION_VIEW_HISTORY"       : "历史",
+        "TEST"                      : "test",
 
         "DIALOG_HEADER_ERROR" : "出错",
 
