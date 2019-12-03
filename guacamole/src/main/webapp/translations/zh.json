@@ -4,6 +4,7 @@
     
     "APP" : {
 
+
         "ACTION_ACKNOWLEDGE"        : "确定",
         "ACTION_CANCEL"             : "取消",
         "ACTION_CLONE"              : "克隆",
@@ -46,6 +47,25 @@
 
     },
     
+    "SETTINGS_USER_GROUPS" : {
+
+        "ACTION_ACKNOWLEDGE"    : "@:APP.ACTION_ACKNOWLEDGE",
+        "ACTION_NEW_USER_GROUP" : "新建组",
+
+        "DIALOG_HEADER_ERROR" : "@:APP.DIALOG_HEADER_ERROR",
+
+        "FIELD_PLACEHOLDER_FILTER" : "@:APP.FIELD_PLACEHOLDER_FILTER",
+
+        "FORMAT_DATE" : "@:APP.FORMAT_DATE_TIME_PRECISE",
+
+        "HELP_USER_GROUPS" : "点击下列连接，以管理该连接。基于您的权限，可以新建和删除连接，或修改连接的属性（如协议、主机名、端口等）。",
+
+        "SECTION_HEADER_USER_GROUPS" : "组",
+
+        "TABLE_HEADER_USER_GROUP_NAME" : "组名"
+
+    },
+
     "SETTINGS_USER_GROUPS" : {
 
         "ACTION_ACKNOWLEDGE"    : "@:APP.ACTION_ACKNOWLEDGE",
