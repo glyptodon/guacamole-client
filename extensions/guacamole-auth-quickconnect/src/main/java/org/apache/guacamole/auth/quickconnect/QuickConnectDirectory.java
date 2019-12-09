@@ -40,7 +40,7 @@ public class QuickConnectDirectory extends SimpleDirectory<Connection> {
      * key of each entry is the connection's identifier. Changes made to this
      * Map will immediately affect this directory.
      */
-    private final Map<String, Connection> connections = new ConcurrentHashMap<>();
+    private final Map<String, Connection> connections = new ConcurrentHashMap<String, Connection>();
 
     /**
      * Creates a new, empty QuickConnectDirectory. The created directory is
@@ -56,6 +56,9 @@ public class QuickConnectDirectory extends SimpleDirectory<Connection> {
      * applies parameter tokens. Parameter tokens are applied only when the
      * connection is used (connect() is invoked).
      *
+     * NOTE: Parameter tokens are not actually currently applied due to API
+     * differences with 0.9.12-incubating vs. 1.1.0.
+     *
      * @param connection
      *     The connection to copy.
      *
@@ -63,7 +66,7 @@ public class QuickConnectDirectory extends SimpleDirectory<Connection> {
      *     An independent copy of the given Connection.
      */
     private Connection copy(Connection connection) {
-        Connection copy = new SimpleConnection(connection.getName(), connection.getIdentifier(), connection.getConfiguration(), true);
+        Connection copy = new SimpleConnection(connection.getName(), connection.getIdentifier(), connection.getConfiguration());
         copy.setParentIdentifier(connection.getParentIdentifier());
         return copy;
     }

@@ -237,7 +237,7 @@ angular.module('guacQuickConnect').factory('quickConnectService', ['$injector',
         // Derive default name for connection from provided parameters
         connection.name = service.getName(connection);
 
-        return $q.resolve(connection);
+        return $q.when(connection);
 
     };
 
@@ -263,10 +263,10 @@ angular.module('guacQuickConnect').factory('quickConnectService', ['$injector',
         return service.parseURI(uri).then(function uriParsed(connection) {
 
             // Update existing connection, if a matching connection can be found
-            return connectionGroupService.getConnectionGroupTree('quickconnect', 'ROOT').then(function rootGroupRetrieved(rootGroup) {
+            return connectionGroupService.getConnectionGroupTree('quickconnect', 'ROOT').then(function rootGroupRetrieved(response) {
 
                 // Find first connection within root group that has the same name
-                var existing = _.find(rootGroup.childConnections, function findIdentifier(child) {
+                var existing = _.find(response.data.childConnections, function findIdentifier(child) {
                     return child.name === connection.name;
                 });
 
@@ -281,6 +281,9 @@ angular.module('guacQuickConnect').factory('quickConnectService', ['$injector',
             // connection's identifier
             .then(function identifierSearchComplete() {
                 return connectionService.saveConnection('quickconnect', connection);
+            })
+            ['catch'](function requestFailed(response) {
+                throw response.data; // Unwrap HTTP failures such that response truly contains REST object
             })
             .then(function connectionSaved() {
                 return connection.identifier;

@@ -23,8 +23,8 @@ import java.util.Collection;
 import java.util.Collections;
 import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.form.Form;
-import org.apache.guacamole.net.auth.simple.SimpleActivityRecordSet;
 import org.apache.guacamole.net.auth.simple.SimpleConnectionGroup;
+import org.apache.guacamole.net.auth.simple.SimpleConnectionRecordSet;
 import org.apache.guacamole.net.auth.simple.SimpleDirectory;
 
 /**
@@ -43,15 +43,19 @@ public abstract class AbstractUserContext implements UserContext {
     protected static final String DEFAULT_ROOT_CONNECTION_GROUP = "ROOT";
 
     /**
-     * {@inheritDoc}
+     * Creates a SimpleDirectory instance which contains only the given object.
      *
-     * <p>This implementation simply returns {@code null}. Implementations that
-     * wish to expose REST resources specific to a user's session should
-     * override this function.
+     * @param <T>
+     *     The type of object that the returned directory may contain.
+     *
+     * @param object
+     *     The object that the returned directory should contain.
+     *
+     * @return
+     *     A SimpleDirectory instance which contains only the given object.
      */
-    @Override
-    public Object getResource() throws GuacamoleException {
-        return null;
+    private static <T extends Identifiable> Directory<T> singletonDirectory(T object) {
+        return new SimpleDirectory<T>(Collections.singletonMap(object.getIdentifier(), object));
     }
 
     /**
@@ -64,20 +68,7 @@ public abstract class AbstractUserContext implements UserContext {
      */
     @Override
     public Directory<User> getUserDirectory() throws GuacamoleException {
-        return new SimpleDirectory<User>(self());
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>This implementation simply returns an empty {@link Directory}.
-     * Implementations that wish to expose user groups should override this
-     * function.
-     */
-    @Override
-    public Directory<UserGroup> getUserGroupDirectory()
-            throws GuacamoleException {
-        return new SimpleDirectory<UserGroup>();
+        return singletonDirectory(self());
     }
 
     /**
@@ -105,7 +96,7 @@ public abstract class AbstractUserContext implements UserContext {
     @Override
     public Directory<ConnectionGroup> getConnectionGroupDirectory()
             throws GuacamoleException {
-        return new SimpleDirectory<ConnectionGroup>(getRootConnectionGroup());
+        return singletonDirectory(getRootConnectionGroup());
     }
 
     /**
@@ -142,22 +133,9 @@ public abstract class AbstractUserContext implements UserContext {
      * override this function.
      */
     @Override
-    public ActivityRecordSet<ConnectionRecord> getConnectionHistory()
+    public ConnectionRecordSet getConnectionHistory()
             throws GuacamoleException {
-        return new SimpleActivityRecordSet<ConnectionRecord>();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>This implementation simply returns an empty {@link ActivityRecordSet}.
-     * Implementations that wish to expose user login/logout history should
-     * override this function.
-     */
-    @Override
-    public ActivityRecordSet<ActivityRecord> getUserHistory()
-            throws GuacamoleException {
-        return new SimpleActivityRecordSet<ActivityRecord>();
+        return new SimpleConnectionRecordSet();
     }
 
     /**
@@ -198,18 +176,6 @@ public abstract class AbstractUserContext implements UserContext {
      * {@inheritDoc}
      *
      * <p>This implementation simply returns an empty {@link Collection}.
-     * Implementations that wish to expose custom user group attributes as
-     * fields within user group edit screens should override this function.
-     */
-    @Override
-    public Collection<Form> getUserGroupAttributes() {
-        return Collections.<Form>emptyList();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>This implementation simply returns an empty {@link Collection}.
      * Implementations that wish to expose custom connection attributes as
      * fields within connection edit screens should override this function.
      */
@@ -241,17 +207,6 @@ public abstract class AbstractUserContext implements UserContext {
     @Override
     public Collection<Form> getSharingProfileAttributes() {
         return Collections.<Form>emptyList();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>This implementation does nothing. Implementations that wish to perform
-     * cleanup tasks when the user associated with this {@link UserContext} is
-     * being logged out should override this function.
-     */
-    @Override
-    public void invalidate() {
     }
 
 }

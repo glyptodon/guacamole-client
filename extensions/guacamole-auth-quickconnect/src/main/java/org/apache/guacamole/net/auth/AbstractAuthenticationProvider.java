@@ -33,18 +33,6 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
     /**
      * {@inheritDoc}
      *
-     * <p>This implementation simply returns {@code null}. Implementations that
-     * wish to expose REST resources which are not specific to a user's session
-     * should override this function.
-     */
-    @Override
-    public Object getResource() throws GuacamoleException {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
      * <p>This implementation performs no authentication whatsoever, ignoring
      * the provided {@code credentials} and simply returning {@code null}. Any
      * authentication attempt will thus fall through to other
@@ -107,51 +95,4 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
         return context;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * <p>This implementation simply returns the provided {@code context}
-     * without performing any decoration. Implementations that wish to augment
-     * the functionality or data provided by other
-     * {@link AuthenticationProvider} implementations should override this
-     * function.
-     */
-    @Override
-    public UserContext decorate(UserContext context,
-            AuthenticatedUser authenticatedUser,
-            Credentials credentials) throws GuacamoleException {
-        return context;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>This implementation simply invokes
-     * {@link #decorate(UserContext,AuthenticatedUser,Credentials)} with the
-     * provided {@code context}, {@code authenticatedUser}, and
-     * {@code credentials}. Implementations which override
-     * {@link #decorate(UserContext,AuthenticatedUser,Credentials)} and which
-     * need to update their existing decorated object following possible
-     * updates to the {@link UserContext} or {@link AuthenticatedUser} (rather
-     * than generate an entirely new decorated object) should override this
-     * function.
-     */
-    @Override
-    public UserContext redecorate(UserContext decorated, UserContext context,
-            AuthenticatedUser authenticatedUser,
-            Credentials credentials) throws GuacamoleException {
-        return decorate(context, authenticatedUser, credentials);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>This implementation does nothing. Implementations that wish to perform
-     * cleanup tasks when the {@link AuthenticationProvider} is being unloaded
-     * should override this function.
-     */
-    @Override
-    public void shutdown() {
-    }
-    
 }

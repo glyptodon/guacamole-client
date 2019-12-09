@@ -26,7 +26,7 @@
     <groupId>org.apache.guacamole</groupId>
     <artifactId>guacamole-auth-quickconnect</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.0</version>
+    <version>0.9.12-GLEN-1.10</version>
     <name>guacamole-auth-quickconnect</name>
     <url>http://guacamole.apache.org/</url>
 
@@ -37,14 +37,14 @@
     <build>
         <plugins>
 
-            <!-- Written for Java 1.8 -->
+            <!-- Written for Java 1.6 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                     <compilerArgs>
                         <arg>-Xlint:all</arg>
                         <arg>-Werror</arg>
@@ -203,7 +203,7 @@
         <dependency>
             <groupId>org.apache.guacamole</groupId>
             <artifactId>guacamole-ext</artifactId>
-            <version>1.1.0</version>
+            <version>0.9.12-GLEN-1.10</version>
             <scope>provided</scope>
         </dependency>
 

@@ -59,7 +59,19 @@ angular.module('guacQuickConnect').directive('quickConnectForm', [function quick
                     type       : ClientIdentifier.Types.CONNECTION,
                     id         : identifier
                 }));
-            }, guacNotification.SHOW_REQUEST_ERROR);
+            }, function saveFailed(error) {
+                guacNotification.showStatus({
+                    className  : 'error',
+                    title      : 'APP.DIALOG_HEADER_ERROR',
+                    text       : error.translatableMessage,
+                    actions    : [{
+                        name        : 'APP.ACTION_ACKNOWLEDGE',
+                        callback    : function acknowledgeCallback() {
+                            guacNotification.showStatus(false);
+                        }
+                    }]
+                });
+            });
         };
 
     }];

@@ -80,7 +80,7 @@ public class QuickConnectUserContext extends AbstractUserContext {
      */
     private ObjectPermissionSet getObjectPermissionSet(Set<String> identifiers, ObjectPermission.Type... types) {
 
-        Set<ObjectPermission> permissions = new HashSet<>(identifiers.size() * types.length);
+        Set<ObjectPermission> permissions = new HashSet<ObjectPermission>(identifiers.size() * types.length);
 
         // Include each possible identifier/type combination
         for (ObjectPermission.Type type : types) {
@@ -129,7 +129,7 @@ public class QuickConnectUserContext extends AbstractUserContext {
 
             @Override
             public ObjectPermissionSet getConnectionGroupPermissions() throws GuacamoleException {
-                return new SimpleObjectPermissionSet(Collections.singleton(ROOT_IDENTIFIER));
+                return new SimpleObjectPermissionSet(Collections.singleton(new ObjectPermission(ObjectPermission.Type.READ, ROOT_IDENTIFIER)));
             }
 
             @Override
