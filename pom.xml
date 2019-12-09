@@ -54,6 +54,7 @@
         <module>extensions/guacamole-auth-jdbc</module>
         <module>extensions/guacamole-auth-ldap</module>
         <module>extensions/guacamole-auth-noauth</module>
+        <module>extensions/guacamole-auth-quickconnect</module>
 
         <!-- Example web application using the Guacamole APIs -->
         <module>doc/guacamole-example</module>
