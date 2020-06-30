@@ -166,6 +166,10 @@
                     "name"    : "enable-sftp",
                     "type"    : "BOOLEAN",
                     "options" : [ "true" ]
+                },
+                {
+                    "name"  : "sftp-root-directory",
+                    "type"  : "TEXT"
                 }
             ]
         }

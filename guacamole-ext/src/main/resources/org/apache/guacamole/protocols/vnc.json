@@ -139,6 +139,10 @@
                     "type"  : "PASSWORD"
                 },
                 {
+                    "name"  : "sftp-root-directory",
+                    "type"  : "TEXT"
+                },
+                {
                     "name"  : "sftp-directory",
                     "type"  : "TEXT"
                 },
