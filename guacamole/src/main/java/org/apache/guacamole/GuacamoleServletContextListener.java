@@ -29,6 +29,7 @@ import java.io.File;
 import java.util.List;
 import javax.servlet.ServletContextEvent;
 import org.apache.guacamole.environment.Environment;
+import org.apache.guacamole.environment.LocalEnvironment;
 import org.apache.guacamole.extension.ExtensionModule;
 import org.apache.guacamole.log.LogModule;
 import org.apache.guacamole.net.auth.AuthenticationProvider;
@@ -82,7 +83,7 @@ public class GuacamoleServletContextListener extends GuiceServletContextListener
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
 
-        environment = new WebApplicationEnvironment();
+        environment = LocalEnvironment.getInstance();
 
         // Read configuration information from GUACAMOLE_HOME/guacamole.properties
         try {
