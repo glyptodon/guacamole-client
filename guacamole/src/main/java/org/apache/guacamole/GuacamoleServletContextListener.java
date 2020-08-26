@@ -87,8 +87,9 @@ public class GuacamoleServletContextListener extends GuiceServletContextListener
 
         // Read configuration information from GUACAMOLE_HOME/guacamole.properties
         try {
-            environment.addGuacamoleProperties(new FileGuacamoleProperties(
-                    new File(environment.getGuacamoleHome(), "guacamole.properties")));
+            File guacProperties = new File(environment.getGuacamoleHome(), "guacamole.properties");
+            environment.addGuacamoleProperties(new FileGuacamoleProperties(guacProperties));
+            logger.info("Read configuration parameters from \"{}\".", guacProperties);
         }
         catch (GuacamoleException e) {
             logger.error("Unable to read guacamole.properties: {}", e.getMessage());
@@ -99,8 +100,11 @@ public class GuacamoleServletContextListener extends GuiceServletContextListener
         // read from system environment if "enable-environment-properties" is
         // set to "true"
         try {
-            if (environment.getProperty(ENABLE_ENVIRONMENT_PROPERTIES, false))
+            if (environment.getProperty(ENABLE_ENVIRONMENT_PROPERTIES, false)) {
                 environment.addGuacamoleProperties(new SystemEnvironmentGuacamoleProperties());
+                logger.info("Additional configuration parameters may be read "
+                        + "from environment variables.");
+            }
         }
         catch (GuacamoleException e) {
             logger.error("Unable to configure support for environment properties: {}", e.getMessage());
