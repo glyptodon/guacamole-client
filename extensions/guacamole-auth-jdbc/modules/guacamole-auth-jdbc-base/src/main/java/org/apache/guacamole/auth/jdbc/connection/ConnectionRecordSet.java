@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.auth.jdbc.base.RestrictedObject;
+import org.apache.guacamole.auth.jdbc.user.ModeledAuthenticatedUser;
 import org.apache.guacamole.net.auth.ConnectionRecord;
 
 /**
@@ -45,6 +46,13 @@ public class ConnectionRecordSet extends RestrictedObject
     @Inject
     private ConnectionService connectionService;
     
+    /**
+     * The identifier of the connection to which this record set should be
+     * limited, if any. If null, the set should contain all records readable
+     * by the user making the request.
+     */
+    private String identifier = null;
+
     /**
      * The set of strings that each must occur somewhere within the returned 
      * connection records, whether within the associated username, the name of 
@@ -68,11 +76,29 @@ public class ConnectionRecordSet extends RestrictedObject
      */
     private final List<ConnectionRecordSortPredicate> connectionRecordSortPredicates =
             new ArrayList<ConnectionRecordSortPredicate>();
+   
+    /**
+     * Initializes this object, associating it with the current authenticated
+     * user and connection identifier.
+     *
+     * @param currentUser
+     *     The user that created or retrieved this object.
+     * 
+     * @param identifier
+     *     The connection identifier to which this record set should be limited,
+     *     or null if the record set should contain all records readable by the
+     *     currentUser.
+     */
+    protected void init(ModeledAuthenticatedUser currentUser, String identifier) {
+        super.init(currentUser);
+        this.identifier = identifier;
+    }
     
     @Override
     public Collection<ConnectionRecord> asCollection()
             throws GuacamoleException {
-        return connectionService.retrieveHistory(getCurrentUser(),
+        // Retrieve history from database
+        return connectionService.retrieveHistory(identifier, getCurrentUser(),
                 requiredContents, connectionRecordSortPredicates, limit);
     }
 
