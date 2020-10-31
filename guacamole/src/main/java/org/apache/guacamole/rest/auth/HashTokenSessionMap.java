@@ -226,6 +226,7 @@ public class HashTokenSessionMap implements TokenSessionMap {
     @Override
     public void shutdown() {
         executor.shutdownNow();
+        sessionMap.values().stream().forEach(GuacamoleSession::invalidate);
     }
 
 }
