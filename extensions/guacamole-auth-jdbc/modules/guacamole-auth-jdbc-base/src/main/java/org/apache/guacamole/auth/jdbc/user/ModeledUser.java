@@ -47,6 +47,7 @@ import org.apache.guacamole.form.TextField;
 import org.apache.guacamole.form.TimeField;
 import org.apache.guacamole.form.TimeZoneField;
 import org.apache.guacamole.net.auth.ActivityRecord;
+import org.apache.guacamole.net.auth.ActivityRecordSet;
 import org.apache.guacamole.net.auth.Permissions;
 import org.apache.guacamole.net.auth.RelatedObjectSet;
 import org.apache.guacamole.net.auth.User;
@@ -182,6 +183,12 @@ public class ModeledUser extends ModeledPermissions<UserModel> implements User {
      */
     @Inject
     private Provider<UserParentUserGroupSet> parentUserGroupSetProvider;
+    
+    /**
+     * Provider for creating user record sets.
+     */
+    @Inject
+    private Provider<UserRecordSet> userRecordSetProvider;
 
     /**
      * Whether attributes which control access restrictions should be exposed
@@ -748,8 +755,11 @@ public class ModeledUser extends ModeledPermissions<UserModel> implements User {
     }
 
     @Override
-    public List<ActivityRecord> getHistory() throws GuacamoleException {
-        return userService.retrieveHistory(getCurrentUser(), this);
+    public ActivityRecordSet<ActivityRecord> getUserHistory()
+            throws GuacamoleException {
+        UserRecordSet userRecordSet = userRecordSetProvider.get();
+        userRecordSet.init(getCurrentUser(), this.getIdentifier());
+        return userRecordSet;
     }
 
     @Override
@@ -762,6 +772,17 @@ public class ModeledUser extends ModeledPermissions<UserModel> implements User {
     @Override
     public Permissions getEffectivePermissions() throws GuacamoleException {
         return super.getEffective();
+    }
+    
+    /**
+     * Returns true if this user is a skeleton user, lacking a database entity
+     * entry.
+     * 
+     * @return 
+     *     True if this user is a skeleton user, otherwise false.
+     */
+    public boolean isSkeleton() {
+        return (getModel().getEntityID() == null);
     }
 
 }

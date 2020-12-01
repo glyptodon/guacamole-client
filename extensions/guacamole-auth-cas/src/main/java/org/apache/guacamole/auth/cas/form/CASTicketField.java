@@ -19,9 +19,10 @@
 
 package org.apache.guacamole.auth.cas.form;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import org.apache.guacamole.form.Field;
+import java.net.URI;
+import javax.ws.rs.core.UriBuilder;
+import org.apache.guacamole.form.RedirectField;
+import org.apache.guacamole.language.TranslatableMessage;
 
 
 /**
@@ -30,24 +31,17 @@ import org.apache.guacamole.form.Field;
  * and then is returned to Guacamole where the ticket field is
  * processed.
  */
-public class CASTicketField extends Field {
+public class CASTicketField extends RedirectField {
 
     /**
-     * The standard HTTP parameter which will be included within the URL by all
-     * CAS services upon successful authentication and redirect.
+     * The parameter that will be present upon successful CAS authentication.
      */
     public static final String PARAMETER_NAME = "ticket";
-
+    
     /**
      * The standard URI name for the CAS login resource.
      */
     private static final String CAS_LOGIN_URI = "login";
-
-
-    /**
-     * The full URI which the field should link to.
-     */
-    private final String authorizationURI;
 
     /**
      * Creates a new CAS "ticket" field which links to the given CAS
@@ -64,42 +58,21 @@ public class CASTicketField extends Field {
      * @param redirectURI
      *     The URI that the CAS service should redirect to upon successful
      *     authentication.
+     * 
+     * @param redirectMessage
+     *     The message that will be displayed for the user while the redirect
+     *     is processed.  This will be processed through Guacamole's translation
+     *     system.
      */
-    public CASTicketField(String authorizationEndpoint, String redirectURI) {
+    public CASTicketField(URI authorizationEndpoint, URI redirectURI,
+            TranslatableMessage redirectMessage) {
+        
+        super(PARAMETER_NAME, UriBuilder.fromUri(authorizationEndpoint)
+                .path(CAS_LOGIN_URI)
+                .queryParam("service", redirectURI)
+                .build(),
+                redirectMessage);
 
-        // Init base field properties
-        super(PARAMETER_NAME, "GUAC_CAS_TICKET");
-
-        // Build authorization URI from given values
-        try {
-            final StringBuilder sb = new StringBuilder();
-            sb.append(authorizationEndpoint);
-            // user might configure the endpoint with a trailing slash
-            if (sb.charAt(sb.length() - 1) != '/') {
-                sb.append('/');
-            }
-            sb.append(CAS_LOGIN_URI);
-            sb.append("?service=");
-            sb.append(URLEncoder.encode(redirectURI, "UTF-8"));
-            this.authorizationURI = sb.toString();
-        }
-
-        // Java is required to provide UTF-8 support
-        catch (UnsupportedEncodingException e) {
-            throw new UnsupportedOperationException("Unexpected lack of UTF-8 support.", e);
-        }
-
-    }
-
-    /**
-     * Returns the full URI that this field should link to when a new ticket
-     * needs to be obtained from the CAS service.
-     *
-     * @return
-     *     The full URI that this field should link to.
-     */
-    public String getAuthorizationURI() {
-        return authorizationURI;
     }
 
 }
