@@ -19,15 +19,13 @@
 
 package org.apache.guacamole.auth.radius;
 
+import com.google.common.io.BaseEncoding;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import java.lang.IllegalArgumentException;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.DatatypeConverter;
 import org.apache.guacamole.auth.radius.user.AuthenticatedUser;
-import org.apache.guacamole.auth.radius.form.RadiusChallengeResponseField;
+import org.apache.guacamole.auth.radius.form.GuacamoleRadiusChallenge;
 import org.apache.guacamole.auth.radius.form.RadiusStateField;
 import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.form.Field;
@@ -44,6 +42,7 @@ import net.jradius.packet.AccessAccept;
 import net.jradius.packet.AccessChallenge;
 import net.jradius.packet.AccessReject;
 import net.jradius.packet.attribute.RadiusAttribute;
+import org.apache.guacamole.form.PasswordField;
 
 /**
  * Service providing convenience functions for the RADIUS AuthenticationProvider
@@ -55,6 +54,12 @@ public class AuthenticationProviderService {
      * Logger for this class.
      */
     private final Logger logger = LoggerFactory.getLogger(AuthenticationProviderService.class);
+    
+    /**
+     * The name of the password field where the user will enter a response to
+     * the RADIUS challenge.
+     */
+    private static final String CHALLENGE_RESPONSE_PARAM = "radiusChallenge";
 
     /**
      * Service for creating and managing connections to RADIUS servers.
@@ -69,18 +74,23 @@ public class AuthenticationProviderService {
     private Provider<AuthenticatedUser> authenticatedUserProvider;
 
     /**
-     * Returns the expected credentials from a RADIUS challenge.
+     * Returns an object containing the challenge message and the expected
+     * credentials from a RADIUS challenge, or null if either state or reply
+     * attributes are missing from the challenge.
      *
      * @param challengePacket
      *     The AccessChallenge RadiusPacket received from the RADIUS 
      *     server.
      *
      * @return
-     *     A CredentialsInfo object that represents fields that need to
-     *     be presented to the user in order to complete authentication.
-     *     One of these must be the RADIUS state.
+     *     A GuacamoleRadiusChallenge object that contains the challenge message
+     *     sent by the RADIUS server and the expected credentials that should
+     *     be requested of the user in order to continue authentication.  One
+     *     of the expected credentials *must* be the RADIUS state.  If either
+     *     state or the reply are missing from the challenge this method will
+     *     return null.
      */
-    private CredentialsInfo getRadiusChallenge(RadiusPacket challengePacket) {
+    private GuacamoleRadiusChallenge getRadiusChallenge(RadiusPacket challengePacket) {
 
         // Try to get the state attribute - if it's not there, we have a problem
         RadiusAttribute stateAttr = challengePacket.findAttribute(Attr_State.TYPE);
@@ -99,13 +109,16 @@ public class AuthenticationProviderService {
         }
 
         // We have the required attributes - convert to strings and then generate the additional login box/field
-        String replyMsg = replyAttr.toString();
-        String radiusState = DatatypeConverter.printHexBinary(stateAttr.getValue().getBytes());
-        Field radiusResponseField = new RadiusChallengeResponseField(replyMsg);
+        String replyMsg = replyAttr.getValue().toString();
+        String radiusState = BaseEncoding.base16().encode(stateAttr.getValue().getBytes());
+        Field radiusResponseField = new PasswordField(CHALLENGE_RESPONSE_PARAM);
         Field radiusStateField = new RadiusStateField(radiusState);
 
-        // Return the CredentialsInfo object that has the state and the expected response.
-        return new CredentialsInfo(Arrays.asList(radiusResponseField,radiusStateField));
+        // Return the GuacamoleRadiusChallenge object that has the state
+        // and the expected response.
+        return new GuacamoleRadiusChallenge(replyMsg,
+                new CredentialsInfo(Arrays.asList(radiusResponseField,
+                        radiusStateField)));
     }
 
     /**
@@ -136,7 +149,7 @@ public class AuthenticationProviderService {
 
         // Grab HTTP request object and a response to a challenge.
         HttpServletRequest request = credentials.getRequest();
-        String challengeResponse = request.getParameter(RadiusChallengeResponseField.PARAMETER_NAME);
+        String challengeResponse = request.getParameter(CHALLENGE_RESPONSE_PARAM);
 
         // RadiusPacket object to store response from server.
         RadiusPacket radPack;
@@ -146,7 +159,9 @@ public class AuthenticationProviderService {
 
             try {
                 radPack = radiusService.authenticate(credentials.getUsername(),
-                                                credentials.getPassword(), null);
+                                                credentials.getPassword(),
+                                                credentials.getRemoteAddress(),
+                                                null);
             }
             catch (GuacamoleException e) {
                 logger.error("Cannot configure RADIUS server: {}", e.getMessage());
@@ -164,9 +179,10 @@ public class AuthenticationProviderService {
                     throw new GuacamoleInvalidCredentialsException("Authentication error.", CredentialsInfo.USERNAME_PASSWORD);
                 }
 
-                byte[] stateBytes = DatatypeConverter.parseHexBinary(stateString);
+                byte[] stateBytes = BaseEncoding.base16().decode(stateString);
                 radPack = radiusService.sendChallengeResponse(credentials.getUsername(),
                                                               challengeResponse,
+                                                              credentials.getRemoteAddress(),
                                                               stateBytes);
             }
             catch (IllegalArgumentException e) {
@@ -202,12 +218,14 @@ public class AuthenticationProviderService {
 
         // Received AccessChallenge packet, more credentials required to complete authentication
         else if (radPack instanceof AccessChallenge) {
-            CredentialsInfo expectedCredentials = getRadiusChallenge(radPack);
+            GuacamoleRadiusChallenge challenge = getRadiusChallenge(radPack);
 
-            if (expectedCredentials == null)
+            if (challenge == null)
                 throw new GuacamoleInvalidCredentialsException("Authentication error.", CredentialsInfo.USERNAME_PASSWORD);
 
-            throw new GuacamoleInsufficientCredentialsException("LOGIN.INFO_RADIUS_ADDL_REQUIRED", expectedCredentials);
+            throw new GuacamoleInsufficientCredentialsException(
+                    challenge.getChallengeText(),
+                    challenge.getExpectedCredentials());
         }
 
         // Something unanticipated happened, so panic and go back to login.

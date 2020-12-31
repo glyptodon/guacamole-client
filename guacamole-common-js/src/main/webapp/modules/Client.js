@@ -713,6 +713,18 @@ Guacamole.Client = function(tunnel) {
      * @param {String} name The name of the pipe.
      */
     this.onpipe = null;
+    
+    /**
+     * Fired when a "required" instruction is received. A required instruction
+     * indicates that additional parameters are required for the connection to
+     * continue, such as user credentials.
+     * 
+     * @event
+     * @param {String[]} parameters
+     *      The names of the connection parameters that are required to be
+     *      provided for the connection to continue.
+     */
+    this.onrequired = null;
 
     /**
      * Fired whenever a sync instruction is received from the server, indicating
@@ -1190,13 +1202,10 @@ Guacamole.Client = function(tunnel) {
 
             // Create stream
             var stream = streams[stream_index] = new Guacamole.InputStream(guac_client, stream_index);
-            var reader = new Guacamole.DataURIReader(stream, mimetype);
 
-            // Draw image when stream is complete
-            reader.onend = function drawImageBlob() {
-                display.setChannelMask(layer, channelMask);
-                display.draw(layer, x, y, reader.getURI());
-            };
+            // Draw received contents once decoded
+            display.setChannelMask(layer, channelMask);
+            display.drawStream(layer, x, y, stream, mimetype);
 
         },
 
@@ -1339,6 +1348,10 @@ Guacamole.Client = function(tunnel) {
 
             display.rect(layer, x, y, w, h);
 
+        },
+                
+        "required": function required(parameters) {
+            if (guac_client.onrequired) guac_client.onrequired(parameters);
         },
         
         "reset": function(parameters) {

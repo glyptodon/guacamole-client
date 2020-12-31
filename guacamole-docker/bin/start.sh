@@ -151,7 +151,7 @@ END
 
     # Verify that the required Docker secrets are present, else, default to their normal environment variables
     if [ -n "$MYSQL_USER_FILE" ]; then
-        set_property "mysql-username" `cat $MYSQL_USER_FILE`
+        set_property "mysql-username" "`cat "$MYSQL_USER_FILE"`"
     elif [ -n "$MYSQL_USER" ]; then
         set_property "mysql-username" "$MYSQL_USER"
     else
@@ -160,7 +160,7 @@ END
     fi
     
     if [ -n "$MYSQL_PASSWORD_FILE" ]; then
-        set_property "mysql-password" `cat $MYSQL_PASSWORD_FILE`
+        set_property "mysql-password" "`cat "$MYSQL_PASSWORD_FILE"`"
     elif [ -n "$MYSQL_PASSWORD" ]; then
         set_property "mysql-password" "$MYSQL_PASSWORD"
     else
@@ -169,7 +169,7 @@ END
     fi
 
     if [ -n "$MYSQL_DATABASE_FILE" ]; then
-        set_property "mysql-database" `cat $MYSQL_DATABASE_FILE`
+        set_property "mysql-database" "`cat "$MYSQL_DATABASE_FILE"`"
     elif [ -n "$MYSQL_DATABASE" ]; then
         set_property "mysql-database" "$MYSQL_DATABASE"
     else
@@ -200,6 +200,36 @@ END
     set_optional_property                              \
         "mysql-default-max-group-connections-per-user" \
         "$MYSQL_DEFAULT_MAX_GROUP_CONNECTIONS_PER_USER"
+
+    set_optional_property     \
+        "mysql-user-required" \
+        "$MYSQL_USER_REQUIRED"
+
+    set_optional_property \
+        "mysql-ssl-mode"  \
+        "$MYSQL_SSL_MODE"
+
+    set_optional_property        \
+        "mysql-ssl-trust-store"  \
+        "$MYSQL_SSL_TRUST_STORE"
+
+    # For SSL trust store password, check secrets, first, then standard env variable
+    if [ -n "$MYSQL_SSL_TRUST_PASSWORD_FILE" ]; then
+        set_property "mysql-ssl-trust-password" "`cat "$MYSQL_SSL_TRUST_PASSWORD_FILE"`"
+    elif [ -n "$MYSQL_SSL_TRUST_PASSWORD" ]; then
+        set_property "mysql-ssl-trust-password" "$MYSQL_SSL_TRUST_PASSWORD"
+    fi
+
+    set_optional_property         \
+        "mysql-ssl-client-store"  \
+        "$MYSQL_SSL_CLIENT_STORE"
+
+    # For SSL trust store password, check secrets, first, then standard env variable
+    if [ -n "$MYSQL_SSL_CLIENT_PASSWORD_FILE" ]; then
+        set_property "mysql-ssl-client-password" "`cat "$MYSQL_SSL_CLIENT_PASSWORD_FILE"`"
+    elif [ -n "$MYSQL_SSL_CLIENT_PASSWORD" ]; then
+        set_property "mysql-ssl-client-password" "$MYSQL_SSL_CLIENT_PASSWORD"
+    fi
 
     # Add required .jar files to GUACAMOLE_LIB and GUACAMOLE_EXT
     ln -s /opt/guacamole/mysql/mysql-connector-*.jar "$GUACAMOLE_LIB"
@@ -274,7 +304,7 @@ END
 
     # Verify that the required Docker secrets are present, else, default to their normal environment variables
     if [ -n "$POSTGRES_USER_FILE" ]; then
-        set_property "postgresql-username" `cat $POSTGRES_USER_FILE`
+        set_property "postgresql-username" "`cat "$POSTGRES_USER_FILE"`"
     elif [ -n "$POSTGRES_USER" ]; then
         set_property "postgresql-username" "$POSTGRES_USER"
     else
@@ -283,7 +313,7 @@ END
     fi
     
     if [ -n "$POSTGRES_PASSWORD_FILE" ]; then
-        set_property "postgresql-password" `cat $POSTGRES_PASSWORD_FILE`
+        set_property "postgresql-password" "`cat "$POSTGRES_PASSWORD_FILE"`"
     elif [ -n "$POSTGRES_PASSWORD" ]; then
         set_property "postgresql-password" "$POSTGRES_PASSWORD"
     else
@@ -292,7 +322,7 @@ END
     fi
 
     if [ -n "$POSTGRES_DATABASE_FILE" ]; then
-        set_property "postgresql-database" `cat $POSTGRES_DATABASE_FILE`
+        set_property "postgresql-database" "`cat "$POSTGRES_DATABASE_FILE"`"
     elif [ -n "$POSTGRES_DATABASE" ]; then
         set_property "postgresql-database" "$POSTGRES_DATABASE"
     else
@@ -323,6 +353,41 @@ END
     set_optional_property                                   \
         "postgresql-default-max-group-connections-per-user" \
         "$POSTGRES_DEFAULT_MAX_GROUP_CONNECTIONS_PER_USER"
+
+    set_optional_property                      \
+        "postgresql-default-statement-timeout" \
+        "$POSTGRES_DEFAULT_STATEMENT_TIMEOUT"
+
+    set_optional_property          \
+        "postgresql-user-required" \
+        "$POSTGRES_USER_REQUIRED"
+
+    set_optional_property           \
+        "postgresql-socket-timeout" \
+        "$POSTGRES_SOCKET_TIMEOUT"
+
+    set_optional_property      \
+        "postgresql-ssl-mode"  \
+        "$POSTGRESQL_SSL_MODE"
+
+    set_optional_property           \
+        "postgresql-ssl-cert-file"  \
+        "$POSTGRESQL_SSL_CERT_FILE"
+
+    set_optional_property          \
+        "postgresql-ssl-key-file"  \
+        "$POSTGRESQL_SSL_KEY_FILE"
+
+    set_optional_property                \
+        "postgresql-ssl-root-cert-file"  \
+        "$POSTGRESQL_SSL_ROOT_CERT_FILE"
+
+    # For SSL key password, check secrets, first, then standard env variable
+    if [ -n "$POSTGRES_SSL_KEY_PASSWORD_FILE" ]; then
+        set_property "postgresql-ssl-key-password" "`cat "$POSTGRES_SSL_KEY_PASSWORD_FILE"`"
+    elif [ -n "$POSTGRES_SSL_KEY_PASSWORD" ]; then
+        set_property "postgresql-ssl-key-password" "$POSTGRES_SSL_KEY_PASSWORD"
+    fi
 
     # Add required .jar files to GUACAMOLE_LIB and GUACAMOLE_EXT
     ln -s /opt/guacamole/postgresql/postgresql-*.jar "$GUACAMOLE_LIB"
@@ -356,34 +421,26 @@ END
     fi
 
     # Update config file
-    set_property          "ldap-hostname"           "$LDAP_HOSTNAME"
-    set_optional_property "ldap-port"               "$LDAP_PORT"
-    set_optional_property "ldap-encryption-method"  "$LDAP_ENCRYPTION_METHOD"
-    set_optional_property "ldap-max-search-results" "$LDAP_MAX_SEARCH_RESULTS"
-    set_optional_property "ldap-search-bind-dn"     "$LDAP_SEARCH_BIND_DN"
+    set_property          "ldap-hostname"                   "$LDAP_HOSTNAME"
+    set_property          "ldap-user-base-dn"               "$LDAP_USER_BASE_DN"
 
-    set_optional_property           \
-        "ldap-search-bind-password" \
-        "$LDAP_SEARCH_BIND_PASSWORD"
-
-    set_property          "ldap-user-base-dn"       "$LDAP_USER_BASE_DN"
-    set_optional_property "ldap-username-attribute" "$LDAP_USERNAME_ATTRIBUTE"
-    set_optional_property "ldap-member-attribute"   "$LDAP_MEMBER_ATTRIBUTE"
-    set_optional_property "ldap-user-search-filter" "$LDAP_USER_SEARCH_FILTER"
-    set_optional_property "ldap-config-base-dn"     "$LDAP_CONFIG_BASE_DN"
-    set_optional_property "ldap-group-base-dn"      "$LDAP_GROUP_BASE_DN"
-
-    set_optional_property           \
-        "ldap-group-name-attribute" \
-        "$LDAP_GROUP_NAME_ATTRIBUTE"
-
-    set_optional_property           \
-        "ldap-dereference-aliases"  \
-        "$LDAP_DEREFERENCE_ALIASES"
-
-    set_optional_property "ldap-follow-referrals"   "$LDAP_FOLLOW_REFERRALS"
-    set_optional_property "ldap-max-referral-hops"  "$LDAP_MAX_REFERRAL_HOPS"
-    set_optional_property "ldap-operation-timeout"  "$LDAP_OPERATION_TIMEOUT"
+    set_optional_property "ldap-port"                       "$LDAP_PORT"
+    set_optional_property "ldap-encryption-method"          "$LDAP_ENCRYPTION_METHOD"
+    set_optional_property "ldap-max-search-results"         "$LDAP_MAX_SEARCH_RESULTS"
+    set_optional_property "ldap-search-bind-dn"             "$LDAP_SEARCH_BIND_DN"
+    set_optional_property "ldap-user-attributes"            "$LDAP_USER_ATTRIBUTES"
+    set_optional_property "ldap-search-bind-password"       "$LDAP_SEARCH_BIND_PASSWORD"
+    set_optional_property "ldap-username-attribute"         "$LDAP_USERNAME_ATTRIBUTE"
+    set_optional_property "ldap-member-attribute"           "$LDAP_MEMBER_ATTRIBUTE"
+    set_optional_property "ldap-user-search-filter"         "$LDAP_USER_SEARCH_FILTER"
+    set_optional_property "ldap-config-base-dn"             "$LDAP_CONFIG_BASE_DN"
+    set_optional_property "ldap-group-base-dn"              "$LDAP_GROUP_BASE_DN"
+    set_optional_property "ldap-member-attribute-type"      "$LDAP_MEMBER_ATTRIBUTE_TYPE"
+    set_optional_property "ldap-group-name-attribute"       "$LDAP_GROUP_NAME_ATTRIBUTE"
+    set_optional_property "ldap-dereference-aliases"        "$LDAP_DEREFERENCE_ALIASES"
+    set_optional_property "ldap-follow-referrals"           "$LDAP_FOLLOW_REFERRALS"
+    set_optional_property "ldap-max-referral-hops"          "$LDAP_MAX_REFERRAL_HOPS"
+    set_optional_property "ldap-operation-timeout"          "$LDAP_OPERATION_TIMEOUT"
 
     # Add required .jar files to GUACAMOLE_EXT
     ln -s /opt/guacamole/ldap/guacamole-auth-*.jar "$GUACAMOLE_EXT"
@@ -529,6 +586,21 @@ END
 }
 
 ##
+## Adds properties to guacamole.properties which configure the TOTP two-factor
+## authentication mechanism.
+##
+associate_totp() {
+    # Update config file
+    set_optional_property "totp-issuer"    "$TOTP_ISSUER"
+    set_optional_property "totp-digits"    "$TOTP_DIGITS"
+    set_optional_property "totp-period"    "$TOTP_PERIOD"
+    set_optional_property "totp-mode"      "$TOTP_MODE"
+
+    # Add required .jar files to GUACAMOLE_EXT
+    ln -s /opt/guacamole/totp/guacamole-auth-*.jar   "$GUACAMOLE_EXT"
+}
+
+##
 ## Adds properties to guacamole.properties which configure the Duo two-factor
 ## authentication service. Checks to see if all variables are defined and makes sure
 ## DUO_APPLICATION_KEY is >= 40 characters.
@@ -565,6 +637,50 @@ END
 
     # Add required .jar files to GUACAMOLE_EXT
     ln -s /opt/guacamole/duo/guacamole-auth-*.jar   "$GUACAMOLE_EXT"
+}
+
+##
+## Adds properties to guacamole.properties which configure the header
+## authentication provider.
+##
+associate_header() {
+    # Update config file
+    set_optional_property "http-auth-header"         "$HTTP_AUTH_HEADER"
+
+    # Add required .jar files to GUACAMOLE_EXT
+    ln -s /opt/guacamole/header/guacamole-auth-*.jar "$GUACAMOLE_EXT"
+}
+
+##
+## Adds properties to guacamole.properties witch configure the CAS
+## authentication service.
+##
+associate_cas() {
+    # Verify required parameters are present
+    if [ -z "$CAS_AUTHORIZATION_ENDPOINT" ] || \
+       [ -z "$CAS_REDIRECT_URI" ]
+    then
+        cat <<END
+FATAL: Missing required environment variables
+-----------------------------------------------------------------------------------
+If using the CAS authentication extension, you must provide each of the
+following environment variables:
+
+    CAS_AUTHORIZATION_ENDPOINT      The URL of the CAS authentication server.
+
+    CAS_REDIRECT_URI                The URI to redirect back to upon successful authentication.
+
+END
+        exit 1;
+    fi
+
+    # Update config file
+    set_property            "cas-authorization-endpoint"       "$CAS_AUTHORIZATION_ENDPOINT"
+    set_property            "cas-redirect-uri"                 "$CAS_REDIRECT_URI"
+    set_optional_property   "cas-clearpass-key"                "$CAS_CLEARPASS_KEY"
+
+    # Add required .jar files to GUACAMOLE_EXT
+    ln -s /opt/guacamole/cas/guacamole-auth-*.jar   "$GUACAMOLE_EXT"
 }
 
 ##
@@ -699,9 +815,24 @@ END
     exit 1;
 fi
 
+# Use TOTP if specified.
+if [ "$TOTP_ENABLED" = "true" ]; then
+    associate_totp
+fi
+
 # Use Duo if specified.
 if [ -n "$DUO_API_HOSTNAME" ]; then
     associate_duo
+fi
+
+# Use header if specified.
+if [ "$HEADER_ENABLED" = "true" ]; then
+    associate_header
+fi
+
+# Use CAS if specified.
+if [ -n "$CAS_AUTHORIZATION_ENDPOINT" ]; then
+    associate_cas
 fi
 
 # Set logback level if specified

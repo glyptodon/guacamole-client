@@ -39,6 +39,7 @@ public class TokenFilterTest {
         TokenFilter tokenFilter = new TokenFilter();
         tokenFilter.setToken("TOKEN_A", "value-of-a");
         tokenFilter.setToken("TOKEN_B", "value-of-b");
+        tokenFilter.setToken("TOKEN_C", "Value-of-C");
 
         // Test basic substitution and escaping
         assertEquals(
@@ -48,8 +49,23 @@ public class TokenFilterTest {
         
         // Unknown tokens must be interpreted as literals
         assertEquals(
-            "${NOPE}hellovalue-of-aworld${TOKEN_C}",
-            tokenFilter.filter("${NOPE}hello${TOKEN_A}world${TOKEN_C}")
+            "${NOPE}hellovalue-of-aworld${TOKEN_D}",
+            tokenFilter.filter("${NOPE}hello${TOKEN_A}world${TOKEN_D}")
+        );
+        
+        assertEquals(
+            "Value-of-C",
+            tokenFilter.filter("${TOKEN_C}")
+        );
+        
+        assertEquals(
+            "value-of-c",
+            tokenFilter.filter("${TOKEN_C:LOWER}")
+        );
+        
+        assertEquals(
+            "VALUE-OF-C",
+            tokenFilter.filter("${TOKEN_C:UPPER}")
         );
         
     }
@@ -67,7 +83,7 @@ public class TokenFilterTest {
         tokenFilter.setToken("TOKEN_B", "value-of-b");
 
         // Create test map
-        Map<Integer, String> map = new HashMap<Integer, String>();
+        Map<Integer, String> map = new HashMap<>();
         map.put(1, "$$${NOPE}hello${TOKEN_A}world${TOKEN_B}$${NOT_A_TOKEN}");
         map.put(2, "${NOPE}hello${TOKEN_A}world${TOKEN_C}");
         map.put(3, null);

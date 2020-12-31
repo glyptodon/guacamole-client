@@ -20,10 +20,12 @@
 package org.apache.guacamole.auth.openid.conf;
 
 import com.google.inject.Inject;
+import java.net.URI;
 import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.environment.Environment;
 import org.apache.guacamole.properties.IntegerGuacamoleProperty;
 import org.apache.guacamole.properties.StringGuacamoleProperty;
+import org.apache.guacamole.properties.URIGuacamoleProperty;
 
 /**
  * Service for retrieving configuration information regarding the OpenID
@@ -36,6 +38,12 @@ public class ConfigurationService {
      * username.
      */
     private static final String DEFAULT_USERNAME_CLAIM_TYPE = "email";
+
+    /**
+     * The default claim type to use to retrieve an authenticated user's
+     * groups.
+     */
+    private static final String DEFAULT_GROUPS_CLAIM_TYPE = "groups";
 
     /**
      * The default space-separated list of OpenID scopes to request.
@@ -63,8 +71,8 @@ public class ConfigurationService {
     /**
      * The authorization endpoint (URI) of the OpenID service.
      */
-    private static final StringGuacamoleProperty OPENID_AUTHORIZATION_ENDPOINT =
-            new StringGuacamoleProperty() {
+    private static final URIGuacamoleProperty OPENID_AUTHORIZATION_ENDPOINT =
+            new URIGuacamoleProperty() {
 
         @Override
         public String getName() { return "openid-authorization-endpoint"; }
@@ -75,8 +83,8 @@ public class ConfigurationService {
      * The endpoint (URI) of the JWKS service which defines how received ID
      * tokens (JWTs) shall be validated.
      */
-    private static final StringGuacamoleProperty OPENID_JWKS_ENDPOINT =
-            new StringGuacamoleProperty() {
+    private static final URIGuacamoleProperty OPENID_JWKS_ENDPOINT =
+            new URIGuacamoleProperty() {
 
         @Override
         public String getName() { return "openid-jwks-endpoint"; }
@@ -103,6 +111,18 @@ public class ConfigurationService {
 
         @Override
         public String getName() { return "openid-username-claim-type"; }
+
+    };
+
+    /**
+     * The claim type which contains the authenticated user's groups within
+     * any valid JWT.
+     */
+    private static final StringGuacamoleProperty OPENID_GROUPS_CLAIM_TYPE =
+            new StringGuacamoleProperty() {
+
+        @Override
+        public String getName() { return "openid-groups-claim-type"; }
 
     };
 
@@ -174,8 +194,8 @@ public class ConfigurationService {
      * authentication process is complete. This must be the full URL that a
      * user would enter into their browser to access Guacamole.
      */
-    private static final StringGuacamoleProperty OPENID_REDIRECT_URI =
-            new StringGuacamoleProperty() {
+    private static final URIGuacamoleProperty OPENID_REDIRECT_URI =
+            new URIGuacamoleProperty() {
 
         @Override
         public String getName() { return "openid-redirect-uri"; }
@@ -200,7 +220,7 @@ public class ConfigurationService {
      *     If guacamole.properties cannot be parsed, or if the authorization
      *     endpoint property is missing.
      */
-    public String getAuthorizationEndpoint() throws GuacamoleException {
+    public URI getAuthorizationEndpoint() throws GuacamoleException {
         return environment.getRequiredProperty(OPENID_AUTHORIZATION_ENDPOINT);
     }
 
@@ -236,7 +256,7 @@ public class ConfigurationService {
      *     If guacamole.properties cannot be parsed, or if the redirect URI
      *     property is missing.
      */
-    public String getRedirectURI() throws GuacamoleException {
+    public URI getRedirectURI() throws GuacamoleException {
         return environment.getRequiredProperty(OPENID_REDIRECT_URI);
     }
 
@@ -270,7 +290,7 @@ public class ConfigurationService {
      *     If guacamole.properties cannot be parsed, or if the JWKS endpoint
      *     property is missing.
      */
-    public String getJWKSEndpoint() throws GuacamoleException {
+    public URI getJWKSEndpoint() throws GuacamoleException {
         return environment.getRequiredProperty(OPENID_JWKS_ENDPOINT);
     }
 
@@ -288,6 +308,22 @@ public class ConfigurationService {
      */
     public String getUsernameClaimType() throws GuacamoleException {
         return environment.getProperty(OPENID_USERNAME_CLAIM_TYPE, DEFAULT_USERNAME_CLAIM_TYPE);
+    }
+
+    /**
+     * Returns the claim type which contains the authenticated user's groups
+     * within any valid JWT, as configured with guacamole.properties. By
+     * default, this will be "groups".
+     *
+     * @return
+     *     The claim type which contains the authenticated user's groups
+     *     within any valid JWT, as configured with guacamole.properties.
+     *
+     * @throws GuacamoleException
+     *     If guacamole.properties cannot be parsed.
+     */
+    public String getGroupsClaimType() throws GuacamoleException {
+        return environment.getProperty(OPENID_GROUPS_CLAIM_TYPE, DEFAULT_GROUPS_CLAIM_TYPE);
     }
 
     /**

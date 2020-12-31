@@ -19,26 +19,22 @@
 
 package org.apache.guacamole.auth.openid.form;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import org.apache.guacamole.form.Field;
+import java.net.URI;
+import javax.ws.rs.core.UriBuilder;
+import org.apache.guacamole.form.RedirectField;
+import org.apache.guacamole.language.TranslatableMessage;
 
 /**
  * Field definition which represents the token returned by an OpenID Connect
  * service.
  */
-public class TokenField extends Field {
+public class TokenField extends RedirectField {
 
     /**
      * The standard HTTP parameter which will be included within the URL by all
      * OpenID services upon successful authentication and redirect.
      */
     public static final String PARAMETER_NAME = "id_token";
-
-    /**
-     * The full URI which the field should link to.
-     */
-    private final String authorizationURI;
 
     /**
      * Creates a new field which requests authentication via OpenID connect.
@@ -68,39 +64,24 @@ public class TokenField extends Field {
      * @param nonce
      *     A random string unique to this request. To defend against replay
      *     attacks, this value must cease being valid after its first use.
+     * 
+     * @param redirectMessage
+     *     The message that will be displayed to the user during redirect.  This
+     *     will be processed through Guacamole's translation system.
      */
-    public TokenField(String authorizationEndpoint, String scope,
-            String clientID, String redirectURI, String nonce) {
+    public TokenField(URI authorizationEndpoint, String scope,
+            String clientID, URI redirectURI, String nonce,
+            TranslatableMessage redirectMessage) {
 
-        // Init base field properties
-        super(PARAMETER_NAME, "GUAC_OPENID_TOKEN");
+        super(PARAMETER_NAME, UriBuilder.fromUri(authorizationEndpoint)
+                .queryParam("scope", scope)
+                .queryParam("response_type", "id_token")
+                .queryParam("client_id", clientID)
+                .queryParam("redirect_uri", redirectURI)
+                .queryParam("nonce", nonce)
+                .build(),
+                redirectMessage);
 
-        // Build authorization URI from given values
-        try {
-            this.authorizationURI = authorizationEndpoint
-                    + "?scope=" + URLEncoder.encode(scope, "UTF-8")
-                    + "&response_type=id_token"
-                    + "&client_id=" + URLEncoder.encode(clientID, "UTF-8")
-                    + "&redirect_uri=" + URLEncoder.encode(redirectURI, "UTF-8")
-                    + "&nonce=" + nonce;
-        }
-
-        // Java is required to provide UTF-8 support
-        catch (UnsupportedEncodingException e) {
-            throw new UnsupportedOperationException("Unexpected lack of UTF-8 support.", e);
-        }
-
-    }
-
-    /**
-     * Returns the full URI that this field should link to when a new token
-     * needs to be obtained from the OpenID service.
-     *
-     * @return
-     *     The full URI that this field should link to.
-     */
-    public String getAuthorizationURI() {
-        return authorizationURI;
     }
 
 }

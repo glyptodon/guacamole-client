@@ -22,6 +22,7 @@ package org.apache.guacamole.auth.openid;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import java.util.Arrays;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.guacamole.auth.openid.conf.ConfigurationService;
 import org.apache.guacamole.auth.openid.form.TokenField;
@@ -30,9 +31,11 @@ import org.apache.guacamole.auth.openid.token.TokenValidationService;
 import org.apache.guacamole.auth.openid.user.AuthenticatedUser;
 import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.form.Field;
+import org.apache.guacamole.language.TranslatableMessage;
 import org.apache.guacamole.net.auth.Credentials;
 import org.apache.guacamole.net.auth.credentials.CredentialsInfo;
 import org.apache.guacamole.net.auth.credentials.GuacamoleInvalidCredentialsException;
+import org.jose4j.jwt.JwtClaims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,13 +93,19 @@ public class AuthenticationProviderService {
             throws GuacamoleException {
 
         String username = null;
+        Set<String> groups = null;
 
         // Validate OpenID token in request, if present, and derive username
         HttpServletRequest request = credentials.getRequest();
         if (request != null) {
             String token = request.getParameter(TokenField.PARAMETER_NAME);
-            if (token != null)
-                username = tokenService.processUsername(token);
+            if (token != null) {
+                JwtClaims claims = tokenService.validateToken(token);
+                if (claims != null) {
+                    username = tokenService.processUsername(claims);
+                    groups = tokenService.processGroups(claims);
+                }
+            }
         }
 
         // If the username was successfully retrieved from the token, produce
@@ -105,7 +114,7 @@ public class AuthenticationProviderService {
 
             // Create corresponding authenticated user
             AuthenticatedUser authenticatedUser = authenticatedUserProvider.get();
-            authenticatedUser.init(username, credentials);
+            authenticatedUser.init(username, credentials, groups);
             return authenticatedUser;
 
         }
@@ -121,7 +130,8 @@ public class AuthenticationProviderService {
                     confService.getScope(),
                     confService.getClientID(),
                     confService.getRedirectURI(),
-                    nonceService.generate(confService.getMaxNonceValidity() * 60000L)
+                    nonceService.generate(confService.getMaxNonceValidity() * 60000L),
+                    new TranslatableMessage("LOGIN.INFO_OID_PENDING_REDIRECT")
                 )
 
             }))

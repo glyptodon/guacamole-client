@@ -20,10 +20,17 @@
 package org.apache.guacamole.auth.radius;
 
 import com.google.inject.AbstractModule;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.Security;
 import org.apache.guacamole.GuacamoleException;
+import org.apache.guacamole.auth.radius.conf.ConfigurationService;
+import org.apache.guacamole.auth.radius.conf.RadiusAuthenticationProtocol;
+import org.apache.guacamole.auth.radius.conf.RadiusGuacamoleProperties;
 import org.apache.guacamole.environment.Environment;
 import org.apache.guacamole.environment.LocalEnvironment;
 import org.apache.guacamole.net.auth.AuthenticationProvider;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  * Guice module which configures RADIUS-specific injections.
@@ -57,6 +64,23 @@ public class RadiusAuthenticationProviderModule extends AbstractModule {
 
         // Get local environment
         this.environment = new LocalEnvironment();
+        
+        // Check for MD4 requirement
+        RadiusAuthenticationProtocol authProtocol = environment.getProperty(RadiusGuacamoleProperties.RADIUS_AUTH_PROTOCOL);
+        RadiusAuthenticationProtocol innerProtocol = environment.getProperty(RadiusGuacamoleProperties.RADIUS_EAP_TTLS_INNER_PROTOCOL);
+        if (authProtocol == RadiusAuthenticationProtocol.MSCHAP_V1 
+                    || authProtocol == RadiusAuthenticationProtocol.MSCHAP_V2
+                    || innerProtocol == RadiusAuthenticationProtocol.MSCHAP_V1 
+                    || innerProtocol == RadiusAuthenticationProtocol.MSCHAP_V2) {
+            
+            try {
+                MessageDigest.getInstance("MD4");
+            }
+            catch (NoSuchAlgorithmException e) {
+                Security.addProvider(new BouncyCastleProvider());
+            }
+            
+        }
 
         // Store associated auth provider
         this.authProvider = authProvider;

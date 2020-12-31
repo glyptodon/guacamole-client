@@ -1,6 +1,6 @@
 {
 
-    "guacamoleVersion" : "1.1.0",
+    "guacamoleVersion" : "1.3.0",
 
     "name"      : "CAS Authentication Extension",
     "namespace" : "guac-cas",
@@ -10,21 +10,11 @@
     ],
 
     "translations" : [
+        "translations/ca.json",
         "translations/de.json",
         "translations/en.json",
-        "translations/ja.json"
-    ],
-
-    "js" : [
-        "cas.min.js"
-    ],
-
-    "css" : [
-        "cas.min.css"
-    ],
-
-    "resources" : {
-        "templates/casTicketField.html" : "text/html"
-    }
+        "translations/ja.json",
+        "translations/ru.json"
+    ]
 
 }
