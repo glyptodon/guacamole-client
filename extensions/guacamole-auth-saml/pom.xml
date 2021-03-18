@@ -26,7 +26,7 @@
     <groupId>org.apache.guacamole</groupId>
     <artifactId>guacamole-auth-saml</artifactId>
     <packaging>jar</packaging>
-    <version>1.3.0-GLEN-2.2</version>
+    <version>1.3.0-GLEN-2.4</version>
     <name>guacamole-auth-saml</name>
     <url>http://guacamole.apache.org/</url>
 
@@ -132,7 +132,7 @@
         <dependency>
             <groupId>org.apache.guacamole</groupId>
             <artifactId>guacamole-ext</artifactId>
-            <version>1.3.0-GLEN-2.2</version>
+            <version>1.3.0-GLEN-2.4</version>
             <scope>provided</scope>
         </dependency>
 
