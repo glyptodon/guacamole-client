@@ -26,7 +26,7 @@
     <groupId>org.apache.guacamole</groupId>
     <artifactId>guacamole-common</artifactId>
     <packaging>jar</packaging>
-    <version>1.3.0-GLEN-2.2</version>
+    <version>1.3.0-GLEN-2.4</version>
     <name>guacamole-common</name>
     <url>http://guacamole.apache.org/</url>
 
