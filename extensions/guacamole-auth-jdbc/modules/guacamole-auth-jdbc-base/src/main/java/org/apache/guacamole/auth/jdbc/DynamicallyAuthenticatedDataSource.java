@@ -57,7 +57,7 @@ public class DynamicallyAuthenticatedDataSource extends PooledDataSource {
 
         // Wrap unpooled DataSource, overriding the connection process such
         // that credentials are dynamically retrieved from the JDBCEnvironment
-        super(new UnpooledDataSource(driverClassLoader, driver, url, null, null) {
+        super(new UnpooledDataSource(driverClassLoader, driver, url, "", "") {
 
             @Override
             public Connection getConnection() throws SQLException {
@@ -71,6 +71,13 @@ public class DynamicallyAuthenticatedDataSource extends PooledDataSource {
 
         });
 
+        // Force recalculation of expectedConnectionTypeCode. The
+        // PooledDataSource constructor accepting a single UnpooledDataSource
+        // will otherwise leave this value uninitialized, resulting in all
+        // connections failing to pass sanity checks and never being returned
+        // to the pool.
+        super.forceCloseAll();
+        
     }
 
 }
