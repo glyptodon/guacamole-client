@@ -156,7 +156,7 @@ public class LDAPConnectionService {
      * requested, and will not be connected until it is used in an LDAP
      * operation (such as a bind).
      *
-     * @param url
+     * @param ldapUrl
      *     The LDAP URL containing the details which should be used to connect
      *     to the LDAP server.
      *
@@ -166,27 +166,16 @@ public class LDAPConnectionService {
      *     specified within the given LDAP URL.
      *
      * @throws GuacamoleException
-     *     If the given URL is not a valid LDAP URL, or if the encryption
-     *     method indicated by the URL is known but not actually implemented (a
-     *     bug).
+     *     If the encryption method indicated by the URL is known but not
+     *     actually implemented (a bug).
      */
-    private LdapNetworkConnection createLDAPConnection(String url)
+    private LdapNetworkConnection createLDAPConnection(LdapUrl ldapUrl)
             throws GuacamoleException {
-
-        // Parse provided LDAP URL
-        LdapUrl ldapUrl;
-        try {
-            ldapUrl = new LdapUrl(url);
-        }
-        catch (LdapException e) {
-            logger.debug("Cannot connect to LDAP URL \"{}\": URL is invalid.", url, e);
-            throw new GuacamoleServerException("Invalid LDAP URL.", e);
-        }
 
         // Retrieve hostname from URL, bailing out if no hostname is present
         String host = ldapUrl.getHost();
         if (host == null || host.isEmpty()) {
-            logger.debug("Cannot connect to LDAP URL \"{}\": no hostname is present.", url);
+            logger.debug("Cannot connect to LDAP URL \"{}\": no hostname is present.", ldapUrl);
             throw new GuacamoleServerException("LDAP URL contains no hostname.");
         }
 
@@ -200,7 +189,7 @@ public class LDAPConnectionService {
         else if (confService.getEncryptionMethod() == EncryptionMethod.STARTTLS) {
             logger.debug("Using STARTTLS for LDAP URL \"{}\" as the main LDAP "
                     + "connection described in guacamole.properties is "
-                    + "configured to use STARTTLS.", url);
+                    + "configured to use STARTTLS.", ldapUrl);
             encryptionMethod = EncryptionMethod.STARTTLS;
         }
 
@@ -368,7 +357,7 @@ public class LDAPConnectionService {
      *     method indicated by the URL is known but not actually implemented (a
      *     bug).
      */
-    public LdapNetworkConnection bindAs(String url,
+    public LdapNetworkConnection bindAs(LdapUrl url,
             LdapNetworkConnection useCredentialsFrom)
             throws GuacamoleException {
         return bindAs(createLDAPConnection(url), useCredentialsFrom);

@@ -41,6 +41,7 @@ import org.apache.directory.api.ldap.model.filter.OrNode;
 import org.apache.directory.api.ldap.model.filter.PresenceNode;
 import org.apache.directory.api.ldap.model.message.SearchRequest;
 import org.apache.directory.api.ldap.model.name.Dn;
+import org.apache.directory.api.ldap.model.url.LdapUrl;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
 import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.GuacamoleServerException;
@@ -246,12 +247,27 @@ public class ObjectQueryService {
                     if (request.isFollowReferrals()) {
                         for (String url : results.getReferral().getLdapUrls()) {
 
+                            // Parse provided LDAP URL
+                            LdapUrl ldapUrl;
+                            try {
+                                ldapUrl = new LdapUrl(url);
+                            }
+                            catch (LdapException e) {
+                                logger.debug("Cannot follow referral to LDAP URL \"{}\": URL is invalid.", url, e);
+                                continue;
+                            }
+
+                            // Use base from referral URL (if provided)
+                            Dn referralBaseDN = ldapUrl.getDn();
+                            if (referralBaseDN == null)
+                                referralBaseDN = baseDN;
+
                             // Connect to referred LDAP server to retrieve further results, ensuring the network
                             // connection is always closed when it will no longer be used
-                            try (LdapNetworkConnection referralConnection = ldapService.bindAs(url, ldapConnection)) {
+                            try (LdapNetworkConnection referralConnection = ldapService.bindAs(ldapUrl, ldapConnection)) {
                                 if (referralConnection != null) {
                                     logger.debug("Following referral to \"{}\"...", url);
-                                    entries.addAll(search(referralConnection, baseDN, query, searchHop + 1));
+                                    entries.addAll(search(referralConnection, referralBaseDN, query, searchHop + 1));
                                 }
                                 else
                                     logger.debug("Could not bind with LDAP "
