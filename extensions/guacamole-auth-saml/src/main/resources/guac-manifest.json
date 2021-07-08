@@ -11,7 +11,10 @@
 
     "translations" : [
         "translations/ca.json",
-        "translations/en.json"
+        "translations/en.json",
+        "translations/ko.json",
+        "translations/fr.json",
+        "translations/pt.json"
     ]
 
 }
