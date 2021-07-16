@@ -30,6 +30,13 @@
     <name>guacamole</name>
     <url>http://guacamole.apache.org/</url>
 
+    <parent>
+        <groupId>org.apache.guacamole</groupId>
+        <artifactId>guacamole-client</artifactId>
+        <version>1.3.0</version>
+        <relativePath>../</relativePath>
+    </parent>
+
     <description>
         The Guacamole web application, providing authentication and an HTML5
         remote desktop client.
@@ -50,40 +57,109 @@
         <connection>scm:git:https://git.wip-us.apache.org/repos/asf/guacamole-client.git</connection>
     </scm>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <build>
         <plugins>
 
-            <!-- Written for Java 1.8 -->
+            <!-- Build AngularJS portion of application using NPM -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.11.3</version>
+                <configuration>
+                    <workingDirectory>src/main/frontend</workingDirectory>
+                    <installDirectory>${project.build.directory}</installDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install-node-and-npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>v14.16.0</nodeVersion>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm-ci</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>ci</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm-build</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Copy automatically-generated set of NPM module dependencies for
+                later use by LICENSE generator -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <compilerArgs>
-                        <arg>-Xlint:all</arg>
-                        <arg>-Werror</arg>
-                    </compilerArgs>
-                    <fork>true</fork>
-                </configuration>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-npm-dependency-list</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${dependency.list.directory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/frontend/dist</directory>
+                                    <includes>
+                                        <include>npm-dependencies.txt</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Automatically generate LICENSE and NOTICE -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-license-files</id>
+                        <phase>generate-resources</phase>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.3.1</version>
                 <configuration>
 
                     <webResources>
 
-                        <!-- Filter translation strings -->
+                        <!-- Add frontend folder to war package ... -->
                         <resource>
-                            <directory>src/main/webapp</directory>
+                            <directory>src/main/frontend/dist</directory>
+                            <excludes>
+                                <exclude>translations/*.json</exclude>
+                                <exclude>index.html</exclude>
+                            </excludes>
+                        </resource>
+
+                        <!-- ... but filter index.html and translation strings -->
+                        <resource>
+                            <directory>src/main/frontend/dist</directory>
                             <filtering>true</filtering>
                             <includes>
                                 <include>translations/*.json</include>
@@ -93,7 +169,7 @@
 
                         <!-- Include all licenses within META-INF -->
                         <resource>
-                            <directory>src/licenses</directory>
+                            <directory>${project.build.directory}/licenses</directory>
                             <targetPath>META-INF</targetPath>
                         </resource>
 
@@ -118,113 +194,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-
-            <!-- Pre-cache Angular templates with maven-angular-plugin -->
-            <plugin>
-                <groupId>com.keithbranton.mojo</groupId>
-                <artifactId>angular-maven-plugin</artifactId>
-                <version>0.3.2</version>
-                <executions>
-                    <execution>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>html2js</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <sourceDir>${basedir}/src/main/webapp/app/</sourceDir>
-                    <include>**/*.html</include>
-                    <target>${basedir}/src/main/webapp/generated/templates-main/templates.js</target>
-                    <prefix>app</prefix>
-                </configuration>
-            </plugin>
-
-            <!-- JS/CSS Minification Plugin -->
-            <plugin>
-                <groupId>com.samaxes.maven</groupId>
-                <artifactId>minify-maven-plugin</artifactId>
-                <version>1.7.5</version>
-                <executions>
-                    <execution>
-                        <id>default-cli</id>
-                        <configuration>
-                            <charset>UTF-8</charset>
-
-                            <webappSourceDir>${project.build.directory}/${project.build.finalName}</webappSourceDir>
-
-                            <cssSourceDir>/</cssSourceDir>
-                            <cssTargetDir>/</cssTargetDir>
-                            <cssFinalFile>guacamole.css</cssFinalFile>
-
-                            <cssSourceFiles>
-                                <cssSourceFile>license.txt</cssSourceFile>
-                            </cssSourceFiles>
-                            
-                            <cssSourceIncludes>
-                                <cssSourceInclude>app/**/*.css</cssSourceInclude>
-                            </cssSourceIncludes>
-
-                            <jsSourceDir>/</jsSourceDir>
-                            <jsTargetDir>/</jsTargetDir>
-                            <jsFinalFile>guacamole.js</jsFinalFile>
-                            
-                            <jsSourceFiles>
-                                <jsSourceFile>license.txt</jsSourceFile>
-                                <jsSourceFile>guacamole-common-js/all.js</jsSourceFile>
-                            </jsSourceFiles>
-
-                            <jsSourceIncludes>
-                                <jsSourceInclude>app/**/*.js</jsSourceInclude>
-                                <jsSourceInclude>generated/**/*.js</jsSourceInclude>
-                            </jsSourceIncludes>
-
-                            <!-- Do not minify and include tests -->
-                            <jsSourceExcludes>
-                                <jsSourceExclude>**/*.test.js</jsSourceExclude>
-                            </jsSourceExcludes>
-                            <jsEngine>CLOSURE</jsEngine>
-
-                            <!-- Disable warnings for JSDoc annotations -->
-                            <closureWarningLevels>
-                                <misplacedTypeAnnotation>OFF</misplacedTypeAnnotation>
-                                <nonStandardJsDocs>OFF</nonStandardJsDocs>
-                            </closureWarningLevels>
-
-                        </configuration>
-                        <goals>
-                            <goal>minify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Verify format using Apache RAT -->
-            <plugin>
-                <groupId>org.apache.rat</groupId>
-                <artifactId>apache-rat-plugin</artifactId>
-                <version>0.12</version>
-
-                <configuration>
-                    <excludes>
-                        <exclude>src/main/webapp/app/*/templates/*.html</exclude>
-                        <exclude>**/*.json</exclude>
-                        <exclude>src/licenses/**/*</exclude>
-                    </excludes>
-                </configuration>
-
-                <!-- Bind RAT to validate phase -->
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-
             </plugin>
 
         </plugins>
@@ -252,12 +221,14 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
         </dependency>
 
         <!-- Guacamole Extension API -->
@@ -273,117 +244,6 @@
             <artifactId>guacamole-common-js</artifactId>
             <version>1.3.0-GLEN-2.4</version>
             <type>zip</type>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- WebJars servlet (for serving org.webjars.* resources) -->
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>webjars-servlet-2.x</artifactId>
-            <version>1.5</version>
-        </dependency>
-
-        <!-- Polyfills for the Blob and FileSaver APIs -->
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>blob-polyfill</artifactId>
-            <version>1.0.20150320</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>filesaver</artifactId>
-            <version>1.3.3</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- Lodash -->
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>lodash</artifactId>
-            <version>4.17.10</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- jQuery -->
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>jquery</artifactId>
-            <version>3.3.1</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- AngularJS -->
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>angular</artifactId>
-            <version>1.6.9</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>angular-route</artifactId>
-            <version>1.6.9</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>angular-touch</artifactId>
-            <version>1.6.9</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- Shim allowing arbitrary retrieval/creation order for AngularJS modules -->
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>angular-module-shim</artifactId>
-            <version>0.0.4</version>
-            <scope>runtime</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.webjars.bower</groupId>
-                    <artifactId>angular</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- Translation support for AngularJS -->
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>angular-translate</artifactId>
-            <version>2.16.0</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>angular-translate-interpolation-messageformat</artifactId>
-            <version>2.16.0</version>
-            <scope>runtime</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.webjars.bower</groupId>
-                    <artifactId>messageformat</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>messageformat</artifactId>
-            <version>1.0.2</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>angular-translate-loader-static-files</artifactId>
-            <version>2.16.0</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- Polyfill for <datalist> element support -->
-        <dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>datalist-polyfill</artifactId>
-            <version>1.14.0</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -435,35 +295,59 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>3.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-assistedinject</artifactId>
-            <version>3.0</version>
         </dependency>
-        
-        <!-- Guice Servlet -->
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-servlet</artifactId>
-            <version>3.0</version>
         </dependency>
         
         <!-- Jersey - JAX-RS Implementation -->
         <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>1.17.1</version>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.hk2</groupId>
+            <artifactId>guice-bridge</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <exclusions>
+
+                <!-- Use newer 2.12.2 version required by Guacamole, rather
+                than 2.11.3 version required by Jersey (see below) -->
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.module</groupId>
+                    <artifactId>jackson-module-jaxb-annotations</artifactId>
+                </exclusion>
+
+            </exclusions>
         </dependency>
 
-        <!-- Jersey - Guice extension -->
+        <!-- Force newer version of Jackson, rather than slightly older version
+            specified by Jersey -->
         <dependency>
-            <groupId>com.sun.jersey.contribs</groupId>
-            <artifactId>jersey-guice</artifactId>
-            <version>1.17.1</version>
-        </dependency> 
-        
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+        </dependency>
+
         <!-- JSR-250 annotations -->
         <dependency>
             <groupId>javax.annotation</groupId>
@@ -471,41 +355,10 @@
             <version>1.0</version>
         </dependency>
         
-        <!-- Jackson for JSON support -->
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-json</artifactId>
-            <version>1.17.1</version>
-
-            <!-- Exclude StAX API, which is part of Java 6 -->
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.xml.stream</groupId>
-                    <artifactId>stax-api</artifactId>
-                </exclusion>
-            </exclusions>
-
-        </dependency>
-        
         <!-- Guava Base Libraries -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>27.0.1-jre</version>
-        </dependency>
-
-        <!-- JSTZ for TimeZone Detection -->
-        <dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>jstz</artifactId>
-            <version>1.0.10</version>
-        </dependency>
-
-        <!-- Pickr (JavaScript color picker) -->
-        <dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>simonwep__pickr</artifactId>
-            <version>1.2.6</version>
         </dependency>
 
     </dependencies>
