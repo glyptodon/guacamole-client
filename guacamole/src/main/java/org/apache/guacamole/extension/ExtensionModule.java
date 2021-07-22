@@ -517,6 +517,9 @@ public class ExtensionModule extends ServletModule {
         Collection<Resource> javaScriptResources = new ArrayList<Resource>();
         Collection<Resource> cssResources = new ArrayList<Resource>();
 
+        // Veriffy that the possibly-cached index.html matches the current build
+        javaScriptResources.add(new WebApplicationResource(getServletContext(), "/verifyCachedVersion.js"));
+
         // Load all extensions
         final Set<String> toleratedAuthProviders = getToleratedAuthenticationProviders();
         loadExtensions(javaScriptResources, cssResources, toleratedAuthProviders);
