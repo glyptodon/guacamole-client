@@ -134,20 +134,40 @@ public class HashTokenSessionMap implements TokenSessionMap {
                 Map.Entry<String, GuacamoleSession> entry = entries.next();
                 GuacamoleSession session = entry.getValue();
 
+                logger.trace("Checking session \"{}\" (\"{}\") ...",
+                        entry.getKey(), session.getAuthenticatedUser().getIdentifier());
+
                 try {
 
                     // Do not expire sessions which are active
-                    if (session.hasTunnels())
+                    if (session.hasTunnels()) {
+                        logger.trace("Session \"{}\" (\"{}\") has at least one "
+                                + "active connection and therefore has not "
+                                + "timed out.", entry.getKey(),
+                                session.getAuthenticatedUser().getIdentifier());
                         continue;
+                    }
 
                     // Get elapsed time since last access
-                    long age = sessionCheckStart - session.getLastAccessedTime();
+                    long lastAccess = session.getLastAccessedTime();
+                    long age = sessionCheckStart - lastAccess;
 
                     // If session is too old, evict it and check the next one
                     if (age >= sessionTimeout) {
-                        logger.debug("Session \"{}\" has timed out.", entry.getKey());
+                        logger.debug("Session \"{}\" (\"{}\") was last "
+                                + "accessed at {} ({} ms ago) and has timed "
+                                + "out.", entry.getKey(),
+                                session.getAuthenticatedUser().getIdentifier(),
+                                lastAccess, age);
                         entries.remove();
                         session.invalidate();
+                    }
+                    else {
+                        logger.trace("Session \"{}\" (\"{}\") was last accessed "
+                                + "at {} ({} ms ago) and therefore has not "
+                                + "timed out.", entry.getKey(),
+                                session.getAuthenticatedUser().getIdentifier(),
+                                lastAccess, age);
                     }
 
                 }
