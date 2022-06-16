@@ -135,6 +135,7 @@ public class GuacamoleProtocolVersionTest {
         Assert.assertTrue(version.equals(GuacamoleProtocolVersion.VERSION_1_1_0));
         Assert.assertFalse(version.equals(GuacamoleProtocolVersion.VERSION_1_0_0));
 
+        Assert.assertFalse(version.equals(new Object()));
     }
 
     /**
