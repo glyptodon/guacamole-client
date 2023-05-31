@@ -1186,8 +1186,6 @@ Guacamole.Mouse.Touchscreen = function Touchscreen(element) {
         // If finger hasn't moved enough to cancel the click
         if (!finger_moved(e)) {
 
-            e.preventDefault();
-
             // If not yet pressed, press and start delay release
             if (!guac_touchscreen.currentState.left) {
 
@@ -1214,8 +1212,9 @@ Guacamole.Mouse.Touchscreen = function Touchscreen(element) {
             end_gesture();
             return;
         }
-
-        e.preventDefault();
+        if(gesture_in_progress){
+          e.preventDefault();
+        }
 
         // New touch begins a new gesture
         begin_gesture(e);
@@ -1251,8 +1250,6 @@ Guacamole.Mouse.Touchscreen = function Touchscreen(element) {
 
         // Update mouse position if dragging
         if (guac_touchscreen.currentState.left) {
-
-            e.preventDefault();
 
             // Update state
             var touch = e.touches[0];
